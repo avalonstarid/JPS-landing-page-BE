@@ -1,0 +1,15 @@
+.container-fluid {
+  max-width: calc(100vw - 16px - 16px);
+}
+
+@media (min-width: 1024px) {
+  .container-fluid {
+    max-width: calc(100vw - var(--tw-sidebar-width) - 16px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-fluid {
+    max-width: calc(100vw - var(--tw-sidebar-width) - 17px);
+  }
+}

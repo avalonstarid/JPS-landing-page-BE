@@ -1,0 +1,35 @@
+.el-input {
+  --el-input-border-radius: 0.375rem !important;
+  /* height: 2.5rem !important; */
+}
+
+.el-input__inner {
+  color: var(--tw-gray-700) !important;
+  font-weight: 500 !important;
+}
+
+.el-input__wrapper {
+  background-color: var(--tw-light-active) !important;
+}
+
+.el-input.is-disabled .el-input__wrapper {
+  background-color: var(--el-disabled-bg-color) !important;
+}
+
+.el-select__wrapper {
+  background-color: var(--tw-light-active) !important;
+}
+
+.el-select__wrapper.is-disabled {
+  background-color: var(--el-disabled-bg-color) !important;
+}
+
+.el-textarea__inner {
+  background-color: var(--tw-light-active) !important;
+  color: var(--tw-gray-700) !important;
+  font-weight: 500 !important;
+}
+
+.el-textarea.is-disabled .el-textarea__inner {
+  background-color: var(--el-disabled-bg-color) !important;
+}

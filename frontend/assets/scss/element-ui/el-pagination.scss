@@ -1,0 +1,26 @@
+.el-pager {
+  gap: 0.25rem;
+}
+
+.el-pager li.is-active {
+  background-color: var(--tw-gray-200) !important;
+  color: var(--tw-gray-500) !important;
+  font-weight: 500 !important;
+}
+
+.el-pager li:hover {
+  background-color: var(--tw-gray-200) !important;
+}
+
+.el-pagination {
+  /* --el-pagination-bg-color: var(--tw-gray-200) !important; */
+  --el-pagination-border-radius: 0.375rem !important;
+  --el-pagination-button-color: var(--tw-gray-600) !important;
+  --el-pagination-hover-color: var(--tw-gray-800) !important;
+}
+
+.el-pagination__sizes,
+.el-pagination__total {
+  color: var(--tw-gray-600) !important;
+  font-weight: 500 !important;
+}

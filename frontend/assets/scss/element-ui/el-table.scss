@@ -1,0 +1,20 @@
+.el-table {
+  --el-table-header-text-color: var(--tw-gray-600) !important;
+  --el-table-header-bg-color: var(--tw-table-head-background-color) !important;
+  --el-table-tr-bg-color: var(--tw-card-background-color) !important;
+}
+
+.el-table thead th {
+  color: var(--tw-gray-600) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  line-height: 1.125rem !important;
+}
+
+.el-table--small {
+  font-size: theme('fontSize.sm') !important;
+}
+
+.text-nowrap .cell {
+  word-wrap: normal !important;
+}

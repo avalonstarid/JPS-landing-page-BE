@@ -1,0 +1,46 @@
+{
+  "name": "skeleton",
+  "description": "Skeleton aplikasi based template Metronic 9.",
+  "version": "9.1.2",
+  "private": true,
+  "type": "module",
+  "homepage": "https://ridhan.dev",
+  "author": "Ridhan S",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.11.0",
+    "@popperjs/core": "^2.11.8",
+    "ua-parser-js": "^2.0.3",
+    "v-clipboard": "^3.0.0-next.1"
+  },
+  "devDependencies": {
+    "@element-plus/nuxt": "^1.1.2",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@types/ua-parser-js": "^0.7.39",
+    "@vite-pwa/nuxt": "^1.0.0",
+    "bun-types": "^1.2.13",
+    "dayjs-nuxt": "^2.1.11",
+    "element-plus": "^2.9.10",
+    "mini-svg-data-uri": "^1.4.4",
+    "nuxt": "^3.15.4",
+    "nuxt-auth-sanctum": "^0.6.7",
+    "nuxt-laravel-echo": "^0.2.5",
+    "ofetch": "^1.4.1",
+    "postcss-preset-env": "^10.1.4",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-attributes": "^1.0.0",
+    "sass": "^1.85.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.3.5",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1"
+  }
+}

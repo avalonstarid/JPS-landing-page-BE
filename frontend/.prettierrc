@@ -1,0 +1,29 @@
+{
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "plugins": ["prettier-plugin-organize-attributes"],
+  "attributeGroups": [
+    "^#",
+    "^:?is$",
+    "^v-for$",
+    "^v-(if|else-if|else)$",
+    "^v-show$",
+    "^v-cloak$",
+    "^v-pre$",
+    "^v-once$",
+    "^:?id$",
+    "^:?ref$",
+    "^:?key$",
+    "^v-model$",
+    "^v-model:",
+    "^:?class$",
+    "^:(?!data-)",
+    "$DEFAULT",
+    "^:?data-",
+    "^@",
+    "^v-html$",
+    "^v-text$",
+    "^v-bind$"
+  ]
+}
