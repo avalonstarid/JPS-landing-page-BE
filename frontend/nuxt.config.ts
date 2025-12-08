@@ -16,50 +16,35 @@ export default defineNuxtConfig({
       },
       link: [
         {
+          href: '/icon/favicon-96x96.png',
+          rel: 'icon',
+          sizes: '96x96',
+          type: 'image/png',
+        },
+        {
+          href: '/icon/favicon.svg',
+          rel: 'icon',
+          type: 'image/svg+xml',
+        },
+        {
+          href: '/icon/favicon.ico',
+          rel: 'shortcut icon',
+        },
+        {
+          href: '/icon/apple-touch-icon.png',
           rel: 'apple-touch-icon',
           sizes: '180x180',
-          href: '/icon/apple-touch-icon.png',
-        },
-        {
-          rel: 'icon',
-          type: 'image/png',
-          sizes: '32x32',
-          href: '/icon/favicon-32x32.png',
-        },
-        {
-          rel: 'icon',
-          type: 'image/png',
-          sizes: '192x192',
-          href: '/icon/android-chrome-192x192.png',
-        },
-        {
-          rel: 'icon',
-          type: 'image/png',
-          sizes: '16x16',
-          href: '/icon/favicon-16x16.png',
         },
         {
           rel: 'manifest',
           href: '/manifest.webmanifest',
         },
-        {
-          rel: 'mask-icon',
-          href: '/icon/safari-pinned-tab.svg',
-          color: '#f8285a',
-        },
       ],
-      meta: [
-        { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
-        { name: 'msapplication-TileColor', content: '#f8285a' },
-        {
-          name: 'msapplication-TileImage',
-          content: '/icon/mstile-144x144.png',
-        },
-      ],
+      meta: [{ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }],
       noscript: [
         {
           children:
-            "We're sorry but Metronic-Vue doesn't work properly without JavaScript enabled. Please enable it to continue.",
+            "We're sorry but JPS Landing doesn't work properly without JavaScript enabled. Please enable it to continue.",
         },
       ],
       script: [
@@ -109,7 +94,7 @@ export default defineNuxtConfig({
   ignore: [
     // 'pages/auth/forgot-password.vue',
     // 'pages/auth/reset-password.vue',
-    // 'pages/auth/sign-up.vue',
+    'pages/auth/sign-up.vue',
     // 'plugins/pushNotifications.client.ts',
   ],
   modules: [
@@ -149,30 +134,26 @@ export default defineNuxtConfig({
     },
     manifest: {
       background_color: '#ffffff',
-      description: 'Skeleton Aplikasi.',
+      description: 'Admin Panel Janu Putra Sejahtera Landing Page.',
       display: 'standalone',
       icons: [
         {
-          src: '/icon/android-chrome-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: '/icon/android-chrome-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          src: '/icon/android-chrome-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
           purpose: 'maskable',
+          sizes: '192x192',
+          src: '/icon/web-app-manifest-192x192.png',
+          type: 'image/png',
+        },
+        {
+          purpose: 'maskable',
+          sizes: '512x512',
+          src: '/icon/web-app-manifest-512x512.png',
+          type: 'image/png',
         },
       ],
       lang: 'id',
-      name: 'Skeleton PWA',
+      name: 'Janu Putra Sejahtera',
       orientation: 'any',
-      short_name: 'SkeletonPWA',
+      short_name: 'JPS',
       start_url: '/?utm_medium=PWA&utm_source=launcher',
       theme_color: '#ffffff',
     },
@@ -200,13 +181,9 @@ export default defineNuxtConfig({
   sanctum: {
     baseUrl: process.env.VITE_API_URL!,
     endpoints: {
-      login:
-        '/auth/login' +
-        (process.env.VITE_SANCTUM_MODE === 'token' ? '/app' : ''),
-      logout:
-        '/auth/logout' +
-        (process.env.VITE_SANCTUM_MODE === 'token' ? '/app' : ''),
-      user: '/auth/fetch',
+      login: '/v1/auth/login/' + process.env.VITE_SANCTUM_MODE,
+      logout: '/v1/auth/logout/' + process.env.VITE_SANCTUM_MODE,
+      user: '/v1/auth/fetch/' + process.env.VITE_SANCTUM_MODE,
     },
     globalMiddleware: {
       enabled: true,

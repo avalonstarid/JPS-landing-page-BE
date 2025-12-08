@@ -18,7 +18,7 @@ export default function useAuditLogs() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/system/audit-logs', {
+      let res = await sanctumFetch('/v1/settings/system/audit-logs', {
         params: { all: 1, ...state },
       })
 
@@ -40,7 +40,7 @@ export default function useAuditLogs() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/system/audit-logs', {
+      let res = await sanctumFetch('/v1/settings/system/audit-logs', {
         params: state,
       })
 
@@ -62,7 +62,7 @@ export default function useAuditLogs() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/system/audit-logs/${id}`)
+      let res = await sanctumFetch(`/v1/settings/system/audit-logs/${id}`)
 
       auditLog.value = res.data
     } catch (e: any) {
@@ -82,7 +82,7 @@ export default function useAuditLogs() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/system/audit-logs/${id}`, {
+      let res = await sanctumFetch(`/v1/settings/system/audit-logs/${id}`, {
         method: 'DELETE',
       })
 
@@ -106,10 +106,13 @@ export default function useAuditLogs() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/system/audit-logs/bulk-destroy', {
-        method: 'DELETE',
-        body: data,
-      })
+      let res = await sanctumFetch(
+        '/v1/settings/system/audit-logs/bulk-destroy',
+        {
+          method: 'DELETE',
+          body: data,
+        },
+      )
 
       ElNotification({
         title: 'Success',

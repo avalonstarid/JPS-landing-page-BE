@@ -12,7 +12,7 @@ export default function useNotifications() {
     store.loading = true
 
     try {
-      let res = await sanctumFetch('/notifications', {
+      let res = await sanctumFetch('/v1/notifications', {
         params: state,
       })
 
@@ -38,7 +38,7 @@ export default function useNotifications() {
     store.loading = true
 
     try {
-      let res = await sanctumFetch('/notifications/unread-count')
+      let res = await sanctumFetch('/v1/notifications/unread-count')
 
       store.unreadCount = res.data
     } catch (e: any) {
@@ -59,7 +59,7 @@ export default function useNotifications() {
     store.loading = true
 
     try {
-      let res = await sanctumFetch(`/notifications/mark-as-read/${id}`, {
+      let res = await sanctumFetch(`/v1/notifications/mark-as-read/${id}`, {
         method: 'PUT',
       })
     } catch (e: any) {
@@ -84,7 +84,7 @@ export default function useNotifications() {
     store.loading = true
 
     try {
-      let res = await sanctumFetch(`/notifications/read-all`, {
+      let res = await sanctumFetch(`/v1/notifications/read-all`, {
         method: 'POST',
       })
     } catch (e: any) {

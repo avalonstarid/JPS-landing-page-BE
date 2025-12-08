@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\Master\Category;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -20,18 +19,10 @@ trait MultiTenantTrait
 			}
 
 			$user = auth()->user();
-			$model = $builder->getModel();
 
 //			if ($user->hasRole('super-admin')) {
 //				return;
 //			}
-
-			if ($model instanceof Category) {
-				$builder->where(function (Builder $query) use ($user) {
-					$query->where('is_public', true)->orWhere('created_by_id', $user->id);
-				});
-				return;
-			}
 
 			$builder->where('created_by_id', $user->id);
 		});

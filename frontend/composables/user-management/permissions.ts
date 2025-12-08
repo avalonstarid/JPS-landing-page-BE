@@ -20,7 +20,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/permissions', {
+      let res = await sanctumFetch('/v1/user-management/permissions', {
         params: { all: 1, ...state },
       })
 
@@ -42,7 +42,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/permissions', {
+      let res = await sanctumFetch('/v1/user-management/permissions', {
         params: state,
       })
 
@@ -64,7 +64,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/permissions/${id}`)
+      let res = await sanctumFetch(`/v1/user-management/permissions/${id}`)
 
       permission.value = res.data
     } catch (e: any) {
@@ -85,7 +85,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/permissions', {
+      let res = await sanctumFetch('/v1/user-management/permissions', {
         method: 'POST',
         body: data,
       })
@@ -119,7 +119,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/permissions/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/permissions/${id}`, {
         method: 'PUT',
         body: data,
       })
@@ -152,7 +152,7 @@ export default function usePermissions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/permissions/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/permissions/${id}`, {
         method: 'DELETE',
       })
 
@@ -177,7 +177,7 @@ export default function usePermissions() {
 
     try {
       let res = await sanctumFetch(
-        '/user-management/permissions/bulk-destroy',
+        '/v1/user-management/permissions/bulk-destroy',
         {
           method: 'DELETE',
           body: data,

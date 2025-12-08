@@ -1,17 +1,20 @@
 <template>
   <div class="grid lg:grid-cols-2 grow">
     <div
-      class="order-1 bg-top bg-no-repeat lg:rounded-xl lg:border lg:border-gray-200 lg:m-5 lg:order-2 xxl:bg-center xl:bg-cover branded-bg"
+      class="order-1 lg:order-2 xl:bg-cover bg-no-repeat xxl:bg-center bg-top lg:m-5 lg:border lg:border-gray-200 lg:rounded-xl branded-bg"
     >
       <div class="flex flex-col gap-4 p-8 lg:p-16">
         <a href="#">
-          <img class="h-[28px] max-w-none" src="/media/app/mini-logo.svg" />
+          <img
+            class="max-w-none h-[28px]"
+            src="/icon/web-app-manifest-192x192.png"
+          />
         </a>
         <div class="flex flex-col gap-3">
-          <h3 class="text-2xl font-semibold text-gray-900">
+          <h3 class="font-semibold text-gray-900 text-2xl">
             Secure Access Portal
           </h3>
-          <div class="text-base font-medium text-gray-600">
+          <div class="font-medium text-gray-600 text-base">
             A robust authentication gateway ensuring
             <br />
             secure
@@ -25,13 +28,13 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col items-center justify-center order-2 p-8 lg:p-10">
-      <div class="card max-w-[400px] w-full">
+    <div class="flex flex-col justify-center items-center order-2 p-8 lg:p-10">
+      <div class="w-full max-w-[400px] card">
         <slot />
       </div>
 
       <div
-        class="flex flex-col items-center justify-center gap-1 mt-10 font-normal text-gray-500 text-2sm"
+        class="flex flex-col justify-center items-center gap-1 mt-10 font-normal text-2sm text-gray-500"
       >
         <div>
           {{
@@ -40,7 +43,7 @@
               : `${appCreated} - ${currentYear}`
           }}
           &copy;
-          <span class="text-gray-600 cursor-pointer hover:text-primary">
+          <span class="text-gray-600 hover:text-primary cursor-pointer">
             {{ appName }} </span
           >. All rights reserved.
         </div>

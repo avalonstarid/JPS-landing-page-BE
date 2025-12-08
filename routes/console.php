@@ -1,6 +1,5 @@
 <?php
 
-use App\Jobs\RepeatTransactionJob;
 use Illuminate\Support\Facades\Schedule;
 use Spatie\OneTimePasswords\Models\OneTimePassword;
 
@@ -16,7 +15,6 @@ Schedule::command('telescope:prune --hours=72')->daily();
 // Daily At
 Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:15');
-Schedule::job(new RepeatTransactionJob)->dailyAt('03:00');
 
 // Every Minute
 Schedule::call(function () {

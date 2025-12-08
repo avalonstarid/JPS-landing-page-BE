@@ -47,7 +47,7 @@ final class LoginRequest extends FormRequest
 		$this->ensureIsNotRateLimited();
 //		$this->ensureVerifiedEmail();
 
-		if (!Auth::validate([
+		if (!Auth::attempt([
 			'email' => $this->input('email'),
 			'password' => $this->input('password'),
 			'active' => true,

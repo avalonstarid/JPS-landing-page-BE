@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\UserManagement\Permission;
 use App\Models\UserManagement\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -16,8 +17,10 @@ class RolePermissionSeeder extends Seeder
 	public function run(): void
 	{
 		$roles = ['super-admin', 'user'];
+
 		foreach ($roles as $role) {
 			Role::create([
+				'label' => Str::headline($role),
 				'name' => $role,
 //				'guard_name' => 'api',
 			]);
@@ -34,6 +37,7 @@ class RolePermissionSeeder extends Seeder
 		];
 		foreach ($permissions as $item) {
 			Permission::create([
+				'label' => Str::headline($item),
 				'name' => $item,
 //				'guard_name' => 'api',
 			]);

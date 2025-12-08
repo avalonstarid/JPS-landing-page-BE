@@ -1,23 +1,23 @@
 <template>
   <div
     id="sidebar"
-    class="fixed top-0 bottom-0 z-20 hidden lg:flex flex-col shrink-0 w-[--tw-sidebar-width] bg-[--tw-page-bg] dark:bg-[--tw-page-bg-dark]"
+    class="hidden top-0 bottom-0 z-20 fixed lg:flex flex-col bg-[--tw-page-bg] dark:bg-[--tw-page-bg-dark] w-[--tw-sidebar-width] shrink-0"
     data-drawer="true"
     data-drawer-class="top-0 bottom-0 flex drawer drawer-start"
     data-drawer-enable="true|lg:false"
   >
     <!-- Sidebar Header -->
     <div id="sidebar_header">
-      <div class="flex items-center justify-center px-3.5 h-[70px]">
+      <div class="flex justify-center items-center px-3.5 h-[70px]">
         <NuxtLink to="/">
-          <img class="dark:hidden h-[30px]" src="/media/app/default-logo.svg" />
+          <img class="dark:hidden h-[40px]" src="/icon/Logo-Janu-Putra-2.png" />
           <img
-            class="hidden dark:inline-block h-[30px]"
-            src="/media/app/default-logo-dark.svg"
+            class="hidden dark:inline-block h-[40px]"
+            src="/icon/Logo-Janu-Putra-2.png"
           />
         </NuxtLink>
       </div>
-      <div class="pt-2.5 px-3.5 mb-1">
+      <div class="mb-1 px-3.5 pt-2.5">
         <el-autocomplete
           v-model="searchMenu"
           :fetch-suggestions="querySearchMenu"
@@ -43,11 +43,11 @@
     <!-- Sidebar menu -->
     <div
       id="sidebar_menu"
-      class="flex items-stretch justify-center my-5 grow shrink-0"
+      class="flex justify-center items-stretch my-5 grow shrink-0"
       v-loading="loadingSideMenu"
     >
       <div
-        class="scrollable-y-auto light:[--tw-scrollbar-thumb-color:var(--tw-content-scrollbar-color)] grow"
+        class="light:[--tw-scrollbar-thumb-color:var(--tw-content-scrollbar-color)] scrollable-y-auto grow"
         data-scrollable="true"
         data-scrollable-dependencies="#sidebar_header, #sidebar_footer"
         data-scrollable-height="auto"
@@ -63,7 +63,7 @@
     <!-- Footer -->
     <div
       id="sidebar_footer"
-      class="flex flex-center justify-between shrink-0 ps-4 pe-3.5 mb-3.5"
+      class="flex flex-center justify-between mb-3.5 ps-4 pe-3.5 shrink-0"
     >
       <KTSidebarFooter />
     </div>

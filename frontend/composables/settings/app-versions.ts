@@ -9,7 +9,7 @@ export default function useAppVersions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/app-versions`)
+      let res = await sanctumFetch(`/v1/settings/app-versions`)
       console.log(res.data)
 
       appVersion.value = res.data ?? {}
@@ -47,7 +47,7 @@ export default function useAppVersions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/app-versions', {
+      let res = await sanctumFetch('/v1/settings/app-versions', {
         method: 'POST',
         body: data,
       })

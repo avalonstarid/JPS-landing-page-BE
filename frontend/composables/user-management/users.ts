@@ -30,7 +30,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/users', {
+      let res = await sanctumFetch('/v1/user-management/users', {
         params: { all: 1, ...state },
       })
 
@@ -52,7 +52,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/users', {
+      let res = await sanctumFetch('/v1/user-management/users', {
         params: state,
       })
 
@@ -74,7 +74,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/users/${id}`)
+      let res = await sanctumFetch(`/v1/user-management/users/${id}`)
 
       user.value = res.data
     } catch (e: any) {
@@ -95,7 +95,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/users', {
+      let res = await sanctumFetch('/v1/user-management/users', {
         method: 'POST',
         body: data,
       })
@@ -129,7 +129,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/users/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/users/${id}`, {
         method: 'PUT',
         body: data,
       })
@@ -162,7 +162,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/users/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/users/${id}`, {
         method: 'DELETE',
       })
 
@@ -186,7 +186,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/users/bulk-destroy', {
+      let res = await sanctumFetch('/v1/user-management/users/bulk-destroy', {
         method: 'DELETE',
         body: data,
       })
@@ -209,7 +209,7 @@ export default function useUsers() {
 
   const exportUser = async (type: string) => {
     try {
-      let res = await sanctumFetch(`/user-management/users/export`, {
+      let res = await sanctumFetch(`/v1/user-management/users/export`, {
         params: { all: 1, ...state, type: type },
       })
 

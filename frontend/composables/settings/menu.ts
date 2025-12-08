@@ -9,7 +9,7 @@ export interface IMenu {
 }
 
 export default function useMenus() {
-  const menu = ref<any>({ order: 1, is_active: true, is_mobile: false })
+  const menu = ref<any>({ order: 1, active: true })
   const menus = ref<any>({
     data: [],
   })
@@ -30,7 +30,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/menu', {
+      let res = await sanctumFetch('/v1/settings/menu', {
         params: { all: 1, ...state },
       })
 
@@ -52,7 +52,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/menu', {
+      let res = await sanctumFetch('/v1/settings/menu', {
         params: state,
       })
 
@@ -74,7 +74,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/menu/${id}`)
+      let res = await sanctumFetch(`/v1/settings/menu/${id}`)
 
       menu.value = res.data
     } catch (e: any) {
@@ -96,7 +96,7 @@ export default function useMenus() {
     menuStore.setLoading(true)
 
     try {
-      let res = await sanctumFetch('/settings/menu/get-menu')
+      let res = await sanctumFetch('/v1/settings/menu/get-menu')
 
       menuStore.setMenu(res.data)
     } catch (e: any) {
@@ -111,7 +111,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/menu', {
+      let res = await sanctumFetch('/v1/settings/menu', {
         method: 'POST',
         body: data,
       })
@@ -146,7 +146,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/menu/${id}`, {
+      let res = await sanctumFetch(`/v1/settings/menu/${id}`, {
         method: 'PUT',
         body: data,
       })
@@ -180,7 +180,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/settings/menu/${id}`, {
+      let res = await sanctumFetch(`/v1/settings/menu/${id}`, {
         method: 'DELETE',
       })
 
@@ -206,7 +206,7 @@ export default function useMenus() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/settings/menu/bulk-destroy', {
+      let res = await sanctumFetch('/v1/settings/menu/bulk-destroy', {
         method: 'DELETE',
         body: data,
       })

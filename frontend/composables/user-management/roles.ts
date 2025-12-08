@@ -18,7 +18,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/roles', {
+      let res = await sanctumFetch('/v1/user-management/roles', {
         params: { all: 1, ...state },
       })
 
@@ -40,7 +40,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/roles', {
+      let res = await sanctumFetch('/v1/user-management/roles', {
         params: state,
       })
 
@@ -62,7 +62,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/roles/${id}`)
+      let res = await sanctumFetch(`/v1/user-management/roles/${id}`)
 
       role.value = res.data
     } catch (e: any) {
@@ -83,7 +83,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/roles', {
+      let res = await sanctumFetch('/v1/user-management/roles', {
         method: 'POST',
         body: data,
       })
@@ -117,7 +117,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/roles/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/roles/${id}`, {
         method: 'PUT',
         body: data,
       })
@@ -150,7 +150,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/roles/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/roles/${id}`, {
         method: 'DELETE',
       })
 
@@ -174,7 +174,7 @@ export default function useRoles() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/roles/bulk-destroy', {
+      let res = await sanctumFetch('/v1/user-management/roles/bulk-destroy', {
         method: 'DELETE',
         body: data,
       })

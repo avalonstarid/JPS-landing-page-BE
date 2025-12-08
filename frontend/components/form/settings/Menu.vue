@@ -11,7 +11,7 @@
     @submit.native.prevent="onSubmit(formRef)"
   >
     <div class="card-body">
-      <div class="grid grid-cols-6 gap-4">
+      <div class="gap-4 grid grid-cols-6">
         <InputSelect
           v-model="menu.parent_id"
           class="col-span-2"
@@ -27,18 +27,6 @@
           >
             <span v-if="item.parent">{{ item.parent.title }} > </span>
             {{ item.title }}
-            <span
-              v-if="item.is_mobile"
-              class="badge badge-sm badge-outline badge-info ms-1"
-            >
-              Mobile
-            </span>
-            <span
-              v-else
-              class="badge badge-sm badge-outline badge-primary ms-1"
-            >
-              Desktop
-            </span>
           </el-option>
         </InputSelect>
 
@@ -72,7 +60,7 @@
             label="Ikon"
             name="icon"
           />
-          <div class="mt-1 text-sm text-gray-500">
+          <div class="mt-1 text-gray-500 text-sm">
             Kode ikon
             <NuxtLink
               class="btn btn-link btn-sm"
@@ -120,17 +108,10 @@
         </InputSelect>
 
         <InputSwitch
-          v-model="menu.is_active"
+          v-model="menu.active"
           :errors="errors"
           active-text="Menu Aktif?"
-          name="is_active"
-        />
-
-        <InputSwitch
-          v-model="menu.is_mobile"
-          :errors="errors"
-          active-text="Menu Mobile?"
-          name="is_mobile"
+          name="active"
         />
 
         <InputSwitch
@@ -147,10 +128,10 @@
         type="button"
         @click="$router.back()"
       >
-        <i class="ki-filled ki-left"></i> Kembali
+        <i class="ki-left ki-filled"></i> Kembali
       </button>
       <BtnIndicator class="btn-sm" :loading="loading">
-        <i class="ki-filled ki-arrow-circle-right"></i> Submit
+        <i class="ki-arrow-circle-right ki-filled"></i> Submit
       </BtnIndicator>
     </div>
   </el-form>

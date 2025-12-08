@@ -1,24 +1,24 @@
 <template>
   <header
     id="header"
-    class="flex lg:hidden items-center fixed z-10 top-0 start-0 end-0 shrink-0 bg-[--tw-page-bg] dark:bg-[--tw-page-bg-dark] h-[--tw-header-height]"
+    class="lg:hidden top-0 z-10 fixed flex items-center bg-[--tw-page-bg] dark:bg-[--tw-page-bg-dark] h-[--tw-header-height] start-0 end-0 shrink-0"
   >
     <!-- Container -->
     <div
-      class="flex flex-wrap items-center justify-between gap-3 container-fixed"
+      class="container-fixed flex flex-wrap justify-between items-center gap-3"
     >
       <NuxtLink to="/">
         <img
           class="dark:hidden min-h-[30px]"
-          src="/media/app/mini-logo-gray.svg"
+          src="/icon/web-app-manifest-192x192.png"
         />
         <img
           class="hidden dark:block min-h-[30px]"
-          src="/media/app/mini-logo-gray-dark.svg"
+          src="/icon/web-app-manifest-192x192.png"
         />
       </NuxtLink>
       <button
-        class="btn btn-icon btn-light btn-clear btn-sm -me-2"
+        class="btn-clear -me-2 btn btn-icon btn-light btn-sm"
         data-drawer-toggle="#sidebar"
       >
         <i class="ki-filled ki-menu"> </i>

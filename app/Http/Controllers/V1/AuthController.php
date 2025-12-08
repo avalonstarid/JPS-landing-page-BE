@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -37,16 +38,29 @@ class AuthController extends Controller
 	 * @return JsonResponse
 	 */
 	#[Unauthenticated]
-	public function login(LoginRequest $request): JsonResponse
+	public function login(LoginRequest $request, $type): JsonResponse
 	{
-		$request->authenticate();
+		if ($type == 'cookie') {
+			$request->authenticate();
 
-		$user = User::where('email', $request->safe()->input('email'))->firstOrFail();
+			$request->session()->regenerate();
+		} else {
+			$user = User::where(['email' => $request->email, 'active' => true])->first();
 
-		$user->sendOneTimePassword();
+			if (!$user || !Hash::check($request->safe()->input('password'), $user->password)) {
+				throw ValidationException::withMessages([
+					'email' => __('auth.failed'),
+				]);
+			}
+
+			$token = $user->createToken('app-token')->plainTextToken;
+		}
 
 		return $this->response(
-			message: 'Login berhasil. Lanjutkan ke proses verifikasi OTP.',
+			message: 'Login successfully.',
+			data: [
+				'token' => $token ?? null,
+			],
 		);
 	}
 

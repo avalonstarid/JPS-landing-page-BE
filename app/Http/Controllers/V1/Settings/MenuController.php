@@ -391,8 +391,8 @@ class MenuController extends Controller
 
 			$data[$index] = [
 				'title' => $item->title,
-				'icon' => ['icon' => $item->icon],
-				'to' => ['path' => $item->to],
+				'icon' => $item->icon,
+				'to' => $item->to,
 			];
 			if (count($item->roles) > 0) {
 				$data[$index]['roles'] = $item->roles->pluck('name')->toArray();

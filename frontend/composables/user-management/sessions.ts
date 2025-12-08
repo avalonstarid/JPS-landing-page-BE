@@ -10,7 +10,7 @@ export default function useSessions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/sessions')
+      let res = await sanctumFetch('/v1/user-management/sessions')
 
       sessions.value = res
     } catch (e: any) {
@@ -30,7 +30,7 @@ export default function useSessions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/sessions/current')
+      let res = await sanctumFetch('/v1/user-management/sessions/current')
 
       session.value = res.data
     } catch (e: any) {
@@ -50,7 +50,7 @@ export default function useSessions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/user-management/sessions/${id}`, {
+      let res = await sanctumFetch(`/v1/user-management/sessions/${id}`, {
         method: 'DELETE',
       })
 
@@ -74,9 +74,12 @@ export default function useSessions() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/user-management/sessions/logout-other', {
-        method: 'DELETE',
-      })
+      let res = await sanctumFetch(
+        '/v1/user-management/sessions/logout-other',
+        {
+          method: 'DELETE',
+        },
+      )
 
       ElNotification({
         title: 'Success',

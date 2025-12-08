@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-grid">
+  <div class="card-grid card">
     <div class="flex-wrap gap-2 py-5 card-header">
       <div v-if="selectedData.length === 0">
         <NuxtLink
@@ -30,7 +30,7 @@
         @input="handleSearch('filter[search]', $event)"
       >
         <template #prefix>
-          <i class="leading-none text-gray-500 ki-filled ki-magnifier text-md">
+          <i class="text-gray-500 text-md leading-none ki-filled ki-magnifier">
           </i>
         </template>
       </el-input>
@@ -62,37 +62,24 @@
             <span v-if="row.icon" class="ms-2"> ({{ row.icon }}) </span>
           </template>
         </el-table-column>
-        <el-table-column prop="is_active" label="Aktif">
+        <el-table-column prop="active" label="Aktif">
           <template #default="{ row }">
             <span
-              v-if="row.is_active"
-              class="badge badge-sm badge-outline badge-success"
+              v-if="row.active"
+              class="badge-outline badge badge-sm badge-success"
             >
               Aktif
             </span>
-            <span v-else class="badge badge-sm badge-outline badge-danger">
+            <span v-else class="badge-outline badge badge-sm badge-danger">
               Tidak Aktif
             </span>
           </template>
         </el-table-column>
         <el-table-column prop="order" label="Urutan" sortable />
-        <el-table-column prop="is_mobile" label="Tipe">
-          <template #default="{ row }">
-            <span
-              v-if="row.is_mobile"
-              class="badge badge-sm badge-outline badge-info"
-            >
-              Mobile
-            </span>
-            <span v-else class="badge badge-sm badge-outline badge-primary">
-              Desktop
-            </span>
-          </template>
-        </el-table-column>
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown trigger="click">
-              <button class="btn btn-sm btn-outline btn-primary">
+              <button class="btn-outline btn btn-sm btn-primary">
                 Opsi <i class="ki-filled ki-down"></i>
               </button>
               <template #dropdown>
