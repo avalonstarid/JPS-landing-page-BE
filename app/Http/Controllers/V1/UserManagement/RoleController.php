@@ -32,7 +32,7 @@ class RoleController extends Controller
 	#[QueryParam('filter[search]', required: false, example: '', enum: ['search'])]
 	#[QueryParam('include', required: false, example: '', enum: ['permissions', 'users'])]
 	#[QueryParam('rows', 'int', required: false, example: 10)]
-	#[QueryParam('sort', required: false, example: '', enum: ['name'])]
+	#[QueryParam('sort', required: false, example: '', enum: ['created_at', 'label', 'name'])]
 	public function index(Request $request): JsonResponse
 	{
 //		$this->authorize('viewAny', Role::class);
@@ -42,13 +42,13 @@ class RoleController extends Controller
 		)->allowedSorts(
 			sorts: [
 				'created_at',
-				'guard_name',
+				'label',
 				'name',
 			],
 		)->allowedFilters(
 			filters: [
 				AllowedFilter::callback('search', function (Builder $q, $value) {
-					$q->whereAny(['name'], 'LIKE', '%' . $value . '%');
+					$q->whereAny(['desc', 'label', 'name'], 'LIKE', '%' . $value . '%');
 				}),
 			],
 		)->allowedIncludes(
@@ -195,7 +195,8 @@ class RoleController extends Controller
 	{
 		$this->authorize('bulkDelete', Role::class);
 
-		Role::whereIn('id', $request->data)->delete();
+		$ids = collect($request->data)->pluck(value: 'id');
+		Role::whereIn('id', $ids)->delete();
 
 		return $this->response(
 			message: 'Berhasil menghapus data.',

@@ -1,8 +1,9 @@
 <template>
-  <div class="card card-grid">
+  <div class="card-grid card">
     <div class="flex-wrap gap-2 py-5 card-header">
       <div v-if="selectedData.length === 0">
         <NuxtLink
+          v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
           :to="{ name: 'user-management-roles-create' }"
         >
@@ -14,6 +15,7 @@
         <span class="font-medium">{{ selectedData.length }} Terpilih</span>
 
         <button
+          v-if="checkScope([`${basePermission}_delete`])"
           class="btn btn-sm btn-danger"
           type="button"
           @click="deleteSelectedData"
@@ -30,7 +32,7 @@
         @input="handleSearch('filter[search]', $event)"
       >
         <template #prefix>
-          <i class="leading-none text-gray-500 ki-filled ki-magnifier text-md">
+          <i class="text-gray-500 text-md leading-none ki-filled ki-magnifier">
           </i>
         </template>
       </el-input>
@@ -55,33 +57,41 @@
         />
         <el-table-column type="selection" width="30" />
         <el-table-column prop="name" label="Nama Role" sortable />
-        <el-table-column label="Permissions">
+        <el-table-column prop="label" label="Label" sortable />
+        <el-table-column prop="desc" label="Deskripsi" />
+        <el-table-column prop="permissions_count" label="Total Permission" />
+        <el-table-column prop="users_count" label="Total User" />
+        <el-table-column prop="created_at" label="Tanggal Dibuat" sortable>
           <template #default="{ row }">
-            <span
-              v-for="item in row.permissions"
-              v-if="row.permissions.length > 0"
-              class="badge badge-sm badge-outline badge-primary me-1"
-            >
-              {{ item.name }}
-            </span>
-            <span v-else>-</span>
+            {{ $dayjs(row.created_at).format('YYYY-MM-DD HH:mm:ss') }}
           </template>
         </el-table-column>
-        <el-table-column prop="users_count" label="Total User" />
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
-            <el-dropdown trigger="click">
-              <button class="btn btn-sm btn-outline btn-primary">
+            <el-dropdown
+              v-if="
+                checkScope([
+                  `${basePermission}_delete`,
+                  `${basePermission}_update`,
+                ])
+              "
+              trigger="click"
+            >
+              <button class="btn-outline btn btn-sm btn-primary">
                 Opsi <i class="ki-filled ki-down"></i>
               </button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item
+                    v-if="checkScope([`${basePermission}_update`])"
                     @click="$router.push(`/user-management/roles/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
-                  <el-dropdown-item @click="deleteData(row.id)">
+                  <el-dropdown-item
+                    v-if="checkScope([`${basePermission}_delete`])"
+                    @click="deleteData(row.id)"
+                  >
                     <i class="ki-filled ki-trash"></i> Hapus
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -108,6 +118,7 @@
 
 <script setup lang="ts">
 import useRoles from '@/composables/user-management/roles'
+import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
   handleSearch,
@@ -120,6 +131,7 @@ definePageMeta({
   breadcrumbs: [{ title: 'User Management' }],
   authorize: ['role_read'],
 })
+const basePermission = 'role'
 
 const route = useRoute()
 const { roles, getRoles, destroyRole, bulkDestroyRole, loading, state } =
@@ -157,7 +169,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  state['include'] = 'permissions,usersCount'
+  state['include'] = 'permissionsCount,usersCount'
   getRoles()
 })
 

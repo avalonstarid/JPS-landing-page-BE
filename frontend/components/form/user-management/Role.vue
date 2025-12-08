@@ -10,13 +10,20 @@
     status-icon
     @submit.native.prevent="onSubmit(formRef)"
   >
-    <div class="flex flex-col gap-4 card-body">
+    <div class="gap-4 grid grid-cols-2 card-body">
       <InputBase
         v-model="role.name"
         :errors="errors"
         :formatter="(value: any) => value.toLowerCase()"
         label="Nama Role"
         name="name"
+      />
+
+      <InputBase
+        v-model="role.label"
+        :errors="errors"
+        label="Label"
+        name="label"
       />
 
       <InputSelect
@@ -36,6 +43,15 @@
           :value="item.id"
         />
       </InputSelect>
+
+      <InputBase
+        v-model="role.desc"
+        :autosize="{ minRows: 2 }"
+        :errors="errors"
+        label="Deskripsi"
+        name="desc"
+        type="textarea"
+      />
     </div>
     <div class="justify-start gap-3 card-footer">
       <button
@@ -43,10 +59,10 @@
         type="button"
         @click="$router.back()"
       >
-        <i class="ki-filled ki-left"></i> Kembali
+        <i class="ki-left ki-filled"></i> Kembali
       </button>
       <BtnIndicator class="btn-sm" :loading="loading">
-        <i class="ki-filled ki-arrow-circle-right"></i> Submit
+        <i class="ki-arrow-circle-right ki-filled"></i> Submit
       </BtnIndicator>
     </div>
   </el-form>

@@ -41,13 +41,13 @@ class PermissionController extends Controller
 		)->allowedSorts(
 			sorts: [
 				'created_at',
-				'guard_name',
+				'label',
 				'name',
 			],
 		)->allowedFilters(
 			filters: [
 				AllowedFilter::callback('search', function (Builder $q, $value) {
-					$q->whereAny(['name'], 'LIKE', '%' . $value . '%');
+					$q->whereAny(['desc', 'label', 'name'], 'LIKE', '%' . $value . '%');
 				}),
 			],
 		)->defaultSorts(
@@ -189,7 +189,8 @@ class PermissionController extends Controller
 	{
 		$this->authorize('bulkDelete', Permission::class);
 
-		Permission::whereIn('id', $request->data)->delete();
+		$ids = collect($request->data)->pluck(value: 'id');
+		Permission::whereIn('id', $ids)->delete();
 
 		return $this->response(
 			message: 'Berhasil menghapus data.',

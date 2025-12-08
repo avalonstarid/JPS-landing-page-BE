@@ -1,8 +1,9 @@
 <template>
-  <div class="card card-grid">
+  <div class="card-grid card">
     <div class="flex-wrap gap-2 py-5 card-header">
       <div v-if="selectedData.length === 0">
         <NuxtLink
+          v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
           :to="{ name: 'user-management-permissions-create' }"
         >
@@ -14,7 +15,7 @@
         <span class="font-medium">{{ selectedData.length }} Terpilih</span>
 
         <button
-          v-if="checkScope(['permission_delete'])"
+          v-if="checkScope([`${basePermission}_delete`])"
           class="btn btn-sm btn-danger"
           type="button"
           @click="deleteSelectedData"
@@ -31,7 +32,7 @@
         @input="handleSearch('filter[search]', $event)"
       >
         <template #prefix>
-          <i class="leading-none text-gray-500 ki-filled ki-magnifier text-md">
+          <i class="text-gray-500 text-md leading-none ki-filled ki-magnifier">
           </i>
         </template>
       </el-input>
@@ -55,26 +56,32 @@
           width="60"
         />
         <el-table-column type="selection" width="30" />
-        <el-table-column
-          prop="name"
-          label="Nama Permission"
-          min-width="130"
-          sortable
-        />
-        <el-table-column prop="guard_name" label="Nama Guard" min-width="100" />
+        <el-table-column prop="name" label="Nama Permission" sortable />
+        <el-table-column prop="label" label="Label" sortable />
+        <el-table-column prop="desc" label="Deskripsi" />
+        <el-table-column prop="created_at" label="Tanggal Dibuat" sortable>
+          <template #default="{ row }">
+            {{ $dayjs(row.created_at).format('YYYY-MM-DD HH:mm:ss') }}
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
-              v-if="checkScope(['permission_delete', 'permission_update'])"
+              v-if="
+                checkScope([
+                  `${basePermission}_delete`,
+                  `${basePermission}_update`,
+                ])
+              "
               trigger="click"
             >
-              <button class="btn btn-sm btn-outline btn-primary">
+              <button class="btn-outline btn btn-sm btn-primary">
                 Opsi <i class="ki-filled ki-down"></i>
               </button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item
-                    v-if="checkScope(['permission_update'])"
+                    v-if="checkScope([`${basePermission}_update`])"
                     @click="
                       $router.push(`/user-management/permissions/${row.id}`)
                     "
@@ -82,7 +89,7 @@
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
                   <el-dropdown-item
-                    v-if="checkScope(['permission_delete'])"
+                    v-if="checkScope([`${basePermission}_delete`])"
                     @click="deleteData(row.id)"
                   >
                     <i class="ki-filled ki-trash"></i> Hapus
@@ -124,6 +131,7 @@ definePageMeta({
   breadcrumbs: [{ title: 'User Management' }],
   authorize: ['permission_read'],
 })
+const basePermission = 'permission'
 
 const route = useRoute()
 const {

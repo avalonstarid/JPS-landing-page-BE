@@ -10,7 +10,7 @@
     status-icon
     @submit.native.prevent="onSubmit(formRef)"
   >
-    <div class="card-body">
+    <div class="gap-4 grid grid-cols-2 card-body">
       <InputBase
         v-model="permission.name"
         :errors="errors"
@@ -18,17 +18,33 @@
         label="Nama Permission"
         name="name"
       />
+
+      <InputBase
+        v-model="permission.label"
+        :errors="errors"
+        label="Label"
+        name="label"
+      />
+
+      <InputBase
+        v-model="permission.desc"
+        :autosize="{ minRows: 2 }"
+        :errors="errors"
+        label="Deskripsi"
+        name="desc"
+        type="textarea"
+      />
     </div>
-    <div class="card-footer justify-start gap-3">
+    <div class="justify-start gap-3 card-footer">
       <button
         class="btn btn-sm btn-secondary"
         type="button"
         @click="$router.back()"
       >
-        <i class="ki-filled ki-left"></i> Kembali
+        <i class="ki-left ki-filled"></i> Kembali
       </button>
       <BtnIndicator class="btn-sm" :loading="loading">
-        <i class="ki-filled ki-arrow-circle-right"></i> Submit
+        <i class="ki-arrow-circle-right ki-filled"></i> Submit
       </BtnIndicator>
     </div>
   </el-form>

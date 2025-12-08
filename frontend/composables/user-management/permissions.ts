@@ -1,7 +1,19 @@
+import type { IState } from '@/helpers/interfaces'
+
+export interface IPermission {
+  id: string
+  created_at: string
+  desc: string
+  guard_name: string
+  label: string
+  name: string
+  updated_at: string
+}
+
 export default function usePermissions() {
-  const permission = ref<any>({})
+  const permission = ref<Partial<IPermission>>({})
   const permissions = ref<any>({
-    data: [],
+    data: [] as IPermission[],
   })
 
   const errors = ref<any>({})
@@ -9,7 +21,7 @@ export default function usePermissions() {
   const router = useRouter()
   const sanctumFetch = useSanctumClient()
 
-  const state = reactive({
+  const state = reactive<IState>({
     defaultSort: undefined,
     page: 1,
     rows: 10,
