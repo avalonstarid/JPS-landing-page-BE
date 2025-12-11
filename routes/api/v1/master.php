@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\Master\EnumController;
 use App\Http\Controllers\V1\Master\EnumTypeController;
 use App\Http\Controllers\V1\Master\ProductController;
+use App\Http\Controllers\V1\Master\StandardController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(EnumController::class)->group(function () {
@@ -18,4 +19,9 @@ Route::controller(EnumTypeController::class)->group(function () {
 Route::controller(ProductController::class)->group(function () {
 	Route::delete('products/bulk-destroy', 'bulkDestroy');
 	Route::apiResource('products', ProductController::class);
+});
+
+Route::controller(StandardController::class)->group(function () {
+	Route::delete('standards/bulk-destroy', 'bulkDestroy');
+	Route::apiResource('standards', StandardController::class);
 });
