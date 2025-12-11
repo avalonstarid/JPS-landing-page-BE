@@ -1,0 +1,110 @@
+<?php
+
+namespace App\Models\Master;
+
+use App\Traits\InteractsWithHashedMedia;
+use App\Traits\OwnerTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
+class Product extends Model implements HasMedia
+{
+	use HasFactory,
+		HasUuids,
+		InteractsWithHashedMedia,
+		LogsActivity,
+		OwnerTrait;
+
+	/**
+	 * The accessors to append to the model's array form.
+	 *
+	 * @var list<string>
+	 */
+	protected $appends = [
+		'featured_thumb',
+	];
+
+	/**
+	 * The attributes that aren't mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $guarded = ['id'];
+
+	/**
+	 * @return HasOne
+	 */
+	public function featured(): HasOne
+	{
+		return $this->hasOne(Media::class, 'model_id')->where('collection_name', 'featured');
+	}
+
+	/**
+	 * Interact with the user's avatar.
+	 *
+	 * @return Attribute
+	 */
+	protected function featuredThumb(): Attribute
+	{
+		return Attribute::make(
+			get: fn() => $this->getFirstMedia('featured')?->getFullUrl('thumb'),
+		);
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function images(): HasMany
+	{
+		return $this->hasMany(Media::class, 'model_id')->where('collection_name', 'images');
+	}
+
+	/**
+	 * Get the attributes that should be cast.
+	 *
+	 * @return array<string, string>
+	 */
+	protected function casts(): array
+	{
+		return [
+			'active' => 'boolean',
+		];
+	}
+
+	/**
+	 * @return LogOptions
+	 */
+	public function getActivitylogOptions(): LogOptions
+	{
+		return LogOptions::defaults()
+			->logAll()
+			->logOnlyDirty()
+			->dontSubmitEmptyLogs();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function registerMediaCollections(): void
+	{
+		$this->addMediaCollection('featured')->singleFile();
+		$this->addMediaCollection('images');
+	}
+
+	public function registerMediaConversions(?Media $media = null): void
+	{
+		$this->addMediaConversion('thumb')
+			->format('webp')
+			->width(287)
+			->height(257)
+			->quality(80);
+	}
+}

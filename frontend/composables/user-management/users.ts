@@ -228,7 +228,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/auth/update-profile', {
+      let res = await sanctumFetch('/v1/auth/update-profile', {
         method: 'PUT',
         body: data,
       })
@@ -262,7 +262,7 @@ export default function useUsers() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/auth/update-password', {
+      let res = await sanctumFetch('/v1/auth/update-password', {
         method: 'PUT',
         body: data,
       })
@@ -291,7 +291,7 @@ export default function useUsers() {
 
   const checkTokenReset = async (data: object) => {
     try {
-      let res = await sanctumFetch('/auth/forgot-password/verify', {
+      let res = await sanctumFetch('/v1/auth/forgot-password/verify', {
         method: 'POST',
         body: data,
       })
@@ -307,7 +307,7 @@ export default function useUsers() {
   const checkVerifyEmail = async (query: any) => {
     try {
       let res = await sanctumFetch(
-        `/auth/verify-email/${query.id}/${query.hash}`,
+        `/v1/auth/verify-email/${query.id}/${query.hash}`,
         {
           params: {
             expires: query.expires,
@@ -335,7 +335,7 @@ export default function useUsers() {
     errors.value = ''
 
     try {
-      let res = await sanctumFetch('/auth/reset-password', {
+      let res = await sanctumFetch('/v1/auth/reset-password', {
         method: 'POST',
         body: data,
       })
