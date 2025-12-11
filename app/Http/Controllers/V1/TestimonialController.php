@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1\Master;
+namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Master\StandardRequest;
-use App\Models\Master\Standard;
+use App\Http\Requests\TestimonialRequest;
+use App\Models\Testimonial;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -13,14 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
-use Knuckles\Scribe\Attributes\Subgroup;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
 
-#[Group("Master", "API Endpoint for Master.")]
-#[Subgroup("Standar Perusahaan", "API endpoint for standar perusahaan.")]
-class StandardController extends Controller
+#[Group("Testimonial", "API Endpoint for testimonial.")]
+class TestimonialController extends Controller
 {
 	/**
 	 * Get Data
@@ -31,18 +29,16 @@ class StandardController extends Controller
 	 */
 	#[QueryParam('filter[search]', required: false, example: '', enum: ['search'])]
 	#[QueryParam('rows', 'int', required: false, example: 10)]
-	#[QueryParam('sort', description: 'Tambah tanda minus (-) di depan untuk descending', required: false, example: '', enum: [
-		'created_at', 'sort_order'])]
+	#[QueryParam('sort', description: 'Tambah tanda minus (-) di depan untuk descending', required: false, example: '', enum: ['created_at'])]
 	public function index(Request $request): JsonResponse
 	{
-//		$this->authorize('viewAny', Standard::class);
+//		$this->authorize('viewAny', Testimonial::class);
 
 		$query = QueryBuilder::for(
-			subject: Standard::class,
+			subject: Testimonial::class,
 		)->allowedSorts(
 			sorts: [
 				'created_at',
-				'sort_order',
 			],
 		)->allowedFilters(
 			filters: [
@@ -75,19 +71,19 @@ class StandardController extends Controller
 	/**
 	 * Insert Data
 	 *
-	 * @param StandardRequest $request
+	 * @param TestimonialRequest $request
 	 *
 	 * @return JsonResponse
 	 * @throws Throwable
 	 */
-	public function store(StandardRequest $request): JsonResponse
+	public function store(TestimonialRequest $request): JsonResponse
 	{
 		try {
-			$this->authorize('create', Standard::class);
+			$this->authorize('create', Testimonial::class);
 
 			DB::beginTransaction();
 
-			$data = Standard::create($request->validated());
+			$data = Testimonial::create($request->validated());
 
 			DB::commit();
 
@@ -109,43 +105,43 @@ class StandardController extends Controller
 	/**
 	 * Get Detail Data
 	 *
-	 * @param Standard $standard
+	 * @param Testimonial $testimonial
 	 *
 	 * @return JsonResponse
 	 */
-	public function show(Standard $standard): JsonResponse
+	public function show(Testimonial $testimonial): JsonResponse
 	{
-//		$this->authorize('view', $standard);
+//		$this->authorize('view', $testimonial);
 
 		return $this->response(
 			message: 'Berhasil mengambil data.',
-			data: $standard,
+			data: $testimonial,
 		);
 	}
 
 	/**
 	 * Update Data
 	 *
-	 * @param StandardRequest $request
-	 * @param Standard        $standard
+	 * @param TestimonialRequest $request
+	 * @param Testimonial        $testimonial
 	 *
 	 * @return JsonResponse
 	 * @throws Throwable
 	 */
-	public function update(StandardRequest $request, Standard $standard): JsonResponse
+	public function update(TestimonialRequest $request, Testimonial $testimonial): JsonResponse
 	{
 		try {
-			$this->authorize('update', $standard);
+			$this->authorize('update', $testimonial);
 
 			DB::beginTransaction();
 
-			$standard->update($request->validated());
+			$testimonial->update($request->validated());
 
 			DB::commit();
 
 			return $this->response(
 				message: 'Berhasil mengubah data.',
-				data: $standard,
+				data: $testimonial,
 			);
 		} catch (Exception $e) {
 			DB::rollBack();
@@ -160,15 +156,15 @@ class StandardController extends Controller
 	/**
 	 * Delete Data
 	 *
-	 * @param Standard $standard
+	 * @param Testimonial $testimonial
 	 *
 	 * @return JsonResponse
 	 */
-	public function destroy(Standard $standard): JsonResponse
+	public function destroy(Testimonial $testimonial): JsonResponse
 	{
-		$this->authorize('delete', $standard);
+		$this->authorize('delete', $testimonial);
 
-		$standard->delete();
+		$testimonial->delete();
 
 		return $this->response(
 			message: 'Berhasil menghapus data.',
@@ -185,11 +181,11 @@ class StandardController extends Controller
 	#[BodyParam("data", "object[]", "List of id", example: [['id' => 1]])]
 	public function bulkDestroy(Request $request): JsonResponse
 	{
-		$this->authorize('bulkDelete', Standard::class);
+		$this->authorize('bulkDelete', Testimonial::class);
 
 		$ids = collect($request->data)->pluck(value: 'id');
 		foreach ($ids as $id) {
-			$data = Standard::where('id', $id)->firstOrFail();
+			$data = Testimonial::where('id', $id)->firstOrFail();
 			$data->delete();
 		}
 

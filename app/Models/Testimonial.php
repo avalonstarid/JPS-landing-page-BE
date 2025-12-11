@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models\Master;
+namespace App\Models;
 
-use App\Traits\HasSortOrder;
 use App\Traits\OwnerTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,10 +10,9 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
 
-class Standard extends Model
+class Testimonial extends Model
 {
 	use HasFactory,
-		HasSortOrder,
 		HasTranslations,
 		HasUuids,
 		LogsActivity,
@@ -31,18 +29,6 @@ class Standard extends Model
 		'desc',
 		'title',
 	];
-
-	/**
-	 * Get the attributes that should be cast.
-	 *
-	 * @return array<string, string>
-	 */
-	protected function casts(): array
-	{
-		return [
-			'icon_custom' => 'boolean',
-		];
-	}
 
 	/**
 	 * @return LogOptions
