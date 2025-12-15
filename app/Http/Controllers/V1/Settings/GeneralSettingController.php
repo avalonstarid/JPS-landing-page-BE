@@ -8,8 +8,12 @@ use App\Models\Setting;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Knuckles\Scribe\Attributes\Group;
+use Knuckles\Scribe\Attributes\Subgroup;
 use Throwable;
 
+#[Group("Settings", "API Endpoint for Settings.")]
+#[Subgroup("General Setting", "API endpoint for general setting.")]
 class GeneralSettingController extends Controller
 {
 	/**
