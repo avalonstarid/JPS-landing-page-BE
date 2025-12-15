@@ -5,9 +5,9 @@ namespace App\Http\Controllers\V1\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\CompanyProfileRequest;
 use App\Models\Setting;
+use App\Traits\ManagesSettings;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\Subgroup;
 use Throwable;
@@ -16,6 +16,8 @@ use Throwable;
 #[Subgroup("General Setting", "API endpoint for general setting.")]
 class GeneralSettingController extends Controller
 {
+	use ManagesSettings;
+
 	/**
 	 * Update Setting Company Profile
 	 *
@@ -29,34 +31,15 @@ class GeneralSettingController extends Controller
 		try {
 			$this->authorize('update_company', Setting::class);
 
-			DB::beginTransaction();
-
 			$validated = $request->validated();
 
-			foreach ($validated as $key => $value) {
-				Setting::updateOrCreate(
-					[
-						'group' => 'company',
-						'key' => $key,
-					],
-					[
-						'value' => $value,
-						'type' => $key == 'company_social' ? 'json' : 'string',
-					],
-				);
-			}
-
-			cache()->forget('site_settings');
-
-			DB::commit();
+			$updatedData = $this->updateSettings($validated, 'company');
 
 			return $this->response(
 				message: 'Berhasil mengubah company profile.',
-				data: Setting::where('group', 'company')->get(),
+				data: $updatedData,
 			);
 		} catch (Exception $e) {
-			DB::rollBack();
-
 			return $this->response(
 				message: $e->getMessage(),
 				status_code: $e->getCode(),
