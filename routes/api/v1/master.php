@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\V1\Master\EnumController;
 use App\Http\Controllers\V1\Master\EnumTypeController;
+use App\Http\Controllers\V1\Master\LocationController;
 use App\Http\Controllers\V1\Master\ProductController;
 use App\Http\Controllers\V1\Master\StandardController;
 use App\Http\Controllers\V1\Master\VisionMissionController;
@@ -15,6 +16,11 @@ Route::controller(EnumController::class)->group(function () {
 Route::controller(EnumTypeController::class)->group(function () {
 	Route::delete('enum-types/bulk-destroy', 'bulkDestroy');
 	Route::apiResource('enum-types', EnumTypeController::class);
+});
+
+Route::controller(LocationController::class)->group(function () {
+	Route::delete('locations/bulk-destroy', 'bulkDestroy');
+	Route::apiResource('locations', LocationController::class);
 });
 
 Route::controller(ProductController::class)->group(function () {
