@@ -22,10 +22,10 @@ class FaqRequest extends BaseApiRequest
 	public function attributes(): array
 	{
 		return [
-			'desc.id' => 'Deskripsi (Bahasa Indonesia)',
-			'desc.en' => 'Deskripsi (Bahasa Inggris)',
-			'title.id' => 'Judul (Bahasa Indonesia)',
-			'title.en' => 'Judul (Bahasa Inggris)',
+			'answer.id' => 'Pertanyaan (Bahasa Indonesia)',
+			'answer.en' => 'Pertanyaan (Bahasa Inggris)',
+			'question.id' => 'Jawaban (Bahasa Indonesia)',
+			'question.en' => 'Jawaban (Bahasa Inggris)',
 		];
 	}
 
