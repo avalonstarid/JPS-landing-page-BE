@@ -11,19 +11,15 @@ return new class extends Migration {
 	 */
 	public function up(): void
 	{
-		Schema::create('settings', function (Blueprint $table) {
+		Schema::create('business_lines', function (Blueprint $table) {
 			$table->uuid('id')->primary();
-			$table->string('group', 100)->index();
-			$table->string('key', 100)->index();
-			$table->string('type')->default('string')
-				->comment("Helper untuk casting: 'string', 'boolean', 'int', 'json'");
-			$table->longText('value')->nullable();
+			$table->json('desc');
+			$table->integer('sort_order');
+			$table->json('title');
 			$table->timestamps();
 
 			$table->foreignIdFor(User::class, 'created_by_id')->nullable()->constrained()->nullOnDelete();
 			$table->foreignIdFor(User::class, 'updated_by_id')->nullable()->constrained()->nullOnDelete();
-
-			$table->unique(['group', 'key']);
 		});
 	}
 
@@ -32,6 +28,6 @@ return new class extends Migration {
 	 */
 	public function down(): void
 	{
-		Schema::dropIfExists('settings');
+		Schema::dropIfExists('business_lines');
 	}
 };

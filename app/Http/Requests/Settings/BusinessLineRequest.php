@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Settings;
 
 use App\Http\Requests\BaseApiRequest;
+use Illuminate\Validation\Rule;
 
-class HistoricalTimelineRequest extends BaseApiRequest
+class BusinessLineRequest extends BaseApiRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -42,12 +43,16 @@ class HistoricalTimelineRequest extends BaseApiRequest
 			'desc' => ['required', 'array'],
 			'desc.id' => ['required', 'string'],
 			'desc.en' => ['required', 'string'],
-			'icon' => ['required', 'string', 'max:100'],
-			'icon_custom' => ['nullable', 'boolean'],
+			'featured' => ['nullable', 'file', 'image', 'max:5120'],
+			'featured_remove' => ['nullable', 'boolean'],
+			'images' => ['nullable', 'array'],
+			'images.*' => ['file', 'image', 'max:5120'],
+			'images_remove' => ['nullable', 'array'],
+			'images_remove.*' => ['nullable', Rule::exists('media', 'id')],
+			'sort_order' => ['required', 'string', 'numeric'],
 			'title' => ['required', 'array'],
 			'title.id' => ['required', 'string', 'max:100'],
 			'title.en' => ['required', 'string', 'max:100'],
-			'year' => ['required', 'numeric'],
 		];
 	}
 }

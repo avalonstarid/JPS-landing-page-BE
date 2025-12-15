@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Master;
+namespace App\Models\Settings;
 
+use App\Traits\HasSortOrder;
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,10 +15,13 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Translatable\HasTranslations;
 
-class Product extends Model implements HasMedia
+class BusinessLine extends Model implements HasMedia
 {
 	use HasFactory,
+		HasSortOrder,
+		HasTranslations,
 		HasUuids,
 		InteractsWithHashedMedia,
 		LogsActivity,
@@ -38,6 +42,11 @@ class Product extends Model implements HasMedia
 	 * @var array
 	 */
 	protected $guarded = ['id'];
+
+	public array $translatable = [
+		'desc',
+		'title',
+	];
 
 	/**
 	 * @return HasOne
@@ -65,18 +74,6 @@ class Product extends Model implements HasMedia
 	public function images(): HasMany
 	{
 		return $this->hasMany(Media::class, 'model_id')->where('collection_name', 'images');
-	}
-
-	/**
-	 * Get the attributes that should be cast.
-	 *
-	 * @return array<string, string>
-	 */
-	protected function casts(): array
-	{
-		return [
-			'active' => 'boolean',
-		];
 	}
 
 	/**
