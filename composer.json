@@ -22,7 +22,9 @@
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.30",
         "maatwebsite/excel": "^3.1",
+        "me-shaon/laravel-request-analytics": "^1.8",
         "opcodesio/log-viewer": "^3.21",
+        "ralphjsmit/laravel-seo": "^1.7",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-backup": "^9.3",
         "spatie/laravel-image-optimizer": "^1.8",
@@ -30,6 +32,7 @@
         "spatie/laravel-one-time-passwords": "^1.0",
         "spatie/laravel-permission": "^6.23",
         "spatie/laravel-query-builder": "^6.3",
+        "spatie/laravel-sluggable": "^3.7",
         "spatie/laravel-translatable": "^6.12",
         "whichbrowser/parser": "^2.1"
     },

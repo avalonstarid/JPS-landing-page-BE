@@ -5,8 +5,15 @@ use App\Http\Controllers\V1\FaqController;
 use App\Http\Controllers\V1\NotificationController;
 use App\Http\Controllers\V1\TestimonialController;
 use Illuminate\Support\Facades\Route;
+use MeShaon\RequestAnalytics\Http\Controllers\Api\AnalyticsApiController;
 
 Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
+	Route::controller(AnalyticsApiController::class)->prefix('analytics')->group(function () {
+		Route::get('overview', 'overview');
+		Route::get('page-views', 'pageViews');
+		Route::get('visitors', 'visitors');
+	});
+
 	Route::controller(FaqController::class)->group(function () {
 		Route::delete('faq/bulk-destroy', 'bulkDestroy');
 		Route::apiResource('faq', FaqController::class);
