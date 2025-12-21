@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\FaqController;
+use App\Http\Controllers\V1\MediaController;
 use App\Http\Controllers\V1\NotificationController;
+use App\Http\Controllers\V1\PostController;
 use App\Http\Controllers\V1\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use MeShaon\RequestAnalytics\Http\Controllers\Api\AnalyticsApiController;
@@ -21,11 +23,21 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 
 	Route::prefix('master')->group(__DIR__ . '/api/v1/master.php');
 
+	Route::controller(MediaController::class)->prefix('media')->group(function () {
+		Route::delete('{media}', 'destroy');
+		Route::post('', 'upload');
+	});
+
 	Route::controller(NotificationController::class)->prefix('notifications')->group(function () {
 		Route::put('mark-as-read/{id}', 'markAsRead');
 		Route::post('read-all', 'readAll');
 		Route::get('unread-count', 'unreadCount');
 		Route::get('', 'index');
+	});
+
+	Route::controller(PostController::class)->group(function () {
+		Route::delete('posts/bulk-destroy', 'bulkDestroy');
+		Route::apiResource('posts', PostController::class);
 	});
 
 	Route::prefix('settings')->group(__DIR__ . '/api/v1/settings.php');

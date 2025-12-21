@@ -13,13 +13,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use MeShaon\RequestAnalytics\Contracts\CanAccessAnalyticsDashboard;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\OneTimePasswords\Models\Concerns\HasOneTimePasswords;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasMedia, MustVerifyEmail
+class User extends Authenticatable implements CanAccessAnalyticsDashboard, HasMedia, MustVerifyEmail
 {
 	/** @use HasFactory<UserFactory> */
 	use HasApiTokens,
@@ -65,6 +66,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
 		return Attribute::make(
 			get: fn() => $this->getFirstMedia('avatar')?->getFullUrl(),
 		);
+	}
+
+	public function canAccessAnalyticsDashboard(): bool
+	{
+		return $this->hasRole('super-admin');
 	}
 
 	/**
