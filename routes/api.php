@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\ContactUsController;
 use App\Models\AppVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::get('app-version', function () {
 		'url' => $data?->url,
 	]);
 });
+
+Route::post('contact-us', [ContactUsController::class, 'store']);
 
 Route::get('redirect-login', function () {
 	return redirect(config('app.frontend_url') . '/auth/sign-in');

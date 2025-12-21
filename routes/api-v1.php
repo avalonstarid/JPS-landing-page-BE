@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\FaqController;
 use App\Http\Controllers\V1\MediaController;
 use App\Http\Controllers\V1\NotificationController;
@@ -14,6 +15,13 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 		Route::get('overview', 'overview');
 		Route::get('page-views', 'pageViews');
 		Route::get('visitors', 'visitors');
+	});
+
+	Route::controller(ContactUsController::class)->group(function () {
+		Route::delete('contact-us/bulk-destroy', 'bulkDestroy');
+		Route::apiResource('contact-us', ContactUsController::class)->except(['store'])->parameters([
+			'contact-us' => 'contact_us',
+		]);
 	});
 
 	Route::controller(FaqController::class)->group(function () {
