@@ -3,6 +3,11 @@
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\FaqController;
+use App\Http\Controllers\V1\Investor\FinancialReportController;
+use App\Http\Controllers\V1\Investor\KeterbukaanInformasiController;
+use App\Http\Controllers\V1\Investor\LaporanTahunanController;
+use App\Http\Controllers\V1\Investor\ProspectusController;
+use App\Http\Controllers\V1\Investor\RupsController;
 use App\Http\Controllers\V1\MediaController;
 use App\Http\Controllers\V1\NotificationController;
 use App\Http\Controllers\V1\PostController;
@@ -27,6 +32,37 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::controller(FaqController::class)->group(function () {
 		Route::delete('faq/bulk-destroy', 'bulkDestroy');
 		Route::apiResource('faq', FaqController::class);
+	});
+
+	Route::prefix('investor')->group(function () {
+		Route::controller(FinancialReportController::class)->group(function () {
+			Route::delete('financial-report/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('financial-report', FinancialReportController::class);
+		});
+
+		Route::controller(KeterbukaanInformasiController::class)->group(function () {
+			Route::delete('keterbukaan-informasi/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('keterbukaan-informasi', KeterbukaanInformasiController::class);
+		});
+
+		Route::controller(LaporanTahunanController::class)->group(function () {
+			Route::delete('laporan-tahunan/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('laporan-tahunan', LaporanTahunanController::class);
+		});
+
+		Route::controller(ProspectusController::class)->group(function () {
+			Route::delete('prospectus/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('prospectus', ProspectusController::class)->parameters([
+				'prospectus' => 'prospectus',
+			]);
+		});
+
+		Route::controller(RupsController::class)->group(function () {
+			Route::delete('rups/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('rups', RupsController::class)->parameters([
+				'rups' => 'rups',
+			]);
+		});
 	});
 
 	Route::prefix('master')->group(__DIR__ . '/api/v1/master.php');
