@@ -4,12 +4,15 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactUsRequest;
+use App\Mail\ContactUsMail;
 use App\Models\ContactUs;
+use App\Models\Setting;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -37,7 +40,8 @@ class ContactUsController extends Controller
 
 		$query = QueryBuilder::for(
 			subject: ContactUs::select([
-				'id', 'email', 'location', 'name', 'phone', 'created_at', 'updated_at', 'created_by_id', 'updated_by_id',
+				'id', 'email', 'location', 'name', 'phone', 'created_at', 'updated_at', 'created_by_id',
+				'updated_by_id',
 			]),
 		)->allowedSorts(
 			sorts: [
@@ -89,6 +93,14 @@ class ContactUsController extends Controller
 			$data = ContactUs::create($request->validated());
 
 			DB::commit();
+
+			// Send Email
+			$company = Setting::where('group', 'company')->get()
+				->mapWithKeys(function ($item) {
+					return [$item->key => $item->value];
+				})->toArray();
+			Mail::to($company['company_social']['email'])->send(new ContactUsMail(array_merge($data->toArray(),
+				$company)));
 
 			return $this->response(
 				message: 'Berhasil menambah data.',
