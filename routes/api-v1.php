@@ -3,6 +3,8 @@
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\FaqController;
+use App\Http\Controllers\V1\Investor\DocumentInvsController;
+use App\Http\Controllers\V1\Investor\FinancialReportController;
 use App\Http\Controllers\V1\MediaController;
 use App\Http\Controllers\V1\NotificationController;
 use App\Http\Controllers\V1\PostController;
@@ -27,6 +29,22 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::controller(FaqController::class)->group(function () {
 		Route::delete('faq/bulk-destroy', 'bulkDestroy');
 		Route::apiResource('faq', FaqController::class);
+	});
+
+	Route::prefix('investor')->group(function () {
+		Route::controller(DocumentInvsController::class)->prefix('document/{category:slug}')->group(function () {
+			Route::delete('bulk-destroy', 'bulkDestroy');
+			Route::get('', 'index');
+			Route::post('', 'store');
+			Route::get('{document}', 'show');
+			Route::put('{document}', 'update');
+			Route::delete('{document}', 'destroy');
+		});
+
+		Route::controller(FinancialReportController::class)->group(function () {
+			Route::delete('financial-reports/bulk-destroy', 'bulkDestroy');
+			Route::apiResource('financial-reports', FinancialReportController::class);
+		});
 	});
 
 	Route::prefix('master')->group(__DIR__ . '/api/v1/master.php');
