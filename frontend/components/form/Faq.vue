@@ -2,7 +2,7 @@
   <el-form
     ref="formRef"
     class="card"
-    :model="visionMission"
+    :model="faq"
     :rules="rules"
     label-position="top"
     require-asterisk-position="right"
@@ -12,46 +12,40 @@
   >
     <div class="card-group gap-4 grid grid-cols-6">
       <InputNumber
-        v-model="visionMission.sort_order"
+        v-model="faq.sort_order"
         :errors="errors"
         label="Urutan"
         name="sort_order"
       />
-
-      <InputBase
-        v-model="visionMission.icon"
-        class="col-span-2"
-        :errors="errors"
-        label="Icon"
-        name="icon"
-      >
-        <template #append>
-          <InputSwitch
-            v-model="visionMission.icon_custom"
-            :errors="errors"
-            active-text="Custom Icon?"
-            name="icon_custom"
-          />
-        </template>
-      </InputBase>
     </div>
 
-    <div v-if="visionMission.desc" class="card-group gap-4 grid grid-cols-2">
-      <div class="p-4 border border-gray-200 rounded-lg">
-        <div class="mb-4 font-bold text-gray-700">Bahasa Indonesia</div>
+    <div class="card-group gap-4 grid grid-cols-2">
+      <div class="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">
+        <div class="font-bold text-gray-700">Bahasa Indonesia</div>
 
         <InputBase
-          v-model="visionMission.desc.id"
+          v-if="faq.question"
+          v-model="faq.question.id"
+          :errors="errors"
+          label="Pertanyaan (ID)"
+          name="question.id"
+        />
+
+        <InputBase
+          v-if="faq.answer"
+          v-model="faq.answer.id"
           :errors="errors"
           :autosize="{ minRows: 2 }"
-          label="Deskripsi (ID)"
-          name="desc.id"
+          label="Jawaban (ID)"
+          name="answer.id"
           type="textarea"
         />
       </div>
 
-      <div class="relative p-4 border border-gray-200 rounded-lg">
-        <div class="flex justify-between items-center mb-4">
+      <div
+        class="relative flex flex-col gap-4 p-4 border border-gray-200 rounded-lg"
+      >
+        <div class="flex justify-between items-center">
           <div class="font-bold text-gray-700">English</div>
           <button
             class="btn btn-sm btn-light-primary"
@@ -64,11 +58,20 @@
         </div>
 
         <InputBase
-          v-model="visionMission.desc.en"
+          v-if="faq.question"
+          v-model="faq.question.en"
+          :errors="errors"
+          label="Pertanyaan (EN)"
+          name="question.en"
+        />
+
+        <InputBase
+          v-if="faq.answer"
+          v-model="faq.answer.en"
           :errors="errors"
           :autosize="{ minRows: 2 }"
-          label="Deskripsi (EN)"
-          name="desc.en"
+          label="Jawaban (EN)"
+          name="answer.en"
           type="textarea"
         />
       </div>
@@ -76,7 +79,7 @@
 
     <div class="card-group">
       <InputSwitch
-        v-model="visionMission.active"
+        v-model="faq.active"
         :errors="errors"
         active-text="Aktif?"
         name="active"
@@ -99,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import useVisionMissions from '@/composables/master/vision-missions'
+import useFaqs from '@/composables/faqs'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const props = defineProps({
@@ -107,39 +110,40 @@ const props = defineProps({
 })
 
 const formRef = ref<FormInstance>()
-const {
-  errors,
-  loading,
-  visionMission,
-  getVisionMission,
-  storeVisionMission,
-  updateVisionMission,
-} = useVisionMissions()
+const { errors, loading, faq, getFaq, storeFaq, updateFaq } = useFaqs()
 
 const copyFromId = () => {
-  visionMission.value.desc!.en = visionMission.value.desc!.id
+  faq.value.answer!.en = faq.value.answer!.id
+  faq.value.question!.en = faq.value.question!.id
 }
 
 // Create Rules Form
 const rules = reactive<FormRules>({
-  'desc.id': [
+  'answer.id': [
     {
       required: true,
-      message: 'Deskripsi (ID) wajib diisi.',
+      message: 'Jawaban (ID) wajib diisi.',
       trigger: 'blur',
     },
   ],
-  'desc.en': [
+  'answer.en': [
     {
       required: true,
-      message: 'Deskripsi (EN) wajib diisi.',
+      message: 'Jawaban (EN) wajib diisi.',
       trigger: 'blur',
     },
   ],
-  icon: [
+  'question.id': [
     {
       required: true,
-      message: 'Icon wajib diisi.',
+      message: 'Pertanyaan (ID) wajib diisi.',
+      trigger: 'blur',
+    },
+  ],
+  'question.en': [
+    {
+      required: true,
+      message: 'Pertanyaan (EN) wajib diisi.',
       trigger: 'blur',
     },
   ],
@@ -159,9 +163,9 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       if (props.id) {
-        await updateVisionMission(props.id, { ...visionMission.value })
+        await updateFaq(props.id, { ...faq.value })
       } else {
-        await storeVisionMission({ ...visionMission.value })
+        await storeFaq({ ...faq.value })
       }
     }
   })
@@ -169,7 +173,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 
 onMounted(() => {
   if (props.id) {
-    getVisionMission(props.id)
+    getFaq(props.id)
   }
 })
 </script>
