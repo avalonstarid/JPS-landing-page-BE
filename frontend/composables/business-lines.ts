@@ -1,27 +1,30 @@
-import type { IState } from '@/helpers/interfaces'
+import type { ApiResponse, IMultiLang, IState } from '@/helpers/interfaces'
 
-export interface IProduct {
+export interface IBusinessLine {
   id: string
-  active: boolean
   created_at: string
-  featured: string | File
-  full_desc: string
+  desc: IMultiLang
+  featured: File | string
+  featured_remove: number
   images: (string | File | any)[]
   images_remove?: string[]
-  short_desc: string
-  slug: string
   sort_order: number
-  title: string
+  title: IMultiLang
   updated_at: string
 }
 
-export default function useProducts() {
-  const product = ref<Partial<IProduct>>({
-    active: true,
+export default function useBusinessLines() {
+  const businessLine = ref<Partial<IBusinessLine>>({
+    desc: {
+      id: '',
+      en: '',
+    },
+    title: {
+      id: '',
+      en: '',
+    },
   })
-  const products = ref<any>({
-    data: [] as IProduct[],
-  })
+  const businessLines = ref<ApiResponse<IBusinessLine[]>>()
 
   const errors = ref<any>({})
   const loading = ref<boolean>(false)
@@ -35,15 +38,18 @@ export default function useProducts() {
     sort: null as string | null,
   })
 
-  const getAllProducts = async () => {
+  const getAllBusinessLines = async () => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        params: { all: 1, ...state },
-      })
+      let res = await sanctumFetch<ApiResponse<IBusinessLine[]>>(
+        '/v1/business-lines',
+        {
+          params: { all: 1, ...state },
+        },
+      )
 
-      products.value = res
+      businessLines.value = res
     } catch (e: any) {
       errors.value = e
 
@@ -57,15 +63,18 @@ export default function useProducts() {
     }
   }
 
-  const getProducts = async () => {
+  const getBusinessLines = async () => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        params: state,
-      })
+      let res = await sanctumFetch<ApiResponse<IBusinessLine[]>>(
+        '/v1/business-lines',
+        {
+          params: state,
+        },
+      )
 
-      products.value = res
+      businessLines.value = res
     } catch (e: any) {
       errors.value = e
 
@@ -79,13 +88,15 @@ export default function useProducts() {
     }
   }
 
-  const getProduct = async (id: string) => {
+  const getBusinessLine = async (id: string) => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`)
+      let res = await sanctumFetch<ApiResponse<IBusinessLine>>(
+        `/v1/business-lines/${id}`,
+      )
 
-      product.value = res.data
+      businessLine.value = res.data
     } catch (e: any) {
       router.back()
 
@@ -99,15 +110,18 @@ export default function useProducts() {
     }
   }
 
-  const storeProduct = async (data: object) => {
+  const storeBusinessLine = async (data: object) => {
     errors.value = ''
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        method: 'POST',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<IBusinessLine>>(
+        '/v1/business-lines',
+        {
+          method: 'POST',
+          body: data,
+        },
+      )
 
       router.back()
 
@@ -133,15 +147,18 @@ export default function useProducts() {
     }
   }
 
-  const updateProduct = async (id: string, data: object) => {
+  const updateBusinessLine = async (id: string, data: object) => {
     errors.value = ''
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`, {
-        method: 'PUT',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<IBusinessLine>>(
+        `/v1/business-lines/${id}`,
+        {
+          method: 'PUT',
+          body: data,
+        },
+      )
 
       router.back()
 
@@ -167,13 +184,16 @@ export default function useProducts() {
     }
   }
 
-  const destroyProduct = async (id: string) => {
+  const destroyBusinessLine = async (id: string) => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`, {
-        method: 'DELETE',
-      })
+      let res = await sanctumFetch<ApiResponse<null>>(
+        `/v1/business-lines/${id}`,
+        {
+          method: 'DELETE',
+        },
+      )
 
       ElNotification({
         title: 'Success',
@@ -191,14 +211,17 @@ export default function useProducts() {
     }
   }
 
-  const bulkDestroyProduct = async (data: object) => {
+  const bulkDestroyBusinessLine = async (data: object) => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products/bulk-destroy', {
-        method: 'DELETE',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<null>>(
+        '/v1/business-lines/bulk-destroy',
+        {
+          method: 'DELETE',
+          body: data,
+        },
+      )
 
       ElNotification({
         title: 'Success',
@@ -219,15 +242,15 @@ export default function useProducts() {
   return {
     errors,
     loading,
-    product,
-    products,
-    getAllProducts,
-    getProducts,
-    getProduct,
-    storeProduct,
-    updateProduct,
-    destroyProduct,
-    bulkDestroyProduct,
+    businessLine,
+    businessLines,
+    getAllBusinessLines,
+    getBusinessLines,
+    getBusinessLine,
+    storeBusinessLine,
+    updateBusinessLine,
+    destroyBusinessLine,
+    bulkDestroyBusinessLine,
     state,
   }
 }

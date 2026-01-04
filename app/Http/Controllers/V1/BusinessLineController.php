@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1\Settings;
+namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\BusinessLineRequest;
-use App\Models\Settings\BusinessLine;
+use App\Http\Requests\BusinessLineRequest;
+use App\Models\BusinessLine;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;

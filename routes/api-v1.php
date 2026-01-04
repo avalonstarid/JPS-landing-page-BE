@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\BusinessLineController;
 use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\FaqController;
 use App\Http\Controllers\V1\HistoricalTimelineController;
@@ -20,6 +21,11 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 		Route::get('overview', 'overview');
 		Route::get('page-views', 'pageViews');
 		Route::get('visitors', 'visitors');
+	});
+
+	Route::controller(BusinessLineController::class)->group(function () {
+		Route::delete('business-lines/bulk-destroy', 'bulkDestroy');
+		Route::apiResource('business-lines', BusinessLineController::class);
 	});
 
 	Route::controller(ContactUsController::class)->group(function () {

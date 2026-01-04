@@ -2,7 +2,7 @@
 
 namespace App\Models\Master;
 
-use App\Models\Settings\BusinessLine;
+use App\Models\BusinessLine;
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;

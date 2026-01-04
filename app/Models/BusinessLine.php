@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Settings;
+namespace App\Models;
 
 use App\Traits\HasSortOrder;
 use App\Traits\InteractsWithHashedMedia;

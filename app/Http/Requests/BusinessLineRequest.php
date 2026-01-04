@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests;
 
-use App\Http\Requests\BaseApiRequest;
 use Illuminate\Validation\Rule;
 
 class BusinessLineRequest extends BaseApiRequest
