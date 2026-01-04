@@ -2,7 +2,7 @@
   <el-form
     ref="formRef"
     class="card"
-    :model="category"
+    :model="visionMission"
     :rules="rules"
     label-position="top"
     require-asterisk-position="right"
@@ -10,31 +10,43 @@
     status-icon
     @submit.native.prevent="onSubmit(formRef)"
   >
-    <div class="card-group">
-      <InputSelect
-        v-model="category.parent_id"
+    <div class="card-group gap-4 grid grid-cols-6">
+      <InputNumber
+        v-model="visionMission.sort_order"
+        :errors="errors"
+        label="Urutan"
+        name="sort_order"
+      />
+
+      <InputBase
+        v-model="visionMission.icon"
         class="col-span-2"
         :errors="errors"
-        label="Induk Kategori"
-        name="parent_id"
+        label="Icon"
+        name="icon"
       >
-        <el-option
-          v-for="item in useParentCategories.categories?.data"
-          :key="item.id"
-          :label="item.name.id"
-          :value="item.id"
-        />
-      </InputSelect>
+        <template #append>
+          <InputSwitch
+            v-model="visionMission.icon_custom"
+            :errors="errors"
+            active-text="Custom Icon?"
+            name="icon_custom"
+          />
+        </template>
+      </InputBase>
     </div>
 
-    <div v-if="category.name" class="card-group gap-4 grid grid-cols-2">
+    <div v-if="visionMission.desc" class="card-group gap-4 grid grid-cols-2">
       <div class="p-4 border border-gray-200 rounded-lg">
         <div class="mb-4 font-bold text-gray-700">Bahasa Indonesia</div>
+
         <InputBase
-          v-model="category.name.id"
+          v-model="visionMission.desc.id"
           :errors="errors"
-          label="Nama Kategori"
-          name="name.id"
+          :autosize="{ minRows: 2 }"
+          label="Deskripsi (ID)"
+          name="desc.id"
+          type="textarea"
         />
       </div>
 
@@ -50,14 +62,27 @@
             <i class="ki-filled ki-copy"></i> Copy From ID
           </button>
         </div>
+
         <InputBase
-          v-model="category.name.en"
+          v-model="visionMission.desc.en"
           :errors="errors"
-          label="Category Name"
-          name="name.en"
+          :autosize="{ minRows: 2 }"
+          label="Deskripsi (EN)"
+          name="desc.en"
+          type="textarea"
         />
       </div>
     </div>
+
+    <div class="card-group">
+      <InputSwitch
+        v-model="visionMission.active"
+        :errors="errors"
+        active-text="Aktif?"
+        name="active"
+      />
+    </div>
+
     <div class="justify-start gap-3 card-footer">
       <button
         class="btn btn-sm btn-secondary"
@@ -74,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import useCategories from '@/composables/master/categories'
+import useVisionMissions from '@/composables/master/vision-missions'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const props = defineProps({
@@ -85,32 +110,45 @@ const formRef = ref<FormInstance>()
 const {
   errors,
   loading,
-  category,
-  getCategory,
-  storeCategory,
-  updateCategory,
-} = useCategories()
-const useParentCategories = reactive(useCategories())
+  visionMission,
+  getVisionMission,
+  storeVisionMission,
+  updateVisionMission,
+} = useVisionMissions()
 
 const copyFromId = () => {
-  if (category.value.name) {
-    category.value.name.en = category.value.name.id
+  if (visionMission.value.desc) {
+    visionMission.value.desc.en = visionMission.value.desc.id
   }
 }
 
 // Create Rules Form
 const rules = reactive<FormRules>({
-  'name.id': [
+  'desc.id': [
     {
       required: true,
-      message: 'Nama Kategori (ID) wajib diisi.',
+      message: 'Deskripsi (ID) wajib diisi.',
       trigger: 'blur',
     },
   ],
-  'name.en': [
+  'desc.en': [
     {
       required: true,
-      message: 'Category Name (EN) is required.',
+      message: 'Deskripsi (EN) wajib diisi.',
+      trigger: 'blur',
+    },
+  ],
+  icon: [
+    {
+      required: true,
+      message: 'Icon wajib diisi.',
+      trigger: 'blur',
+    },
+  ],
+  sort_order: [
+    {
+      required: true,
+      message: 'Urutan wajib diisi.',
       trigger: 'blur',
     },
   ],
@@ -123,20 +161,17 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       if (props.id) {
-        await updateCategory(props.id, { ...category.value })
+        await updateVisionMission(props.id, { ...visionMission.value })
       } else {
-        await storeCategory({ ...category.value })
+        await storeVisionMission({ ...visionMission.value })
       }
     }
   })
 }
 
 onMounted(() => {
-  useParentCategories.state['filter[parent_id]'] = 'null'
-  useParentCategories.getAllCategories()
-
   if (props.id) {
-    getCategory(props.id)
+    getVisionMission(props.id)
   }
 })
 </script>

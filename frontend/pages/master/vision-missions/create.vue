@@ -1,5 +1,5 @@
 <template>
-  <FormMasterCategory />
+  <FormMasterVisionMission />
 </template>
 
 <script setup lang="ts">
@@ -7,8 +7,8 @@ definePageMeta({
   title: 'Tambah',
   breadcrumbs: [
     { title: 'Master' },
-    { title: 'Kategori', to: '/master/categories' },
+    { title: 'Visi & Misi', to: '/master/vision-missions' },
   ],
-  authorize: ['category_create'],
+  authorize: ['vision_mission_create'],
 })
 </script>

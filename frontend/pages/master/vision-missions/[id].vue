@@ -1,5 +1,5 @@
 <template>
-  <FormMasterCategory :id="route.params.id.toString()" />
+  <FormMasterVisionMission :id="route.params.id.toString()" />
 </template>
 
 <script setup lang="ts">
@@ -7,9 +7,9 @@ definePageMeta({
   title: 'Ubah',
   breadcrumbs: [
     { title: 'Master' },
-    { title: 'Kategori', to: '/master/categories' },
+    { title: 'Visi & Misi', to: '/master/vision-missions' },
   ],
-  authorize: ['category_update'],
+  authorize: ['vision_mission_update'],
 })
 
 const route = useRoute()

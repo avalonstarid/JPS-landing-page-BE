@@ -4,9 +4,13 @@
       :placeholder="`Masukan ${label ?? 'disini'}`"
       clearable
       v-bind="$attrs"
-    />
+    >
+      <template #[name]="slotData" v-for="(_, name) in $slots">
+        <slot :name="name" v-bind="slotData" />
+      </template>
+    </el-input>
 
-    <span v-if="showHelptext" class="text-xs text-gray-500">
+    <span v-if="showHelptext" class="text-gray-500 text-xs">
       {{ helpText }}
     </span>
   </el-form-item>
