@@ -48,7 +48,13 @@ class CategoryController extends Controller
 				AllowedFilter::callback('search', function (Builder $q, $value) {
 					$q->whereAny(['name', 'slug'], 'LIKE', '%' . $value . '%');
 				}),
-				AllowedFilter::exact('parent_id'),
+				AllowedFilter::callback('parent_id', function (Builder $q, $value) {
+					if ($value == 'null') {
+						$q->whereNull('parent_id');
+					} else {
+						$q->where('parent_id', $value);
+					}
+				}),
 			],
 		)->allowedIncludes(
 			includes: [

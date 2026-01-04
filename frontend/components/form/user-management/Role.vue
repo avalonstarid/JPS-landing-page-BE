@@ -37,7 +37,7 @@
         multiple
       >
         <el-option
-          v-for="item in permissions.data"
+          v-for="item in permissions?.data"
           :key="item.id"
           :label="item.name"
           :value="item.id"

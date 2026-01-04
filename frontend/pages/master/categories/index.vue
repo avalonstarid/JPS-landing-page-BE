@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'user-management-permissions-create' }"
+          :to="{ name: 'master-categories-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="permissions?.data"
+        :data="categories?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -49,21 +49,17 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column
-          :index="permissions?.from"
+          :index="categories?.from"
           align="right"
           class-name="text-nowrap"
           type="index"
           width="60"
         />
         <el-table-column type="selection" width="30" />
-        <el-table-column prop="name" label="Nama Permission" sortable />
-        <el-table-column prop="label" label="Label" sortable />
-        <el-table-column prop="desc" label="Deskripsi" />
-        <el-table-column prop="created_at" label="Tanggal Dibuat" sortable>
-          <template #default="{ row }">
-            {{ $dayjs(row.created_at).format('YYYY-MM-DD HH:mm:ss') }}
-          </template>
-        </el-table-column>
+        <el-table-column prop="parent.name.id" label="Parent" />
+        <el-table-column prop="name.id" label="Nama Kategori (ID)" />
+        <el-table-column prop="name.en" label="Nama Kategori (EN)" />
+        <el-table-column prop="slug" label="Slug" />
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
@@ -82,9 +78,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="
-                      $router.push(`/user-management/permissions/${row.id}`)
-                    "
+                    @click="$router.push(`/master/categories/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -107,7 +101,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="permissions?.total ?? 0"
+        :total="categories?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"
@@ -117,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import usePermissions from '@/composables/user-management/permissions'
+import useCategories from '@/composables/master/categories'
 import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
@@ -127,21 +121,21 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Permissions',
-  breadcrumbs: [{ title: 'User Management' }],
-  authorize: ['permission_read'],
+  title: 'Kategori',
+  breadcrumbs: [{ title: 'Master' }],
+  authorize: ['category_read'],
 })
-const basePermission = 'permission'
+const basePermission = 'category'
 
 const route = useRoute()
 const {
-  permissions,
-  getPermissions,
-  destroyPermission,
-  bulkDestroyPermission,
+  categories,
+  getCategories,
+  destroyCategory,
+  bulkDestroyCategory,
   loading,
   state,
-} = usePermissions()
+} = useCategories()
 const selectedData = ref([])
 
 const deleteData = (id) => {
@@ -150,8 +144,8 @@ const deleteData = (id) => {
     type: 'warning',
   })
     .then(async () => {
-      await destroyPermission(id)
-      await getPermissions()
+      await destroyCategory(id)
+      await getCategories()
     })
     .catch(() => {})
 }
@@ -166,8 +160,8 @@ const deleteSelectedData = () => {
     },
   )
     .then(async () => {
-      await bulkDestroyPermission({ data: selectedData.value })
-      await getPermissions()
+      await bulkDestroyCategory({ data: selectedData.value })
+      await getCategories()
     })
     .catch(() => {})
 }
@@ -175,7 +169,8 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  getPermissions()
+  state.include = 'parent'
+  getCategories()
 })
 
 // Event Table
@@ -183,7 +178,7 @@ watch(
   () => route.query,
   () => {
     syncStateFilter(route, state)
-    getPermissions()
+    getCategories()
   },
 )
 const handleSelectionChange = (val: any) => {

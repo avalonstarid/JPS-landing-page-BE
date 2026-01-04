@@ -10,7 +10,7 @@
     status-icon
     @submit.native.prevent="onSubmit(formRef)"
   >
-    <div class="flex items-center justify-center card-group">
+    <div class="card-group flex justify-center items-center">
       <InputImage
         :previewImage="user.preview_image"
         @change="handleImageUpload"
@@ -18,7 +18,7 @@
       />
     </div>
 
-    <div class="grid grid-cols-3 gap-4 card-group">
+    <div class="card-group gap-4 grid grid-cols-3">
       <InputBase
         v-model="user.name"
         :errors="errors"
@@ -27,7 +27,7 @@
       />
     </div>
 
-    <div class="grid grid-cols-3 gap-4 card-group">
+    <div class="card-group gap-4 grid grid-cols-3">
       <InputBase
         v-model="user.email"
         :errors="errors"
@@ -86,7 +86,7 @@
         multiple
       >
         <el-option
-          v-for="item in permissions.data"
+          v-for="item in permissions?.data"
           :key="item.id"
           :label="item.name"
           :value="item.id"
@@ -109,10 +109,10 @@
         type="button"
         @click="$router.back()"
       >
-        <i class="ki-filled ki-left"></i> Kembali
+        <i class="ki-left ki-filled"></i> Kembali
       </button>
       <BtnIndicator class="btn-sm" :loading="loading">
-        <i class="ki-filled ki-arrow-circle-right"></i> Submit
+        <i class="ki-arrow-circle-right ki-filled"></i> Submit
       </BtnIndicator>
     </div>
   </el-form>

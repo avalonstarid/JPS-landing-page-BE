@@ -1,18 +1,23 @@
-import type { ApiResponse, IState } from '@/helpers/interfaces'
+import type { ApiResponse, IMultiLang, IState } from '@/helpers/interfaces'
 
-export interface IPermission {
+export interface ICategory {
   id: string
   created_at: string
-  desc: string
-  guard_name: string
-  label: string
-  name: string
+  name: IMultiLang
+  parent: ICategory | null
+  parent_id: string | null
+  slug: string
   updated_at: string
 }
 
-export default function usePermissions() {
-  const permission = ref<Partial<IPermission>>({})
-  const permissions = ref<ApiResponse<IPermission[]>>()
+export default function useCategories() {
+  const category = ref<Partial<ICategory>>({
+    name: {
+      id: '',
+      en: '',
+    },
+  })
+  const categories = ref<ApiResponse<ICategory[]>>()
 
   const errors = ref<any>({})
   const loading = ref<boolean>(false)
@@ -26,18 +31,18 @@ export default function usePermissions() {
     sort: null as string | null,
   })
 
-  const getAllPermissions = async () => {
+  const getAllCategories = async () => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch<ApiResponse<IPermission[]>>(
-        '/v1/user-management/permissions',
+      let res = await sanctumFetch<ApiResponse<ICategory[]>>(
+        '/v1/master/categories',
         {
           params: { all: 1, ...state },
         },
       )
 
-      permissions.value = res
+      categories.value = res
     } catch (e: any) {
       errors.value = e
 
@@ -51,18 +56,18 @@ export default function usePermissions() {
     }
   }
 
-  const getPermissions = async () => {
+  const getCategories = async () => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch<ApiResponse<IPermission[]>>(
-        '/v1/user-management/permissions',
+      let res = await sanctumFetch<ApiResponse<ICategory[]>>(
+        '/v1/master/categories',
         {
           params: state,
         },
       )
 
-      permissions.value = res
+      categories.value = res
     } catch (e: any) {
       errors.value = e
 
@@ -76,15 +81,15 @@ export default function usePermissions() {
     }
   }
 
-  const getPermission = async (id: string) => {
+  const getCategory = async (id: string) => {
     loading.value = true
 
     try {
-      let res = await sanctumFetch<ApiResponse<IPermission>>(
-        `/v1/user-management/permissions/${id}`,
+      let res = await sanctumFetch<ApiResponse<ICategory>>(
+        `/v1/master/categories/${id}`,
       )
 
-      permission.value = res.data
+      category.value = res.data
     } catch (e: any) {
       router.back()
 
@@ -98,13 +103,13 @@ export default function usePermissions() {
     }
   }
 
-  const storePermission = async (data: object) => {
+  const storeCategory = async (data: object) => {
     errors.value = ''
     loading.value = true
 
     try {
-      let res = await sanctumFetch<ApiResponse<IPermission>>(
-        '/v1/user-management/permissions',
+      let res = await sanctumFetch<ApiResponse<ICategory>>(
+        '/v1/master/categories',
         {
           method: 'POST',
           body: data,
@@ -135,13 +140,13 @@ export default function usePermissions() {
     }
   }
 
-  const updatePermission = async (id: string, data: object) => {
+  const updateCategory = async (id: string, data: object) => {
     errors.value = ''
     loading.value = true
 
     try {
-      let res = await sanctumFetch<ApiResponse<IPermission>>(
-        `/v1/user-management/permissions/${id}`,
+      let res = await sanctumFetch<ApiResponse<ICategory>>(
+        `/v1/master/categories/${id}`,
         {
           method: 'PUT',
           body: data,
@@ -172,12 +177,12 @@ export default function usePermissions() {
     }
   }
 
-  const destroyPermission = async (id: string) => {
+  const destroyCategory = async (id: string) => {
     loading.value = true
 
     try {
       let res = await sanctumFetch<ApiResponse<null>>(
-        `/v1/user-management/permissions/${id}`,
+        `/v1/master/categories/${id}`,
         {
           method: 'DELETE',
         },
@@ -199,12 +204,12 @@ export default function usePermissions() {
     }
   }
 
-  const bulkDestroyPermission = async (data: object) => {
+  const bulkDestroyCategory = async (data: object) => {
     loading.value = true
 
     try {
       let res = await sanctumFetch<ApiResponse<null>>(
-        '/v1/user-management/permissions/bulk-destroy',
+        '/v1/master/categories/bulk-destroy',
         {
           method: 'DELETE',
           body: data,
@@ -230,15 +235,15 @@ export default function usePermissions() {
   return {
     errors,
     loading,
-    permission,
-    permissions,
-    getAllPermissions,
-    getPermissions,
-    getPermission,
-    storePermission,
-    updatePermission,
-    destroyPermission,
-    bulkDestroyPermission,
+    category,
+    categories,
+    getAllCategories,
+    getCategories,
+    getCategory,
+    storeCategory,
+    updateCategory,
+    destroyCategory,
+    bulkDestroyCategory,
     state,
   }
 }
