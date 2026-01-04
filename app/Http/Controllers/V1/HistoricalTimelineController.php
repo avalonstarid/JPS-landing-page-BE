@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1\Settings;
+namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\HistoricalTimelineRequest;
-use App\Models\Settings\HistoricalTimeline;
+use App\Http\Requests\HistoricalTimelineRequest;
+use App\Models\HistoricalTimeline;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;

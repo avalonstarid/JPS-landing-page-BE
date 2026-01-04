@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\FaqController;
+use App\Http\Controllers\V1\HistoricalTimelineController;
 use App\Http\Controllers\V1\Investor\DocumentInvsController;
 use App\Http\Controllers\V1\Investor\FinancialReportController;
 use App\Http\Controllers\V1\JobApplicationController;
@@ -31,6 +32,11 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::controller(FaqController::class)->group(function () {
 		Route::delete('faq/bulk-destroy', 'bulkDestroy');
 		Route::apiResource('faq', FaqController::class);
+	});
+
+	Route::controller(HistoricalTimelineController::class)->group(function () {
+		Route::delete('historical-timelines/bulk-destroy', 'bulkDestroy');
+		Route::apiResource('historical-timelines', HistoricalTimelineController::class);
 	});
 
 	Route::prefix('investor')->group(function () {

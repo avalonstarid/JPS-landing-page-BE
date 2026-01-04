@@ -3,7 +3,6 @@
 use App\Http\Controllers\V1\Settings\AppVersionController;
 use App\Http\Controllers\V1\Settings\BusinessLineController;
 use App\Http\Controllers\V1\Settings\GeneralSettingController;
-use App\Http\Controllers\V1\Settings\HistoricalTimelineController;
 use App\Http\Controllers\V1\Settings\MenuController;
 use App\Http\Controllers\V1\Settings\System\AuditLogController;
 use Illuminate\Support\Facades\Route;
@@ -17,11 +16,6 @@ Route::controller(BusinessLineController::class)->group(function () {
 
 Route::controller(GeneralSettingController::class)->prefix('general-settings')->group(function () {
 	Route::post('company-profile', 'companyProfile');
-});
-
-Route::controller(HistoricalTimelineController::class)->group(function () {
-	Route::delete('historical-timeline/bulk-destroy', 'bulkDestroy');
-	Route::apiResource('historical-timeline', HistoricalTimelineController::class);
 });
 
 Route::controller(MenuController::class)->group(function () {

@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Settings;
-
-use App\Http\Requests\BaseApiRequest;
+namespace App\Http\Requests;
 
 class HistoricalTimelineRequest extends BaseApiRequest
 {

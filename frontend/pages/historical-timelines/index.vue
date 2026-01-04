@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'master-standards-create' }"
+          :to="{ name: 'historical-timelines-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="standards?.data"
+        :data="historicalTimelines?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -49,7 +49,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column
-          :index="standards?.from"
+          :index="historicalTimelines?.from"
           align="right"
           class-name="text-nowrap"
           type="index"
@@ -59,7 +59,7 @@
         <el-table-column prop="title.id" label="Judul (ID)" />
         <el-table-column prop="title.en" label="Judul (EN)" />
         <el-table-column prop="icon" label="Ikon" />
-        <el-table-column prop="sort_order" label="Urutan" width="70" />
+        <el-table-column prop="year" label="Tahun" width="70" />
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
@@ -78,7 +78,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/master/standards/${row.id}`)"
+                    @click="$router.push(`/historical-timelines/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -101,7 +101,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="standards?.total ?? 0"
+        :total="historicalTimelines?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"
@@ -111,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import useStandards from '@/composables/master/standards'
+import useHistoricalTimelines from '@/composables/historical-timelines'
 import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
@@ -121,21 +121,21 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Standar',
-  breadcrumbs: [{ title: 'Master' }],
-  authorize: ['standard_read'],
+  title: 'Linimasa Sejarah',
+  breadcrumbs: [],
+  authorize: ['historical_timeline_read'],
 })
-const basePermission = 'standard'
+const basePermission = 'historical_timeline'
 
 const route = useRoute()
 const {
-  standards,
-  getStandards,
-  destroyStandard,
-  bulkDestroyStandard,
+  historicalTimelines,
+  getHistoricalTimelines,
+  destroyHistoricalTimeline,
+  bulkDestroyHistoricalTimeline,
   loading,
   state,
-} = useStandards()
+} = useHistoricalTimelines()
 const selectedData = ref([])
 
 const deleteData = (id) => {
@@ -144,8 +144,8 @@ const deleteData = (id) => {
     type: 'warning',
   })
     .then(async () => {
-      await destroyStandard(id)
-      await getStandards()
+      await destroyHistoricalTimeline(id)
+      await getHistoricalTimelines()
     })
     .catch(() => {})
 }
@@ -160,8 +160,8 @@ const deleteSelectedData = () => {
     },
   )
     .then(async () => {
-      await bulkDestroyStandard({ data: selectedData.value })
-      await getStandards()
+      await bulkDestroyHistoricalTimeline({ data: selectedData.value })
+      await getHistoricalTimelines()
     })
     .catch(() => {})
 }
@@ -169,7 +169,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  getStandards()
+  getHistoricalTimelines()
 })
 
 // Event Table
@@ -178,7 +178,7 @@ watch(
   () => {
     syncStateFilter(route, state)
 
-    getStandards()
+    getHistoricalTimelines()
   },
 )
 const handleSelectionChange = (val: any) => {
