@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Master;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Master\LocationRequest;
+use App\Http\Resources\Master\LocationResource;
 use App\Models\Master\Location;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,24 +57,18 @@ class LocationController extends Controller
 			],
 		);
 
-		if ($request->input('all', '') == 1) {
-			return $this->response(
-				message: 'Berhasil mengambil data.',
-				data: $query->get(),
-			);
+		if ($request->boolean('all')) {
+			$data = $query->get();
 		} else {
-			$request->merge([
-				'page' => $request->input('page', 1),
-			]);
+			$rows = $request->input('rows', 10);
 
-			$data = $query->fastPaginate(perPage: $request->input('rows', 10))->withQueryString();
-
-			return response()->json(array_merge([
-				'success' => true,
-				'message' => 'Berhasil mengambil data.',
-				'errors' => null,
-			], $data->toArray()));
+			$data = $query->fastPaginate($rows)->withQueryString();
 		}
+
+		return $this->responseNew(
+			message: 'Berhasil mengambil data.',
+			data: LocationResource::collection($data),
+		);
 	}
 
 	/**

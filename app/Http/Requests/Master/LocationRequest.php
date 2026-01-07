@@ -57,8 +57,8 @@ class LocationRequest extends BaseApiRequest
 			'images.*' => ['file', 'image', 'max:5120'],
 			'images_remove' => ['nullable', 'array'],
 			'images_remove.*' => ['nullable', Rule::exists('media', 'id')],
-			'lat' => ['nullable', 'numeric', 'between:-90,90'],
-			'lng' => ['nullable', 'numeric', 'between:-180,180'],
+			'lat' => ['required', 'numeric', 'between:-90,90'],
+			'lng' => ['required', 'numeric', 'between:-180,180'],
 			'phone' => ['required', 'string', 'max:20'],
 			'business_line_id' => ['required', Rule::exists('business_lines', 'id')],
 		];

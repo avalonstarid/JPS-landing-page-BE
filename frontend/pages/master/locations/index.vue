@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'business-lines-create' }"
+          :to="{ name: 'master-locations-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="businessLines?.data"
+        :data="locations?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -49,7 +49,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column
-          :index="businessLines?.from"
+          :index="locations?.from"
           align="right"
           class-name="text-nowrap"
           type="index"
@@ -64,17 +64,39 @@
           </template>
           <template #default="{ row }">
             <el-image
+              v-if="row.media"
               class="w-[50px] h-[50px]"
-              :src="row.featured_thumb"
-              :preview-src-list="[row.featured_thumb]"
+              :src="row.media[0].thumb_url"
+              :preview-src-list="row.media.map((item) => item.original_url)"
               fit="cover"
               preview-teleported
             />
           </template>
         </el-table-column>
-        <el-table-column prop="title.id" label="Judul (ID)" />
-        <el-table-column prop="title.en" label="Judul (EN)" />
-        <el-table-column prop="sort_order" label="Urutan" width="70" />
+        <el-table-column prop="business_line.title.id" label="Lini Bisnis" />
+        <el-table-column prop="address" label="Alamat" />
+        <el-table-column prop="phone" label="No. Telp" />
+        <el-table-column label="Titik Lokasi">
+          <template #default="{ row }">
+            <a
+              class="text-primary hover:underline"
+              :href="`https://www.google.com/maps/search/?api=1&query=${row.lat},${row.lng}`"
+              target="_blank"
+            >
+              {{ row.lat }}, {{ row.lng }}
+            </a>
+          </template>
+        </el-table-column>
+        <el-table-column prop="active" label="Aktif" width="100">
+          <template #default="{ row }">
+            <span
+              class="badge-outline badge badge-sm"
+              :class="row.active ? 'badge-success' : 'badge-danger'"
+            >
+              {{ row.active ? 'Aktif' : 'Tidak Aktif' }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
@@ -93,7 +115,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/business-lines/${row.id}`)"
+                    @click="$router.push(`/master/locations/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -116,7 +138,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="businessLines?.total ?? 0"
+        :total="locations?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"
@@ -126,7 +148,7 @@
 </template>
 
 <script setup lang="ts">
-import useBusinessLines from '@/composables/business-lines'
+import useLocations from '@/composables/master/locations'
 import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
@@ -136,21 +158,21 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Lini Bisnis',
-  breadcrumbs: [],
-  authorize: ['business_line_read'],
+  title: 'Lokasi',
+  breadcrumbs: [{ title: 'Master' }],
+  authorize: ['location_read'],
 })
-const basePermission = 'business_line'
+const basePermission = 'location'
 
 const route = useRoute()
 const {
-  businessLines,
-  getBusinessLines,
-  destroyBusinessLine,
-  bulkDestroyBusinessLine,
+  locations,
+  getLocations,
+  destroyLocation,
+  bulkDestroyLocation,
   loading,
   state,
-} = useBusinessLines()
+} = useLocations()
 const selectedData = ref([])
 
 const deleteData = (id) => {
@@ -159,8 +181,8 @@ const deleteData = (id) => {
     type: 'warning',
   })
     .then(async () => {
-      await destroyBusinessLine(id)
-      await getBusinessLines()
+      await destroyLocation(id)
+      await getLocations()
     })
     .catch(() => {})
 }
@@ -175,8 +197,8 @@ const deleteSelectedData = () => {
     },
   )
     .then(async () => {
-      await bulkDestroyBusinessLine({ data: selectedData.value })
-      await getBusinessLines()
+      await bulkDestroyLocation({ data: selectedData.value })
+      await getLocations()
     })
     .catch(() => {})
 }
@@ -184,7 +206,8 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  getBusinessLines()
+  state.include = 'businessLine,media'
+  getLocations()
 })
 
 // Event Table
@@ -193,7 +216,7 @@ watch(
   () => {
     syncStateFilter(route, state)
 
-    getBusinessLines()
+    getLocations()
   },
 )
 const handleSelectionChange = (val: any) => {
