@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'historical-timelines-create' }"
+          :to="{ name: 'testimonials-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="historicalTimelines?.data"
+        :data="testimonials?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -49,17 +49,22 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column
-          :index="historicalTimelines?.from"
+          :index="testimonials?.from"
           align="right"
           class-name="text-nowrap"
           type="index"
           width="60"
         />
         <el-table-column type="selection" width="30" />
-        <el-table-column prop="year" label="Tahun" width="70" />
+        <el-table-column prop="client_name" label="Nama Client" />
+        <el-table-column prop="client_role" label="Role Client" />
         <el-table-column prop="title.id" label="Judul (ID)" />
         <el-table-column prop="title.en" label="Judul (EN)" />
-        <el-table-column prop="icon" label="Ikon" />
+        <el-table-column prop="created_at" label="Dibuat Pada">
+          <template #default="{ row }">
+            {{ $dayjs(row.created_at).format('DD MMM YYYY HH:mm:ss') }}
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
@@ -78,7 +83,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/historical-timelines/${row.id}`)"
+                    @click="$router.push(`/testimonials/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -101,7 +106,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="historicalTimelines?.total ?? 0"
+        :total="testimonials?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"
@@ -111,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import useHistoricalTimelines from '@/composables/historical-timelines'
+import useTestimonials from '@/composables/testimonials'
 import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
@@ -121,21 +126,21 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Linimasa Sejarah',
+  title: 'Testimonial',
   breadcrumbs: [],
-  authorize: ['historical_timeline_read'],
+  authorize: ['testimonial_read'],
 })
-const basePermission = 'historical_timeline'
+const basePermission = 'testimonial'
 
 const route = useRoute()
 const {
-  historicalTimelines,
-  getHistoricalTimelines,
-  destroyHistoricalTimeline,
-  bulkDestroyHistoricalTimeline,
+  testimonials,
+  getTestimonials,
+  destroyTestimonial,
+  bulkDestroyTestimonial,
   loading,
   state,
-} = useHistoricalTimelines()
+} = useTestimonials()
 const selectedData = ref([])
 
 const deleteData = (id) => {
@@ -144,8 +149,8 @@ const deleteData = (id) => {
     type: 'warning',
   })
     .then(async () => {
-      await destroyHistoricalTimeline(id)
-      await getHistoricalTimelines()
+      await destroyTestimonial(id)
+      await getTestimonials()
     })
     .catch(() => {})
 }
@@ -160,8 +165,8 @@ const deleteSelectedData = () => {
     },
   )
     .then(async () => {
-      await bulkDestroyHistoricalTimeline({ data: selectedData.value })
-      await getHistoricalTimelines()
+      await bulkDestroyTestimonial({ data: selectedData.value })
+      await getTestimonials()
     })
     .catch(() => {})
 }
@@ -169,7 +174,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  getHistoricalTimelines()
+  getTestimonials()
 })
 
 // Event Table
@@ -178,7 +183,7 @@ watch(
   () => {
     syncStateFilter(route, state)
 
-    getHistoricalTimelines()
+    getTestimonials()
   },
 )
 const handleSelectionChange = (val: any) => {

@@ -93,8 +93,8 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::prefix('settings')->group(__DIR__ . '/api/v1/settings.php');
 
 	Route::controller(TestimonialController::class)->group(function () {
-		Route::delete('testimonial/bulk-destroy', 'bulkDestroy');
-		Route::apiResource('testimonial', TestimonialController::class);
+		Route::delete('testimonials/bulk-destroy', 'bulkDestroy');
+		Route::apiResource('testimonials', TestimonialController::class);
 	});
 
 	Route::prefix('user-management')->group(__DIR__ . '/api/v1/user-management.php');
