@@ -38,7 +38,7 @@ class DocumentInvsRequest extends BaseApiRequest
 	public function rules(): array
 	{
 		return [
-			'document' => [Rule::requiredIf($this->method() == 'POST'), 'file', 'mimes:pdf', 'max:5120'],
+			'document' => [Rule::requiredIf($this->method() == 'POST'), 'file', 'mimes:pdf', 'max:102400'],
 			'featured' => [Rule::requiredIf($this->method() == 'POST'), 'image', 'max:5120'],
 			'title' => ['required', 'array'],
 			'title.en' => ['required', 'string', 'max:100'],

@@ -39,9 +39,8 @@ class FinancialReportRequest extends BaseApiRequest
 	{
 		return [
 			'arus_kas_bersih' => ['required', 'numeric'],
-			'document' => [Rule::requiredIf($this->method() == 'POST'), 'file', 'mimes:pdf', 'max:5120'],
+			'document' => [Rule::requiredIf($this->method() == 'POST'), 'file', 'mimes:pdf', 'max:102400'],
 			'ekuitas' => ['required', 'numeric'],
-			'featured' => [Rule::requiredIf($this->method() == 'POST'), 'image', 'max:5120'],
 			'laba_bersih' => ['required', 'numeric'],
 			'liabilitas' => ['required', 'numeric'],
 			'name' => ['required', 'array'],

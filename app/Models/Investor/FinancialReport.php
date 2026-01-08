@@ -43,14 +43,6 @@ class FinancialReport extends Model implements HasMedia
 	}
 
 	/**
-	 * @return HasOne
-	 */
-	public function featured(): HasOne
-	{
-		return $this->hasOne(Media::class, 'model_id')->where('collection_name', 'featured');
-	}
-
-	/**
 	 * Get the attributes that should be cast.
 	 *
 	 * @return array<string, string>
@@ -83,20 +75,5 @@ class FinancialReport extends Model implements HasMedia
 	public function registerMediaCollections(): void
 	{
 		$this->addMediaCollection('document')->singleFile();
-		$this->addMediaCollection('featured')->singleFile();
-	}
-
-	/**
-	 * @param Media|null $media
-	 *
-	 * @return void
-	 */
-	public function registerMediaConversions(?Media $media = null): void
-	{
-		$this->addMediaConversion('thumb')
-			->format('webp')
-			->width(361)
-			->height(300)
-			->quality(100);
 	}
 }

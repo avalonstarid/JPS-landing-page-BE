@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Investor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Investor\DocumentInvsRequest;
+use App\Http\Resources\Investor\DocumentInvsSource;
 use App\Models\Investor\DocumentInvs;
 use App\Models\Master\Category;
 use Exception;
@@ -32,6 +33,7 @@ class DocumentInvsController extends Controller
 	 * @return JsonResponse
 	 */
 	#[QueryParam('filter[search]', required: false, example: '', enum: ['search'])]
+	#[QueryParam('include', required: false, example: '', enum: ['category', 'document', 'featured', 'media'])]
 	#[QueryParam('rows', 'int', required: false, example: 10)]
 	#[QueryParam('sort', description: 'Tambah tanda minus (-) di depan untuk descending', required: false, example: '', enum: [
 		'created_at', 'tahun'])]
@@ -51,26 +53,22 @@ class DocumentInvsController extends Controller
 					$q->whereAny(['title'], 'LIKE', '%' . $value . '%');
 				}),
 			],
+		)->allowedIncludes(
+			includes: ['category', 'document', 'featured', 'media'],
 		);
 
-		if ($request->input('all', '') == 1) {
-			return $this->response(
-				message: 'Berhasil mengambil data.',
-				data: $query->get(),
-			);
+		if ($request->boolean('all')) {
+			$data = $query->get();
 		} else {
-			$request->merge([
-				'page' => $request->input('page', 1),
-			]);
+			$rows = $request->input('rows', 10);
 
-			$data = $query->fastPaginate(perPage: $request->input('rows', 10))->withQueryString();
-
-			return response()->json(array_merge([
-				'success' => true,
-				'message' => 'Berhasil mengambil data.',
-				'errors' => null,
-			], $data->toArray()));
+			$data = $query->fastPaginate($rows)->withQueryString();
 		}
+
+		return $this->responseNew(
+			message: 'Berhasil mengambil data.',
+			data: DocumentInvsSource::collection($data),
+		);
 	}
 
 	/**
