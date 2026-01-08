@@ -21,6 +21,17 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     container_name: ${DOCKER_CONTAINER_NAME_FE:-skeleton_fe}
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - nginx
     #ports:

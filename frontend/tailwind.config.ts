@@ -17,8 +17,8 @@ export default <Partial<Config>>{
     'ki-outline',
     'ki-duotone',
     'ki-solid',
-    { pattern: /^apexcharts-.*$/ },
-    { pattern: /^leaflet-.*$/ },
+    // { pattern: /^apexcharts-.*$/ },
+    // { pattern: /^leaflet-.*$/ },
   ],
   darkMode: 'class',
   theme: {
@@ -655,7 +655,7 @@ export default <Partial<Config>>{
     require('./metronic/core/plugins/components/rating'),
     require('./metronic/core/plugins/components/scrollable'),
     require('./metronic/core/plugins/components/progress'),
-    require('./metronic/core/plugins/components/apexcharts'),
-    require('./metronic/core/plugins/components/leaflet'),
+    // require('./metronic/core/plugins/components/apexcharts'),
+    // require('./metronic/core/plugins/components/leaflet'),
   ],
 }

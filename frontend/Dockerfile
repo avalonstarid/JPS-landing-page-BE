@@ -1,42 +1,42 @@
-# use the official Bun image
-# FROM oven/bun:latest AS base # Error build tailwind
-FROM node:22.14-slim AS base
+FROM node:22-alpine AS base
 
 # Set working directory
 WORKDIR /app
 
 RUN npm install -g bun
 
-# Add pm2
-RUN npm install -g pm2
-# RUN bun add -g pm2
-
-# install dependencies into temp directory
-# this will cache them and speed up future builds
+# Install Stage
 FROM base AS install
 
-RUN mkdir -p /temp/dev
+COPY package.json bun.lock ./
 
-COPY package.json bun.lock /temp/dev/
+# Install ALL dependencies (including devDependencies)
+RUN bun install --frozen-lockfile
 
-RUN cd /temp/dev && bun install
+# Build Stage
+FROM base AS build
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS release
-
-COPY --from=install /temp/dev/node_modules node_modules
+COPY --from=install /app/node_modules /app/node_modules
 
 COPY . .
 
-# Install dependencies & build
+# Run build (Nuxt generates production assets by default)
 RUN bun run build
 
-# Expose port 80
-EXPOSE 80
+# Run Stage
+FROM base AS run
 
-# run the app
+# Set production env for runtime
+ENV NODE_ENV=production
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3000
+
+WORKDIR /app
+
 USER node
-# CMD ["bun", "dev"]
-# CMD ["bun", ".output/server/index.mjs"]
-CMD ["pm2-runtime", "start", "ecosystem.config.cjs"]
+
+COPY --from=build --chown=node:node /app/.output ./.output
+
+EXPOSE 3000
+
+CMD ["bun", "run", ".output/server/index.mjs"]

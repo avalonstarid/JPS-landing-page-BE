@@ -107,6 +107,9 @@ export default defineNuxtConfig({
     'nuxt-auth-sanctum',
     // 'nuxt-laravel-echo',
   ],
+  nitro: {
+    preset: 'bun',
+  },
   postcss: {
     plugins: {
       'postcss-import': {},
