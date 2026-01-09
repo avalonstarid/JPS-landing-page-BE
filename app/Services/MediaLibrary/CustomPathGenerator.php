@@ -17,7 +17,7 @@ class CustomPathGenerator implements BasePathGenerator
 	 */
 	public function getPathForConversions(Media $media): string
 	{
-		return $this->getPath($media) . '/conversions/';
+		return $this->getPath($media) . 'conversions/';
 	}
 
 	/**
