@@ -14,9 +14,11 @@ RUN apt update && apt install -y \
 RUN install-php-extensions \
     exif \
     gd \
+    igbinary \
     imagick \
     pcntl \
     pdo_mysql \
+    redis \
     zip \
     @composer
 

@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-redis": "*",
         "aaronfrancis/fast-paginate": "^2.0",
         "akaunting/laravel-money": "^6.0",
         "knuckleswtf/scribe": "^5.5",

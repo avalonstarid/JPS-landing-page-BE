@@ -7,6 +7,7 @@ services:
     networks:
       - mysql
       - nginx
+      - redis
     #ports:
     #  - '${DOCKER_PORT_BE:-80}:80'
     restart: unless-stopped
@@ -52,6 +53,7 @@ services:
       start_period: 30s   # Beri waktu 30 detik saat start awal sebelum mulai nge-cek
     networks:
       - mysql
+      - redis
     restart: unless-stopped
     tty: true
     volumes:
@@ -75,6 +77,7 @@ services:
     hostname: ${DOCKER_CONTAINER_NAME:-skeleton_worker}
     networks:
       - mysql
+      - redis
     restart: unless-stopped
     stop_grace_period: 60s
     tty: true
@@ -92,3 +95,6 @@ networks:
   nginx:
     external: true
     name: nginx
+  redis:
+    external: true
+    name: redis
