@@ -18,7 +18,18 @@ class LandingController extends Controller
 {
 	public function index()
 	{
-		$data = Cache::remember('landing_index', 3600, function () {
+		$seo = new SEOData(
+			title: 'PT Janu Putra Sejahtera - Perusahaan Peternakan Terintegrasi',
+			description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
+			url: config('app.frontend_url'),
+			type: 'website',
+			site_name: 'PT Janu Putra Sejahtera',
+			locale: 'id_ID',
+			robots: 'index, follow',
+			canonical_url: config('app.frontend_url'),
+		);
+
+		$data = Cache::remember('landing_index', 3600, function () use ($seo) {
 			return [
 				// FAQ
 				'faq' => [
@@ -91,16 +102,16 @@ class LandingController extends Controller
 				],
 
 				// SEO
-				'seo' => new SEOData(
-					title: 'PT Janu Putra Sejahtera - Perusahaan Peternakan Terintegrasi',
-					description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-					url: config('app.frontend_url'),
-					type: 'website',
-					site_name: 'PT Janu Putra Sejahtera',
-					locale: 'id_ID',
-					robots: 'index, follow',
-					canonical_url: config('app.frontend_url'),
-				),
+				'seo' => [
+					'title' => $seo->title,
+					'description' => $seo->description,
+					'url' => $seo->url,
+					'type' => $seo->type,
+					'site_name' => $seo->site_name,
+					'locale' => $seo->locale,
+					'robots' => $seo->robots,
+					'canonical_url' => $seo->canonical_url,
+				],
 
 				// Standard
 				'standard' => [
