@@ -47,6 +47,7 @@ class JobApplicationController extends Controller
 				AllowedFilter::callback('search', function (Builder $q, $value) {
 					$q->whereAny(['email', 'name'], 'LIKE', '%' . $value . '%');
 				}),
+				AllowedFilter::exact('job_posting_id'),
 			],
 		)->allowedIncludes(
 			includes: ['gender', 'jobPosting', 'resume', 'statusKawin'],
