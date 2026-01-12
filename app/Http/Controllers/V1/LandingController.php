@@ -31,11 +31,11 @@ class LandingController extends Controller
 	public function index()
 	{
 		$seo = new SEOData(
-			title: 'PT Janu Putra Sejahtera - Perusahaan Peternakan Terintegrasi',
+			title: config('app.name') . ' - Perusahaan Peternakan Terintegrasi',
 			description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
 			url: config('app.frontend_url'),
 			type: 'website',
-			site_name: 'PT Janu Putra Sejahtera',
+			site_name: config('app.name'),
 			locale: 'id_ID',
 			robots: 'index, follow',
 			canonical_url: config('app.frontend_url'),
@@ -169,14 +169,14 @@ class LandingController extends Controller
 	public function tentangPerusahaan()
 	{
 		$seo = new SEOData(
-			title: 'PT Janu Putra Sejahtera - Perusahaan Peternakan Terintegrasi',
-			description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-			url: config('app.frontend_url'),
+			title: 'Tentang Perusahaan - ' . config('app.name'),
+			description: 'PT Janu Putra Sejahtera Tbk tersebar di daerah Yogyakarta dan Jawa Tengah. Perusahaan ayam terintegrasi.',
+			url: config('app.frontend_url') . '/' . request()->path(),
 			type: 'website',
-			site_name: 'PT Janu Putra Sejahtera',
+			site_name: config('app.name'),
 			locale: 'id_ID',
 			robots: 'index, follow',
-			canonical_url: config('app.frontend_url'),
+			canonical_url: config('app.frontend_url') . '/' . request()->path(),
 		);
 
 		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () use ($seo) {
