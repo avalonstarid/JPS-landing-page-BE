@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Master\Location;
 use App\Traits\HasSortOrder;
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
@@ -74,6 +75,14 @@ class BusinessLine extends Model implements HasMedia
 	public function images(): HasMany
 	{
 		return $this->hasMany(Media::class, 'model_id')->where('collection_name', 'images');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function locations(): HasMany
+	{
+		return $this->hasMany(Location::class, 'business_line_id');
 	}
 
 	/**
