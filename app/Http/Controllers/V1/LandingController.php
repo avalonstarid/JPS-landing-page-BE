@@ -33,12 +33,12 @@ class LandingController extends Controller
 		$seo = new SEOData(
 			title: config('app.name') . ' - Perusahaan Peternakan Terintegrasi',
 			description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-			url: config('app.frontend_url'),
+			url: config('app.landing_url'),
 			type: 'website',
 			site_name: config('app.name'),
 			locale: 'id_ID',
 			robots: 'index, follow',
-			canonical_url: config('app.frontend_url'),
+			canonical_url: config('app.landing_url'),
 		);
 
 		$data = Cache::remember('landing:index', 3600, function () use ($seo) {
@@ -171,12 +171,12 @@ class LandingController extends Controller
 		$seo = new SEOData(
 			title: 'Tentang Perusahaan - ' . config('app.name'),
 			description: 'PT Janu Putra Sejahtera Tbk tersebar di daerah Yogyakarta dan Jawa Tengah. Perusahaan ayam terintegrasi.',
-			url: config('app.frontend_url') . '/' . request()->path(),
+			url: config('app.landing_url') . '/' . request()->path(),
 			type: 'website',
 			site_name: config('app.name'),
 			locale: 'id_ID',
 			robots: 'index, follow',
-			canonical_url: config('app.frontend_url') . '/' . request()->path(),
+			canonical_url: config('app.landing_url') . '/' . request()->path(),
 		);
 
 		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () use ($seo) {

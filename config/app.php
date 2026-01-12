@@ -56,6 +56,8 @@ return [
 
 	'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
 
+	'landing_url' => env('LANDING_URL', 'http://localhost:3000'),
+
 	'asset_url' => env('ASSET_URL'),
 
 	/*
@@ -105,7 +107,7 @@ return [
 
 	'previous_keys' => [
 		...array_filter(
-			explode(',', env('APP_PREVIOUS_KEYS', ''))
+			explode(',', env('APP_PREVIOUS_KEYS', '')),
 		),
 	],
 
