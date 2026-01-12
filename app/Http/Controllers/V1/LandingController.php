@@ -41,7 +41,7 @@ class LandingController extends Controller
 			canonical_url: config('app.frontend_url'),
 		);
 
-		$data = Cache::remember('landing_index', 3600, function () use ($seo) {
+		$data = Cache::remember('landing:index', 3600, function () use ($seo) {
 			return [
 				// FAQ
 				'faq' => [
@@ -179,7 +179,7 @@ class LandingController extends Controller
 			canonical_url: config('app.frontend_url'),
 		);
 
-		$data = Cache::remember('landing_tentangPerusahaan', 1, function () use ($seo) {
+		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () use ($seo) {
 			return [
 				// Dewan
 				'dewan' => [
