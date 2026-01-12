@@ -55,6 +55,11 @@ class CategoryController extends Controller
 						$q->where('parent_id', $value);
 					}
 				}),
+				AllowedFilter::callback('parent_slug', function (Builder $q, $value) {
+					$q->whereHas('parent', function (Builder $q) use ($value) {
+						$q->where('slug', $value);
+					});
+				}),
 			],
 		)->allowedIncludes(
 			includes: [

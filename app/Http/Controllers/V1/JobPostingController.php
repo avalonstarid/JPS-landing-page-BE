@@ -28,7 +28,7 @@ class JobPostingController extends Controller
 	 * @return JsonResponse
 	 */
 	#[QueryParam('filter[search]', required: false, example: '', enum: ['search'])]
-	#[QueryParam('include', required: false, example: '', enum: ['category'])]
+	#[QueryParam('include', required: false, example: '', enum: ['category', 'pelamar'])]
 	#[QueryParam('rows', 'int', required: false, example: 10)]
 	#[QueryParam('sort', description: 'Tambah tanda minus (-) di depan untuk descending', required: false, example: '', enum: [
 		'closed_at', 'created_at', 'published_at'])]
@@ -48,11 +48,17 @@ class JobPostingController extends Controller
 		)->allowedFilters(
 			filters: [
 				AllowedFilter::callback('search', function (Builder $q, $value) {
-					$q->whereAny(['title'], 'LIKE', '%' . $value . '%');
+					$searchTerm = '%' . strtolower($value) . '%';
+
+					$q->where(function ($subQuery) use ($searchTerm) {
+						$subQuery->orWhereRaw('LOWER(address) LIKE ?', [$searchTerm]);
+						$subQuery->orWhereRaw('LOWER(location) LIKE ?', [$searchTerm]);
+						$subQuery->orWhereRaw('LOWER(title) LIKE ?', [$searchTerm]);
+					});
 				}),
 			],
 		)->allowedIncludes(
-			includes: ['category'],
+			includes: ['category', 'pelamar'],
 		);
 
 		if ($request->input('all', '') == 1) {

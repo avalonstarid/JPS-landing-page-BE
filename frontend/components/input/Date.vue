@@ -7,11 +7,10 @@
       format="YYYY-MM-DD"
       type="date"
       value-format="YYYY-MM-DD"
-      arrow-control
       v-bind="$attrs"
     />
 
-    <span v-if="showHelptext" class="text-xs text-gray-500">
+    <span v-if="showHelptext" class="text-gray-500 text-xs">
       {{ helpText }}
     </span>
   </el-form-item>

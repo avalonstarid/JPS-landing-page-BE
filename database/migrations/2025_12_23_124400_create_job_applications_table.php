@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\JobPosting;
 use App\Models\Master\Enums;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,11 +23,11 @@ return new class extends Migration {
 			$table->text('reason');
 			$table->timestamps();
 
-			$table->string('gender_id', 20)->comment('Enum Type: JK');
+			$table->foreignIdFor(Enums::class, 'gender_id')->comment('Enum Type: JK')->constrained()->references('code')
+				->restrictOnDelete();
+			$table->foreignIdFor(JobPosting::class, 'job_posting_id')->constrained()->cascadeOnDelete();
 			$table->foreignIdFor(Enums::class, 'status_kawin_id')->comment('Enum Type: STSKWN')->constrained()
 				->restrictOnDelete();
-
-			$table->foreign('gender_id')->references('code')->on('enums')->restrictOnDelete();
 		});
 	}
 

@@ -28,7 +28,7 @@ class JobApplicationController extends Controller
 	 * @return JsonResponse
 	 */
 	#[QueryParam('filter[search]', required: false, example: '', enum: ['search'])]
-	#[QueryParam('include', required: false, example: '', enum: ['gender', 'statusKawin'])]
+	#[QueryParam('include', required: false, example: '', enum: ['gender', 'jobPosting', 'resume', 'statusKawin'])]
 	#[QueryParam('rows', 'int', required: false, example: 10)]
 	#[QueryParam('sort', description: 'Tambah tanda minus (-) di depan untuk descending', required: false, example: '', enum: [
 		'created_at'])]
@@ -49,7 +49,7 @@ class JobApplicationController extends Controller
 				}),
 			],
 		)->allowedIncludes(
-			includes: ['gender', 'resume', 'statusKawin'],
+			includes: ['gender', 'jobPosting', 'resume', 'statusKawin'],
 		);
 
 		if ($request->input('all', '') == 1) {

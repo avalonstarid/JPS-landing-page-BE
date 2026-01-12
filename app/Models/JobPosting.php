@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
@@ -42,6 +43,14 @@ class JobPosting extends Model
 	public function category(): BelongsTo
 	{
 		return $this->belongsTo(Category::class, 'category_id');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function pelamar(): HasMany
+	{
+		return $this->hasMany(JobApplication::class, 'job_posting_id');
 	}
 
 	/**

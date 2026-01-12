@@ -33,6 +33,7 @@ class JobApplicationRequest extends BaseApiRequest
 			'reason' => ['required', 'string'],
 			'resume' => ['required', 'file', 'max:5120', 'mimes:pdf,jpeg,png'],
 			'gender_id' => ['required', Rule::exists('enums', 'code')],
+			'job_posting_id' => ['required', Rule::exists('job_postings', 'id')],
 			'status_kawin_id' => ['required', Rule::exists('enums', 'id')],
 		];
 	}

@@ -34,6 +34,18 @@ class JobPostingRequest extends BaseApiRequest
 	}
 
 	/**
+	 * Prepare the data for validation.
+	 */
+	protected function prepareForValidation(): void
+	{
+		if ($this->method() === 'POST') {
+			$this->merge([
+				'published_at' => now(),
+			]);
+		}
+	}
+
+	/**
 	 * Get the validation rules that apply to the request.
 	 *
 	 * @return array

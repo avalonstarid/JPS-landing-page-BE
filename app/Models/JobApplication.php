@@ -37,6 +37,14 @@ class JobApplication extends Model implements HasMedia
 	}
 
 	/**
+	 * @return BelongsTo
+	 */
+	public function jobPosting(): BelongsTo
+	{
+		return $this->belongsTo(JobPosting::class, 'job_posting_id');
+	}
+
+	/**
 	 * @return JobApplication|HasOne
 	 */
 	public function resume(): JobApplication|HasOne
