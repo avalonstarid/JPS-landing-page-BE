@@ -4,6 +4,8 @@ namespace App\Models\Master;
 
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -111,5 +113,14 @@ class Product extends Model implements HasMedia
 			->width(287)
 			->height(257)
 			->quality(80);
+	}
+
+	/**
+	 * Scope a query to only include active users.
+	 */
+	#[Scope]
+	protected function active(Builder $query): void
+	{
+		$query->where('active', true);
 	}
 }

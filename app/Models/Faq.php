@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Traits\HasSortOrder;
 use App\Traits\OwnerTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,5 +55,14 @@ class Faq extends Model
 			->logAll()
 			->logOnlyDirty()
 			->dontSubmitEmptyLogs();
+	}
+
+	/**
+	 * Scope a query to only include active users.
+	 */
+	#[Scope]
+	protected function active(Builder $query): void
+	{
+		$query->where('active', true);
 	}
 }

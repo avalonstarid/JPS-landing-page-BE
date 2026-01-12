@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\ContactUsController;
+use App\Http\Controllers\V1\LandingController;
 use App\Models\AppVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Storage;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::controller(LandingController::class)->group(function () {
+	Route::get('', 'index');
+});
 
 Route::get('app-version', function () {
 	$data = AppVersion::first();
