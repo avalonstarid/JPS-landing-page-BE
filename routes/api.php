@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Storage;
 
 Route::controller(LandingController::class)->group(function () {
 	Route::get('', 'index');
+	Route::get('karir', 'karir');
+	Route::get('karir-list', 'karirList');
+	Route::get('karir/{slug}', 'karirDetail');
 	Route::get('lini-bisnis/{slug}', 'liniBisnis');
 	Route::get('produk', 'produk');
 	Route::get('tentang-perusahaan', 'tentangPerusahaan');

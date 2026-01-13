@@ -3,6 +3,7 @@
 namespace App\Models\Master;
 
 use App\Models\Investor\DocumentInvs;
+use App\Models\JobPosting;
 use App\Traits\OwnerTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,6 +50,14 @@ class Category extends Model
 	public function documentInvs(): HasMany
 	{
 		return $this->hasMany(DocumentInvs::class, 'category_id');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function jobPostings(): HasMany
+	{
+		return $this->hasMany(JobPosting::class, 'category_id');
 	}
 
 	/**
