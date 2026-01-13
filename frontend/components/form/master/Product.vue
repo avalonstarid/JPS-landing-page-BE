@@ -17,17 +17,11 @@
         :multiple="false"
         label="Featured Image"
         name="featured"
+        @remove="handleFeaturedRemove"
       />
     </div>
 
     <div class="card-group gap-4 grid grid-cols-2">
-      <InputBase
-        v-model="product.title"
-        :errors="errors"
-        label="Title"
-        name="title"
-      />
-
       <div class="gap-4 grid grid-cols-3 align-bottom">
         <InputBase
           v-model="product.slug"
@@ -44,26 +38,84 @@
           name="sort_order"
         />
       </div>
+    </div>
 
-      <div>
+    <div class="card-group gap-4 grid grid-cols-2">
+      <div class="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">
+        <div class="font-bold text-gray-700">Bahasa Indonesia</div>
+
         <InputBase
-          v-model="product.short_desc"
+          v-if="product.title"
+          v-model="product.title.id"
+          :errors="errors"
+          label="Title (ID)"
+          name="title.id"
+        />
+
+        <InputBase
+          v-if="product.short_desc"
+          v-model="product.short_desc.id"
           :autosize="{ minRows: 3 }"
           :errors="errors"
-          label="Deskripsi Singkat"
-          name="short_desc"
+          label="Deskripsi Singkat (ID)"
+          name="short_desc.id"
+          type="textarea"
+        />
+
+        <InputBase
+          v-if="product.full_desc"
+          v-model="product.full_desc.id"
+          :autosize="{ minRows: 6 }"
+          :errors="errors"
+          label="Deskripsi Lengkap (ID)"
+          name="full_desc.id"
           type="textarea"
         />
       </div>
 
-      <InputBase
-        v-model="product.full_desc"
-        :autosize="{ minRows: 6 }"
-        :errors="errors"
-        label="Deskripsi Lengkap"
-        name="full_desc"
-        type="textarea"
-      />
+      <div
+        class="relative flex flex-col gap-4 p-4 border border-gray-200 rounded-lg"
+      >
+        <div class="flex justify-between items-center">
+          <div class="font-bold text-gray-700">English</div>
+          <button
+            class="btn btn-sm btn-light-primary"
+            type="button"
+            title="Copy from Indonesia"
+            @click="copyFromId"
+          >
+            <i class="ki-filled ki-copy"></i> Copy From ID
+          </button>
+        </div>
+
+        <InputBase
+          v-if="product.title"
+          v-model="product.title.en"
+          :errors="errors"
+          label="Title (EN)"
+          name="title.en"
+        />
+
+        <InputBase
+          v-if="product.short_desc"
+          v-model="product.short_desc.en"
+          :autosize="{ minRows: 3 }"
+          :errors="errors"
+          label="Deskripsi Singkat (EN)"
+          name="short_desc.en"
+          type="textarea"
+        />
+
+        <InputBase
+          v-if="product.full_desc"
+          v-model="product.full_desc.en"
+          :autosize="{ minRows: 6 }"
+          :errors="errors"
+          label="Deskripsi Lengkap (EN)"
+          name="full_desc.en"
+          type="textarea"
+        />
+      </div>
     </div>
 
     <div class="card-group">
@@ -102,6 +154,7 @@
 
 <script setup lang="ts">
 import useProducts from '@/composables/master/products'
+import { objectToFormData } from '@/helpers/formData'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const props = defineProps({
@@ -111,6 +164,12 @@ const props = defineProps({
 const formRef = ref<FormInstance>()
 const { errors, loading, product, getProduct, storeProduct, updateProduct } =
   useProducts()
+
+const copyFromId = () => {
+  product.value.full_desc!.en = product.value.full_desc!.id
+  product.value.short_desc!.en = product.value.short_desc!.id
+  product.value.title!.en = product.value.title!.id
+}
 
 // Create Rules Form
 const rules = reactive<FormRules>({
@@ -130,6 +189,11 @@ const rules = reactive<FormRules>({
   ],
 })
 
+const handleFeaturedRemove = (item: any) => {
+  console.log('Featured Remove')
+  product.value.featured_remove = 1
+}
+
 const handleImageRemove = (item: any) => {
   if (item && typeof item === 'object' && item.id) {
     if (!product.value.images_remove) {
@@ -145,40 +209,16 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      const formData = new FormData()
-      formData.append('active', product.value.active?.toString() ?? '')
-      formData.append('full_desc', product.value.full_desc ?? '')
-      formData.append('short_desc', product.value.short_desc ?? '')
-      formData.append('slug', product.value.slug ?? '')
-      formData.append('sort_order', product.value.sort_order?.toString() ?? '')
-      formData.append('title', product.value.title ?? '')
-
-      if (product.value.featured instanceof File) {
-        formData.append('featured', product.value.featured)
-      } else if (product.value.featured === null) {
-        formData.append('featured_remove', '1')
+      const payload = {
+        ...product.value,
+        featured:
+          product.value.featured instanceof File
+            ? product.value.featured
+            : null,
+        images: product.value.images?.filter((img) => img instanceof File),
       }
 
-      if (product.value.images instanceof Array) {
-        for (let i = 0; i < product.value.images.length; i++) {
-          const img = product.value.images[i]
-          if (img instanceof File) {
-            formData.append('images[]', img)
-          }
-        }
-      }
-
-      if (
-        product.value.images_remove &&
-        product.value.images_remove.length > 0
-      ) {
-        for (let i = 0; i < product.value.images_remove.length; i++) {
-          formData.append(
-            'images_remove[]',
-            product.value.images_remove[i].toString(),
-          )
-        }
-      }
+      const formData = objectToFormData(payload)
 
       if (props.id) {
         await updateProduct(props.id, formData)

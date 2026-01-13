@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="products.data"
+        :data="products?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -72,8 +72,8 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="Title" />
-        <el-table-column prop="short_desc" label="Deskripsi Singkat" />
+        <el-table-column prop="title.id" label="Title" />
+        <el-table-column prop="short_desc.id" label="Deskripsi Singkat" />
         <el-table-column prop="sort_order" label="Urutan" />
         <el-table-column prop="active" label="Aktif">
           <template #default="{ row }">
@@ -129,7 +129,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="products.total ?? 0"
+        :total="products?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"

@@ -161,6 +161,7 @@ const removeImage = (index: number) => {
   if (!props.multiple) {
     emit('update:modelValue', null)
     emit('change', null)
+    emit('remove', null)
     return
   }
 

@@ -16,10 +16,15 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
 	use HasFactory,
+		HasSlug,
+		HasTranslations,
 		HasUuids,
 		InteractsWithHashedMedia,
 		LogsActivity,
@@ -40,6 +45,12 @@ class Product extends Model implements HasMedia
 	 * @var array
 	 */
 	protected $guarded = ['id'];
+
+	public array $translatable = [
+		'full_desc',
+		'short_desc',
+		'title',
+	];
 
 	/**
 	 * @return HasOne
@@ -90,6 +101,17 @@ class Product extends Model implements HasMedia
 			->logAll()
 			->logOnlyDirty()
 			->dontSubmitEmptyLogs();
+	}
+
+	/**
+	 * Get the options for generating the slug.
+	 */
+	public function getSlugOptions(): SlugOptions
+	{
+		return SlugOptions::create()
+			->generateSlugsFrom('title')
+			->saveSlugsTo('slug')
+			->preventOverwrite();
 	}
 
 	/**

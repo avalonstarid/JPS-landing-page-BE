@@ -14,11 +14,11 @@ return new class extends Migration {
 		Schema::create('products', function (Blueprint $table) {
 			$table->uuid('id')->primary();
 			$table->boolean('active')->default(true);
-			$table->longText('full_desc')->nullable();
-			$table->text('short_desc')->nullable();
+			$table->json('full_desc')->nullable();
+			$table->json('short_desc')->nullable();
 			$table->string('slug')->unique();
 			$table->integer('sort_order')->default(0);
-			$table->string('title', 100);
+			$table->json('title');
 			$table->timestamps();
 
 			$table->foreignIdFor(User::class, 'created_by_id')->nullable()->constrained()->nullOnDelete();

@@ -1,27 +1,38 @@
-import type { IState } from '@/helpers/interfaces'
+import type { ApiResponse, IMultiLang, IState } from '@/helpers/interfaces'
 
 export interface IProduct {
   id: string
   active: boolean
   created_at: string
   featured: string | File
-  full_desc: string
+  featured_remove: number
+  full_desc: IMultiLang
   images: (string | File | any)[]
   images_remove?: string[]
-  short_desc: string
+  short_desc: IMultiLang
   slug: string
   sort_order: number
-  title: string
+  title: IMultiLang
   updated_at: string
 }
 
 export default function useProducts() {
   const product = ref<Partial<IProduct>>({
     active: true,
+    full_desc: {
+      en: '',
+      id: '',
+    },
+    short_desc: {
+      en: '',
+      id: '',
+    },
+    title: {
+      en: '',
+      id: '',
+    },
   })
-  const products = ref<any>({
-    data: [] as IProduct[],
-  })
+  const products = ref<ApiResponse<IProduct[]>>()
 
   const errors = ref<any>({})
   const loading = ref<boolean>(false)
@@ -39,9 +50,12 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        params: { all: 1, ...state },
-      })
+      let res = await sanctumFetch<ApiResponse<IProduct[]>>(
+        '/v1/master/products',
+        {
+          params: { all: 1, ...state },
+        },
+      )
 
       products.value = res
     } catch (e: any) {
@@ -61,9 +75,12 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        params: state,
-      })
+      let res = await sanctumFetch<ApiResponse<IProduct[]>>(
+        '/v1/master/products',
+        {
+          params: state,
+        },
+      )
 
       products.value = res
     } catch (e: any) {
@@ -83,7 +100,9 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`)
+      let res = await sanctumFetch<ApiResponse<IProduct>>(
+        `/v1/master/products/${id}`,
+      )
 
       product.value = res.data
     } catch (e: any) {
@@ -104,10 +123,13 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products', {
-        method: 'POST',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<IProduct>>(
+        '/v1/master/products',
+        {
+          method: 'POST',
+          body: data,
+        },
+      )
 
       router.back()
 
@@ -138,10 +160,13 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`, {
-        method: 'PUT',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<IProduct>>(
+        `/v1/master/products/${id}`,
+        {
+          method: 'PUT',
+          body: data,
+        },
+      )
 
       router.back()
 
@@ -171,9 +196,12 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch(`/v1/master/products/${id}`, {
-        method: 'DELETE',
-      })
+      let res = await sanctumFetch<ApiResponse<null>>(
+        `/v1/master/products/${id}`,
+        {
+          method: 'DELETE',
+        },
+      )
 
       ElNotification({
         title: 'Success',
@@ -195,10 +223,13 @@ export default function useProducts() {
     loading.value = true
 
     try {
-      let res = await sanctumFetch('/v1/master/products/bulk-destroy', {
-        method: 'DELETE',
-        body: data,
-      })
+      let res = await sanctumFetch<ApiResponse<null>>(
+        '/v1/master/products/bulk-destroy',
+        {
+          method: 'DELETE',
+          body: data,
+        },
+      )
 
       ElNotification({
         title: 'Success',

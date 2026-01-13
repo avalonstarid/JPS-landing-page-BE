@@ -151,6 +151,14 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     if (valid) {
       const payload = {
         ...docInvestor.value,
+        document:
+          docInvestor.value.document instanceof File
+            ? docInvestor.value.document
+            : null,
+        featured:
+          docInvestor.value.featured instanceof File
+            ? docInvestor.value.featured
+            : null,
       }
 
       const formData = objectToFormData(payload)
