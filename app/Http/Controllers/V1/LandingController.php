@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Landing\BusinessLineResource;
 use App\Http\Resources\Landing\FaqResource;
 use App\Http\Resources\Landing\HistoricalTimelineResource;
+use App\Http\Resources\Landing\LiniBisnis\BusinessLineDetailResource;
 use App\Http\Resources\Landing\ProductResource;
 use App\Http\Resources\Landing\StandardResource;
 use App\Http\Resources\Landing\TestimonialResource;
@@ -30,18 +31,18 @@ class LandingController extends Controller
 	 */
 	public function index()
 	{
-		$seo = new SEOData(
-			title: config('app.name') . ' - Perusahaan Peternakan Terintegrasi',
-			description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-			url: config('app.landing_url'),
-			type: 'website',
-			site_name: config('app.name'),
-			locale: 'id_ID',
-			robots: 'index, follow',
-			canonical_url: config('app.landing_url'),
-		);
+		$data = Cache::remember('landing:index', 3600, function () {
+			$seo = new SEOData(
+				title: config('app.name') . ' - Perusahaan Peternakan Terintegrasi',
+				description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
+				url: config('app.landing_url'),
+				type: 'website',
+				site_name: config('app.name'),
+				locale: 'id_ID',
+				robots: 'index, follow',
+				canonical_url: config('app.landing_url'),
+			);
 
-		$data = Cache::remember('landing:index', 3600, function () use ($seo) {
 			return [
 				// FAQ
 				'faq' => [
@@ -168,18 +169,18 @@ class LandingController extends Controller
 	 */
 	public function tentangPerusahaan()
 	{
-		$seo = new SEOData(
-			title: 'Tentang Perusahaan - ' . config('app.name'),
-			description: 'PT Janu Putra Sejahtera Tbk tersebar di daerah Yogyakarta dan Jawa Tengah. Perusahaan ayam terintegrasi.',
-			url: config('app.landing_url') . '/' . request()->path(),
-			type: 'website',
-			site_name: config('app.name'),
-			locale: 'id_ID',
-			robots: 'index, follow',
-			canonical_url: config('app.landing_url') . '/' . request()->path(),
-		);
+		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () {
+			$seo = new SEOData(
+				title: 'Tentang Perusahaan - ' . config('app.name'),
+				description: 'PT Janu Putra Sejahtera Tbk tersebar di daerah Yogyakarta dan Jawa Tengah. Perusahaan ayam terintegrasi.',
+				url: config('app.landing_url') . '/' . request()->path(),
+				type: 'website',
+				site_name: config('app.name'),
+				locale: 'id_ID',
+				robots: 'index, follow',
+				canonical_url: config('app.landing_url') . '/' . request()->path(),
+			);
 
-		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () use ($seo) {
 			return [
 				// Dewan
 				'dewan' => [
@@ -342,6 +343,72 @@ class LandingController extends Controller
 						'en' => 'Company Vision and Mission',
 						'id' => 'Visi dan Misi Perusahaan',
 					],
+				],
+			];
+		});
+
+		return $this->response(
+			message: 'Berhasil mengambil data.',
+			data: $data,
+		);
+	}
+
+	/**
+	 * @return JsonResponse
+	 */
+	public function liniBisnis(string $slug)
+	{
+		$data = Cache::remember("landing:liniBisnis:$slug", 3600, function () use ($slug) {
+			$businessLine = BusinessLine::with(['images'])->where('slug', $slug)->firstOrFail();
+
+			$seo = new SEOData(
+				title: $businessLine->title . ' - ' . config('app.name'),
+				description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
+				url: config('app.landing_url') . '/' . request()->path(),
+				type: 'website',
+				site_name: config('app.name'),
+				locale: 'id_ID',
+				robots: 'index, follow',
+				canonical_url: config('app.landing_url') . '/' . request()->path(),
+			);
+
+			return [
+				// Business Line
+				'business_line' => [
+					'data' => new BusinessLineDetailResource($businessLine),
+					'title' => [
+						'en' => 'Business Lines',
+						'id' => 'Lini Bisnis',
+					],
+				],
+
+				// CTA
+				'cta' => [
+					'text' => [
+						'en' => 'Farm Information',
+						'id' => 'Informasi Peternakan',
+					],
+				],
+
+				// Hero
+				'hero' => [
+					'background' => '/images/hero.jpg',
+					'title' => [
+						'en' => 'Our Business',
+						'id' => 'Bisnis Kami',
+					],
+				],
+
+				// SEO
+				'seo' => [
+					'title' => $seo->title,
+					'description' => $seo->description,
+					'url' => $seo->url,
+					'type' => $seo->type,
+					'site_name' => $seo->site_name,
+					'locale' => $seo->locale,
+					'robots' => $seo->robots,
+					'canonical_url' => $seo->canonical_url,
 				],
 			];
 		});

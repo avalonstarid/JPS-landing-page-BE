@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 
 Route::controller(LandingController::class)->group(function () {
 	Route::get('', 'index');
+	Route::get('lini-bisnis/{slug}', 'liniBisnis');
 	Route::get('tentang-perusahaan', 'tentangPerusahaan');
 });
 

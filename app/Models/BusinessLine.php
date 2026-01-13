@@ -16,11 +16,14 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
 
 class BusinessLine extends Model implements HasMedia
 {
 	use HasFactory,
+		HasSlug,
 		HasSortOrder,
 		HasTranslations,
 		HasUuids,
@@ -94,6 +97,17 @@ class BusinessLine extends Model implements HasMedia
 			->logAll()
 			->logOnlyDirty()
 			->dontSubmitEmptyLogs();
+	}
+
+	/**
+	 * Get the options for generating the slug.
+	 */
+	public function getSlugOptions(): SlugOptions
+	{
+		return SlugOptions::create()
+			->generateSlugsFrom('title')
+			->saveSlugsTo('slug')
+			->preventOverwrite();
 	}
 
 	/**
