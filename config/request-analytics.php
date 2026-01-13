@@ -39,7 +39,9 @@ return [
 	'ignore-paths' => [
 		env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
 		'broadcasting/auth',
+		'karir-list',
 		'livewire/*',
+		'relasi-investor/*/list',
 		'telescope',
 		'telescope/*',
 		'v1/*',
