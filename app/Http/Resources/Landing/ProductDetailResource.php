@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Landing\LiniBisnis;
+namespace App\Http\Resources\Landing;
 
 use App\Http\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BusinessLineDetailResource extends JsonResource
+class ProductDetailResource extends JsonResource
 {
 	/**
 	 * Transform the resource into an array.
@@ -16,7 +16,7 @@ class BusinessLineDetailResource extends JsonResource
 	public function toArray(Request $request): array
 	{
 		return [
-			'desc' => $this->getTranslations('desc'),
+			'full_desc' => $this->getTranslations('full_desc'),
 			'images' => MediaResource::collection($this->whenLoaded('images')),
 			'title' => $this->getTranslations('title'),
 		];

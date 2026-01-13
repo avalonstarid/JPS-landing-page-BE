@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources\Landing;
 
+use App\Http\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class BusinessLineDetailResource extends JsonResource
 {
 	/**
 	 * Transform the resource into an array.
@@ -15,8 +16,8 @@ class ProductResource extends JsonResource
 	public function toArray(Request $request): array
 	{
 		return [
-			'featured_thumb' => $this->featured_thumb,
-			'short_desc' => $this->getTranslations('short_desc'),
+			'desc' => $this->getTranslations('desc'),
+			'images' => MediaResource::collection($this->whenLoaded('images')),
 			'title' => $this->getTranslations('title'),
 		];
 	}

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Landing\BusinessLineDetailResource;
 use App\Http\Resources\Landing\BusinessLineResource;
 use App\Http\Resources\Landing\FaqResource;
 use App\Http\Resources\Landing\HistoricalTimelineResource;
-use App\Http\Resources\Landing\LiniBisnis\BusinessLineDetailResource;
+use App\Http\Resources\Landing\ProductDetailResource;
 use App\Http\Resources\Landing\ProductResource;
 use App\Http\Resources\Landing\StandardResource;
 use App\Http\Resources\Landing\TestimonialResource;
@@ -152,6 +153,189 @@ class LandingController extends Controller
 						'en' => 'Customer Words',
 						'id' => 'Kata Konsumen',
 					],
+				],
+			];
+		});
+
+		return $this->response(
+			message: 'Berhasil mengambil data.',
+			data: $data,
+		);
+	}
+
+	/**
+	 * Get Lini Bisnis Landing Page
+	 *
+	 * @return JsonResponse
+	 */
+	public function liniBisnis(string $slug)
+	{
+		$data = Cache::remember("landing:liniBisnis:$slug", 3600, function () use ($slug) {
+			$businessLine = BusinessLine::with(['images'])->where('slug', $slug)->firstOrFail();
+
+			$seo = new SEOData(
+				title: $businessLine->title . ' - ' . config('app.name'),
+				description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
+				url: config('app.landing_url') . '/' . request()->path(),
+				type: 'website',
+				site_name: config('app.name'),
+				locale: 'id_ID',
+				robots: 'index, follow',
+				canonical_url: config('app.landing_url') . '/' . request()->path(),
+			);
+
+			return [
+				// Business Line
+				'business_line' => [
+					'data' => new BusinessLineDetailResource($businessLine),
+					'title' => [
+						'en' => 'Business Lines',
+						'id' => 'Lini Bisnis',
+					],
+				],
+
+				// CTA
+				'cta' => [
+					'text' => [
+						'en' => 'Farm Information',
+						'id' => 'Informasi Peternakan',
+					],
+				],
+
+				// Hero
+				'hero' => [
+					'background' => '/images/hero.jpg',
+					'title' => [
+						'en' => 'Our Business',
+						'id' => 'Bisnis Kami',
+					],
+				],
+
+				// SEO
+				'seo' => [
+					'title' => $seo->title,
+					'description' => $seo->description,
+					'url' => $seo->url,
+					'type' => $seo->type,
+					'site_name' => $seo->site_name,
+					'locale' => $seo->locale,
+					'robots' => $seo->robots,
+					'canonical_url' => $seo->canonical_url,
+				],
+			];
+		});
+
+		return $this->response(
+			message: 'Berhasil mengambil data.',
+			data: $data,
+		);
+	}
+
+	/**
+	 * Get Produk Landing Page
+	 *
+	 * @return JsonResponse
+	 */
+	public function produk()
+	{
+		$data = Cache::remember('landing:produk', 3600, function () {
+			$seo = new SEOData(
+				title: 'Produk - ' . config('app.name'),
+				description: 'Rangkaian produk unggas kami memenuhi standar kualitas, keamanan, dan konsistensi.',
+				url: config('app.landing_url') . '/' . request()->path(),
+				type: 'website',
+				site_name: config('app.name'),
+				locale: 'id_ID',
+				robots: 'index, follow',
+				canonical_url: config('app.landing_url') . '/' . request()->path(),
+			);
+
+			return [
+				// Commercial
+				'commercial' => [
+					'stock' => [
+						'last_update' => [
+							'en' => 'Last updated 29 November 2025',
+							'id' => 'Terakhir diupdate 29 November 2025',
+						],
+						'products' => [
+							'day-old-chick-doc-parent-stock' => [
+								'stat' => 1000,
+								'title' => [
+									'en' => 'DOC Parent Stock',
+									'id' => 'DOC Parent Stock',
+								],
+							],
+							'day-old-chick-doc-final-stock' => [
+								'stat' => 1500,
+								'title' => [
+									'en' => 'DOC Final Stock',
+									'id' => 'DOC Final Stock',
+								],
+							],
+							'ayam-hidup-broiler-komersial' => [
+								'stat' => 900,
+								'title' => [
+									'en' => 'Ayam Hidup Broiler Komersial',
+									'id' => 'Ayam Hidup Broiler Komersial',
+								],
+							],
+							'telur-komersial' => [
+								'stat' => 2300,
+								'title' => [
+									'en' => 'Commercial Eggs',
+									'id' => 'Telur Komersial',
+								],
+							],
+							'produk-rpa' => [
+								'stat' => 1800,
+								'title' => [
+									'en' => 'RPA Products',
+									'id' => 'Produk RPA',
+								],
+							],
+						],
+						'title' => [
+							'en' => 'Stock Update',
+							'id' => 'Stock Update',
+						],
+					],
+					'title' => [
+						'en' => 'Our Commercial Products',
+						'id' => 'Produk Komersial Kami',
+					],
+				],
+
+				// Hero
+				'hero' => [
+					'background' => '/images/hero.jpg',
+					'subtitle' => [
+						'en' => 'We provide a range of poultry products that meet quality, safety, and consistency standards',
+						'id' => 'Kami menyediakan rangkaian produk unggas yang memenuhi standar kualitas, keamanan, dan konsisten',
+					],
+					'title' => [
+						'en' => 'Integrated Poultry Solutions',
+						'id' => 'Solusi Perunggasan Terintegrasi',
+					],
+				],
+
+				// Produk
+				'product' => [
+					'data' => ProductDetailResource::collection(
+						Product::with(['images'])->active()->orderBy('sort_order')->get(),
+					),
+				],
+
+				// SEO
+				'seo' => [
+					'title' => $seo->title,
+					'description' => $seo->description,
+					'url' => $seo->url,
+					'type' => $seo->type,
+					'site_name' => $seo->site_name,
+					'locale' => $seo->locale,
+					'robots' => $seo->robots,
+					'canonical_url' => $seo->canonical_url,
 				],
 			];
 		});
@@ -343,72 +527,6 @@ class LandingController extends Controller
 						'en' => 'Company Vision and Mission',
 						'id' => 'Visi dan Misi Perusahaan',
 					],
-				],
-			];
-		});
-
-		return $this->response(
-			message: 'Berhasil mengambil data.',
-			data: $data,
-		);
-	}
-
-	/**
-	 * @return JsonResponse
-	 */
-	public function liniBisnis(string $slug)
-	{
-		$data = Cache::remember("landing:liniBisnis:$slug", 3600, function () use ($slug) {
-			$businessLine = BusinessLine::with(['images'])->where('slug', $slug)->firstOrFail();
-
-			$seo = new SEOData(
-				title: $businessLine->title . ' - ' . config('app.name'),
-				description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-				url: config('app.landing_url') . '/' . request()->path(),
-				type: 'website',
-				site_name: config('app.name'),
-				locale: 'id_ID',
-				robots: 'index, follow',
-				canonical_url: config('app.landing_url') . '/' . request()->path(),
-			);
-
-			return [
-				// Business Line
-				'business_line' => [
-					'data' => new BusinessLineDetailResource($businessLine),
-					'title' => [
-						'en' => 'Business Lines',
-						'id' => 'Lini Bisnis',
-					],
-				],
-
-				// CTA
-				'cta' => [
-					'text' => [
-						'en' => 'Farm Information',
-						'id' => 'Informasi Peternakan',
-					],
-				],
-
-				// Hero
-				'hero' => [
-					'background' => '/images/hero.jpg',
-					'title' => [
-						'en' => 'Our Business',
-						'id' => 'Bisnis Kami',
-					],
-				],
-
-				// SEO
-				'seo' => [
-					'title' => $seo->title,
-					'description' => $seo->description,
-					'url' => $seo->url,
-					'type' => $seo->type,
-					'site_name' => $seo->site_name,
-					'locale' => $seo->locale,
-					'robots' => $seo->robots,
-					'canonical_url' => $seo->canonical_url,
 				],
 			];
 		});
