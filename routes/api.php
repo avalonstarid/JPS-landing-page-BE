@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 
 Route::controller(LandingController::class)->group(function () {
 	Route::get('', 'index');
+	Route::get('hubungi-kami', 'hubungiKami');
 	Route::get('karir', 'karir');
 	Route::get('karir-list', 'karirList');
 	Route::get('karir/{slug}', 'karirDetail');
