@@ -190,6 +190,17 @@
       </div>
     </div>
 
+    <!-- Upload Progress -->
+    <div v-if="useMedia.loading" class="w-full h-1">
+      <el-progress
+        :percentage="100"
+        :show-text="false"
+        :stroke-width="4"
+        indeterminate
+        status="warning"
+      />
+    </div>
+
     <!-- Main Content -->
     <TiptapEditorContent class="editor-content" :editor="editor" />
 

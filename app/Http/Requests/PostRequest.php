@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PostRequest extends BaseApiRequest
@@ -29,6 +30,18 @@ class PostRequest extends BaseApiRequest
 			'title.en' => 'Judul (Bahasa Inggris)',
 			'title.id' => 'Judul (Bahasa Indonesia)',
 		];
+	}
+
+	/**
+	 * Prepare the data for validation.
+	 */
+	protected function prepareForValidation(): void
+	{
+		if (!empty($this->input('slug'))) {
+			$this->merge([
+				'slug' => Str::slug($this->input('slug')),
+			]);
+		}
 	}
 
 	/**
