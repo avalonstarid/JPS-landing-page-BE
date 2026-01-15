@@ -23,6 +23,9 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('berita', 'berita');
 	Route::get('berita-list', 'beritaList');
 	Route::get('berita/detail/{slug}', 'beritaDetail');
+	Route::get('blog', 'blog');
+	Route::get('blog-list', 'blogList');
+	Route::get('blog/detail/{slug}', 'blogDetail');
 	Route::get('hubungi-kami', 'hubungiKami');
 	Route::get('karir', 'karir');
 	Route::get('karir-list', 'karirList');
