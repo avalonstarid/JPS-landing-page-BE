@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Master\Enums;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -42,6 +43,12 @@ class PostRequest extends BaseApiRequest
 				'slug' => Str::slug($this->input('slug')),
 			]);
 		}
+
+		// Get Enum ID
+		$enum = Enums::where('code', $this->input('type'))->first();
+		$this->merge([
+			'type_id' => $enum->id,
+		]);
 	}
 
 	/**
@@ -69,7 +76,8 @@ class PostRequest extends BaseApiRequest
 			'title' => ['required', 'array'],
 			'title.en' => ['required', 'string'],
 			'title.id' => ['required', 'string'],
-			'type' => ['required', 'string', Rule::in(['announcement', 'blog', 'news'])],
+			'type' => ['required', 'string', Rule::exists('enums', 'code')],
+			'type_id' => ['required', 'string', Rule::exists('enums', 'id')],
 		];
 	}
 }

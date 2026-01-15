@@ -1,5 +1,5 @@
 <template>
-  <FormPost :id="route.params.id.toString()" type="news" />
+  <FormPost :id="route.params.id.toString()" type="TPST3" />
 </template>
 
 <script setup lang="ts">

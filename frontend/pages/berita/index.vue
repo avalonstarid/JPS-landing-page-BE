@@ -193,7 +193,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  state['filter[type]'] = 'news'
+  state['filter[type]'] = 'TPST3'
   getPosts()
 })
 

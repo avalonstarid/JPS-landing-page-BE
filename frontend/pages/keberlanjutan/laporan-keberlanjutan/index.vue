@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'pengumuman-create' }"
+          :to="{ name: 'keberlanjutan-laporan-keberlanjutan-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -39,7 +39,7 @@
     </div>
     <div class="card-body">
       <el-table
-        :data="posts?.data"
+        :data="docInvestors?.data"
         :default-sort="state.defaultSort"
         v-loading="loading"
         size="small"
@@ -49,7 +49,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column
-          :index="posts?.from"
+          :index="docInvestors?.from"
           align="right"
           class-name="text-nowrap"
           type="index"
@@ -65,30 +65,36 @@
           <template #default="{ row }">
             <el-image
               class="w-[50px] h-[50px]"
-              :src="row.featured_thumb"
-              :preview-src-list="[row.featured_thumb]"
+              :src="row.featured?.thumb_url"
+              :preview-src-list="[row.featured?.original_url]"
               fit="cover"
               preview-teleported
             />
           </template>
         </el-table-column>
-        <el-table-column prop="title.id" label="Judul">
+        <el-table-column prop="title.id" label="Judul (ID)" />
+        <el-table-column prop="title.en" label="Judul (EN)" />
+        <el-table-column label="Size Dokumen">
           <template #default="{ row }">
-            <NuxtLink
-              class="font-semibold text-2sm text-primary hover:text-primary-active"
-              :to="`${landingUrl}/pengumuman/detail/${row.slug}`"
-              target="_blank"
-            >
-              {{ row.title.id }}
-            </NuxtLink>
+            {{ formatBytes(row.document?.size) }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="published_at"
-          label="Tanggal Publikasi"
-          sortable
-        />
-        <el-table-column prop="views" label="Views" width="100" />
+        <el-table-column prop="created_at" label="Dibuat Pada">
+          <template #default="{ row }">
+            {{ $dayjs(row.created_at).format('DD MMM YYYY HH:mm:ss') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="Download">
+          <template #default="{ row }">
+            <a
+              class="btn-outline btn btn-sm btn-primary"
+              :href="row.document?.original_url"
+              target="_blank"
+            >
+              <i class="ki-filled ki-cloud-download"></i>
+            </a>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown
@@ -107,7 +113,11 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/pengumuman/${row.id}`)"
+                    @click="
+                      $router.push(
+                        `/keberlanjutan/laporan-keberlanjutan/${row.id}`,
+                      )
+                    "
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -130,7 +140,7 @@
         v-model:page-size="state.rows"
         class="flex flex-wrap w-full"
         :disabled="loading"
-        :total="posts?.total ?? 0"
+        :total="docInvestors?.total ?? 0"
         layout="sizes, ->, total, prev, pager, next"
         @size-change="handleEvTable('rows', $event)"
         @current-change="handleEvTable('page', $event)"
@@ -140,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import usePosts from '@/composables/posts'
+import useDocInvestors from '@/composables/investor/documents'
 import { checkScope } from '@/helpers/checkScope'
 import {
   handleEvTable,
@@ -148,19 +158,26 @@ import {
   handleSortChange,
   syncStateFilter,
 } from '@/helpers/evTable'
+import { formatBytes } from '@/helpers/helpers'
 
 definePageMeta({
-  title: 'Pengumuman',
-  breadcrumbs: [],
-  authorize: ['post_read'],
+  title: 'Laporan Keberlanjutan',
+  breadcrumbs: [{ title: 'Keberlanjutan' }],
+  authorize: ['document_investor_read'],
 })
-const basePermission = 'post'
+const basePermission = 'document_investor'
+const categoryInvestor = 'laporan-keberlanjutan'
 
 const route = useRoute()
-const { posts, getPosts, destroyPost, bulkDestroyPost, loading, state } =
-  usePosts()
+const {
+  docInvestors,
+  getDocInvestors,
+  destroyDocInvestor,
+  bulkDestroyDocInvestor,
+  loading,
+  state,
+} = useDocInvestors()
 const selectedData = ref([])
-const landingUrl = import.meta.env.VITE_LANDING_URL
 
 const deleteData = (id) => {
   ElMessageBox.confirm('Do you want to delete this record?', 'Warning', {
@@ -168,8 +185,8 @@ const deleteData = (id) => {
     type: 'warning',
   })
     .then(async () => {
-      await destroyPost(id)
-      await getPosts()
+      await destroyDocInvestor(categoryInvestor, id)
+      await getDocInvestors(categoryInvestor)
     })
     .catch(() => {})
 }
@@ -184,8 +201,10 @@ const deleteSelectedData = () => {
     },
   )
     .then(async () => {
-      await bulkDestroyPost({ data: selectedData.value })
-      await getPosts()
+      await bulkDestroyDocInvestor(categoryInvestor, {
+        data: selectedData.value,
+      })
+      await getDocInvestors(categoryInvestor)
     })
     .catch(() => {})
 }
@@ -193,8 +212,8 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  state['filter[type]'] = 'TPST1'
-  getPosts()
+  state.include = 'document,featured'
+  getDocInvestors(categoryInvestor)
 })
 
 // Event Table
@@ -203,7 +222,7 @@ watch(
   () => {
     syncStateFilter(route, state)
 
-    getPosts()
+    getDocInvestors(categoryInvestor)
   },
 )
 const handleSelectionChange = (val: any) => {

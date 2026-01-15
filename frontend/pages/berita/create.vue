@@ -1,5 +1,5 @@
 <template>
-  <FormPost type="news" />
+  <FormPost type="TPST3" />
 </template>
 
 <script setup lang="ts">

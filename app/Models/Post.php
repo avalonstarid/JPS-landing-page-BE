@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Master\Enums;
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -67,6 +68,14 @@ class Post extends Model implements HasMedia
 	public function featured(): HasOne
 	{
 		return $this->hasOne(Media::class, 'model_id')->where('collection_name', 'featured');
+	}
+
+	/**
+	 * @return BelongsTo
+	 */
+	public function type(): BelongsTo
+	{
+		return $this->belongsTo(Enums::class, 'type_id');
 	}
 
 	/**
@@ -143,7 +152,7 @@ class Post extends Model implements HasMedia
 	#[Scope]
 	protected function announcement(Builder $query): void
 	{
-		$query->where('type', 'announcement');
+		$query->whereHas('type', fn($query) => $query->where('code', 'TPST1'));
 	}
 
 	/**
@@ -152,7 +161,7 @@ class Post extends Model implements HasMedia
 	#[Scope]
 	protected function blog(Builder $query): void
 	{
-		$query->where('type', 'blog');
+		$query->whereHas('type', fn($query) => $query->where('code', 'TPST2'));
 	}
 
 	/**
@@ -161,7 +170,16 @@ class Post extends Model implements HasMedia
 	#[Scope]
 	protected function news(Builder $query): void
 	{
-		$query->where('type', 'news');
+		$query->whereHas('type', fn($query) => $query->where('code', 'TPST3'));
+	}
+
+	/**
+	 * Scope a query to only include Pendekatan dan Kinerja Manajemen.
+	 */
+	#[Scope]
+	protected function pendekatanKinerja(Builder $query): void
+	{
+		$query->whereHas('type', fn($query) => $query->where('code', 'TPST4'));
 	}
 
 	/**

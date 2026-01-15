@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Master\Enums;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,11 +20,12 @@ return new class extends Migration {
 			$table->timestamp('published_at')->nullable();
 			$table->string('slug')->unique();
 			$table->json('title');
-			$table->enum('type', ['announcement', 'blog', 'news'])->index();
 			$table->unsignedBigInteger('views')->default(0);
 			$table->timestamps();
 
 			$table->foreignIdFor(User::class, 'created_by_id')->nullable()->constrained()->nullOnDelete();
+			$table->foreignIdFor(Enums::class, 'type_id')->comment('Enum Type: TPST')->constrained()
+				->restrictOnDelete();
 			$table->foreignIdFor(User::class, 'updated_by_id')->nullable()->constrained()->nullOnDelete();
 		});
 	}

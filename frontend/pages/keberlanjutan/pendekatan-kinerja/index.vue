@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'pengumuman-create' }"
+          :to="{ name: 'keberlanjutan-pendekatan-kinerja-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -76,7 +76,7 @@
           <template #default="{ row }">
             <NuxtLink
               class="font-semibold text-2sm text-primary hover:text-primary-active"
-              :to="`${landingUrl}/pengumuman/detail/${row.slug}`"
+              :to="`${landingUrl}/blog/detail/${row.slug}`"
               target="_blank"
             >
               {{ row.title.id }}
@@ -107,7 +107,11 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/pengumuman/${row.id}`)"
+                    @click="
+                      $router.push(
+                        `/keberlanjutan/pendekatan-kinerja/${row.id}`,
+                      )
+                    "
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -150,8 +154,8 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Pengumuman',
-  breadcrumbs: [],
+  title: 'Pendekatan dan Kinerja Manajemen',
+  breadcrumbs: [{ title: 'Keberlanjutan' }],
   authorize: ['post_read'],
 })
 const basePermission = 'post'
@@ -193,7 +197,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  state['filter[type]'] = 'TPST1'
+  state['filter[type]'] = 'TPST4'
   getPosts()
 })
 

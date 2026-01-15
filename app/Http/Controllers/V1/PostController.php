@@ -46,11 +46,11 @@ class PostController extends Controller
 				'published_at',
 				'slug',
 				'title',
-				'type',
 				'views',
 				'created_at',
 				'updated_at',
 				'created_by_id',
+				'type_id',
 				'updated_by_id',
 			]),
 		)->allowedSorts(
@@ -64,7 +64,7 @@ class PostController extends Controller
 				AllowedFilter::callback('search', function (Builder $q, $value) {
 					$q->whereAny(['slug', 'title'], 'LIKE', '%' . $value . '%');
 				}),
-				AllowedFilter::exact('type'),
+				AllowedFilter::exact('type', 'type.code'),
 			],
 		)->allowedIncludes(
 			includes: [
@@ -110,7 +110,7 @@ class PostController extends Controller
 			DB::beginTransaction();
 
 			$data = Post::create($request->safe()->except([
-				'featured', 'featured_remove', 'seo',
+				'featured', 'featured_remove', 'seo', 'type',
 			]));
 
 			if ($request->hasFile('featured')) {
@@ -187,7 +187,7 @@ class PostController extends Controller
 
 			DB::beginTransaction();
 
-			$post->update($request->safe()->except(['featured', 'featured_remove']));
+			$post->update($request->safe()->except(['featured', 'featured_remove', 'seo', 'type']));
 
 			// Set Featured Image
 			if ($request->hasFile('featured')) {
@@ -197,12 +197,13 @@ class PostController extends Controller
 			}
 
 			// Update SEO
+			$title = $request->safe()->input('seo.title') ?? $post->title;
 			$post->seo->update([
 				'author' => $post->author->name,
 				'description' => $request->safe()->input('seo.desc') ??
 					Str::limit(strip_tags($post->content), 160, ''),
 				'image' => $post->getFirstMediaUrl('featured') ?: null,
-				'title' => $request->safe()->input('seo.title') ?? $post->title,
+				'title' => $title . ' - ' . config('app.name'),
 			]);
 
 			// Ubah Kepemilikan Temp Media

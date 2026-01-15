@@ -1,5 +1,5 @@
 <template>
-  <FormPost type="blog" />
+  <FormPost type="TPST2" />
 </template>
 
 <script setup lang="ts">
