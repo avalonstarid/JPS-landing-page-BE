@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Traits\InteractsWithHashedMedia;
 use App\Traits\OwnerTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -135,9 +137,13 @@ class Post extends Model implements HasMedia
 			->quality(80);
 	}
 
-	public function scopePublished($query)
+	/**
+	 * Scope a query to only include published.
+	 */
+	#[Scope]
+	protected function published(Builder $query): void
 	{
-		return $query->where('is_published', true)
+		$query->where('is_published', true)
 			->where('published_at', '<=', now());
 	}
 }

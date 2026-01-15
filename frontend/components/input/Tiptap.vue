@@ -210,6 +210,7 @@
 
 <script setup lang="ts">
 import useMedias from '@/composables/media'
+import FileHandler from '@tiptap/extension-file-handler'
 import TextAlign from '@tiptap/extension-text-align'
 import ImageResize from 'tiptap-extension-resize-image'
 
@@ -277,6 +278,27 @@ const editor = useEditor({
     }),
     TextAlign.configure({
       types: ['heading', 'paragraph', 'image'],
+    }),
+    FileHandler.configure({
+      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+      onDrop: (currentEditor, files, pos) => {
+        files.forEach(async (file) => {
+          const url = await uploadImage(file, 'image')
+
+          if (url) {
+            currentEditor.chain().focus().setImage({ src: url }).run()
+          }
+        })
+      },
+      onPaste: (currentEditor, files) => {
+        files.forEach(async (file) => {
+          const url = await uploadImage(file, 'image')
+
+          if (url) {
+            currentEditor.chain().focus().setImage({ src: url }).run()
+          }
+        })
+      },
     }),
   ],
   editorProps: {

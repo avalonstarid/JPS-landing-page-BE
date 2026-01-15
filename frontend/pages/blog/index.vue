@@ -5,7 +5,7 @@
         <NuxtLink
           v-if="checkScope([`${basePermission}_create`])"
           class="btn btn-sm btn-primary"
-          :to="{ name: 'berita-create' }"
+          :to="{ name: 'blog-create' }"
         >
           <i class="ki-filled ki-plus-squared"></i>
           Tambah
@@ -76,7 +76,7 @@
           <template #default="{ row }">
             <NuxtLink
               class="font-semibold text-2sm text-primary hover:text-primary-active"
-              :to="`${landingUrl}/berita/detail/${row.slug}`"
+              :to="`${landingUrl}/blog/detail/${row.slug}`"
               target="_blank"
             >
               {{ row.title.id }}
@@ -107,7 +107,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item
                     v-if="checkScope([`${basePermission}_update`])"
-                    @click="$router.push(`/berita/${row.id}`)"
+                    @click="$router.push(`/blog/${row.id}`)"
                   >
                     <i class="ki-filled ki-notepad-edit"></i> Ubah
                   </el-dropdown-item>
@@ -150,7 +150,7 @@ import {
 } from '@/helpers/evTable'
 
 definePageMeta({
-  title: 'Berita',
+  title: 'Blog',
   breadcrumbs: [],
   authorize: ['post_read'],
 })
@@ -193,7 +193,7 @@ const deleteSelectedData = () => {
 onMounted(() => {
   syncStateFilter(route, state)
 
-  state['filter[type]'] = 'news'
+  state['filter[type]'] = 'blog'
   getPosts()
 })
 
