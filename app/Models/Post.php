@@ -138,6 +138,15 @@ class Post extends Model implements HasMedia
 	}
 
 	/**
+	 * Scope a query to only include news.
+	 */
+	#[Scope]
+	protected function news(Builder $query): void
+	{
+		$query->where('type', 'news');
+	}
+
+	/**
 	 * Scope a query to only include published.
 	 */
 	#[Scope]

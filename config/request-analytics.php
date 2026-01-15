@@ -38,6 +38,7 @@ return [
 
 	'ignore-paths' => [
 		env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
+		'berita-list',
 		'broadcasting/auth',
 		'karir-list',
 		'livewire/*',

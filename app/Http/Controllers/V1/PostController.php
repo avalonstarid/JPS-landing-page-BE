@@ -118,12 +118,13 @@ class PostController extends Controller
 			}
 
 			// Update SEO
+			$title = $request->safe()->input('seo.title') ?? $data->title;
 			$data->seo->update([
 				'author' => $data->author->name,
 				'description' => $request->safe()->input('seo.desc') ??
 					Str::limit(strip_tags($data->content), 160, ''),
 				'image' => $data->getFirstMediaUrl('featured') ?: null,
-				'title' => $request->safe()->input('seo.title') ?? $data->title,
+				'title' => $title . ' - ' . config('app.name'),
 			]);
 
 			// Ubah Kepemilikan Temp Media
