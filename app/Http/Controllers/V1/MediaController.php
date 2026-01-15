@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\TemporaryUpload;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Knuckles\Scribe\Attributes\Group;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Throwable;
@@ -55,24 +54,31 @@ class MediaController extends Controller
 	 */
 	public function upload(Request $request)
 	{
-		$request->validate([
-			'image' => ['required', 'image', 'max:5120'],
-		]);
+		try {
+			$request->validate([
+				'image' => ['required', 'image', 'max:10240'],
+			]);
 
-		$file = $request->file('image');
+			$tempModel = TemporaryUpload::create([
+				'session_id' => session()->getId(),
+			]);
 
-		$originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-		$safeName = Str::slug($originalName);
-		// Hasil: "foto-kegiatan-1708456123-ax9z.jpg"
-		$filename = $safeName . '-' . time() . '-' . Str::random(4) . '.' . $file->getClientOriginalExtension();
+			$media = $tempModel->addMedia($request->file('image'))->withCustomProperties(['date' => now()])
+				->toMediaCollection('uploads');
 
-		$path = $file->storeAs('uploads/images', $filename, 'public');
-
-		return $this->response(
-			message: 'Berhasil upload image.',
-			data: [
-				'url' => asset(Storage::url($path)),
-			],
-		);
+			return $this->response(
+				message: 'Berhasil upload image.',
+				data: [
+					'media_id' => $media->id,
+					'url_original' => $media->getUrl(),
+					'url' => $media->getUrl('thumb'),
+				],
+			);
+		} catch (Exception $e) {
+			return $this->response(
+				message: $e->getMessage(),
+				status_code: $e->getCode(),
+			);
+		}
 	}
 }

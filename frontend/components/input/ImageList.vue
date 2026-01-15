@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-4">
+  <div>
     <label class="mb-2 form-label">{{ label }}</label>
 
     <div class="input-image-list">

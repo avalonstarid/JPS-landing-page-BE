@@ -106,6 +106,7 @@ export default defineNuxtConfig({
     'dayjs-nuxt',
     'nuxt-auth-sanctum',
     // 'nuxt-laravel-echo',
+    'nuxt-tiptap-editor',
   ],
   nitro: {
     preset: 'bun',
@@ -199,6 +200,9 @@ export default defineNuxtConfig({
       onLogin: false,
       onLogout: '/auth/sign-in',
     },
+  },
+  tiptap: {
+    prefix: 'Tiptap',
   },
   vite: {
     css: {

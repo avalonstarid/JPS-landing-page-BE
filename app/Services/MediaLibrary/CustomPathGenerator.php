@@ -37,7 +37,7 @@ class CustomPathGenerator implements BasePathGenerator
 
 		if ($media->hasCustomProperty('date')) {
 			$date = Carbon::make($media->getCustomProperty('date'));
-			$prefix .= $date->year . '/' . $date->isoFormat('MM') . '/' . $date->isoFormat('DD');
+			$prefix .= $date->year . '/' . $date->isoFormat('MM') . '/' . $date->isoFormat('DD') . '/';
 		}
 
 		return $prefix;

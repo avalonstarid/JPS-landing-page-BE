@@ -1,5 +1,10 @@
 <template>
-  <el-form-item class="!mb-0" :error="error" :label="label" :prop="name">
+  <el-form-item
+    class="!mb-0 !w-full"
+    :error="error"
+    :label="label"
+    :prop="name"
+  >
     <el-input
       :placeholder="`Masukan ${label ?? 'disini'}`"
       clearable

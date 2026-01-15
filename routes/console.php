@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\TemporaryUpload;
 use Illuminate\Support\Facades\Schedule;
 use Spatie\OneTimePasswords\Models\OneTimePassword;
 
@@ -11,6 +12,14 @@ Schedule::command('model:prune', [
 ])->daily();
 Schedule::command('sanctum:prune-expired --hours=24')->daily();
 Schedule::command('telescope:prune --hours=72')->daily();
+Schedule::call(function () {
+	$staleUploads = TemporaryUpload::where('created_at', '<', now()->subDay())->get();
+
+	foreach ($staleUploads as $temp) {
+		$temp->clearMediaCollection();
+		$temp->delete();
+	}
+})->daily();
 
 // Daily At
 Schedule::command('backup:clean')->daily()->at('01:00');

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use Throwable;
@@ -125,6 +126,13 @@ class PostController extends Controller
 				'title' => $request->safe()->input('seo.title') ?? $data->title,
 			]);
 
+			// Ubah Kepemilikan Temp Media
+			foreach ($request->safe()->array('temp_media_ids') as $mediaId) {
+				$media = Media::find($mediaId);
+
+				$media->move($data, 'uploads');
+			}
+
 			DB::commit();
 
 			return $this->response(
@@ -195,6 +203,13 @@ class PostController extends Controller
 				'image' => $post->getFirstMediaUrl('featured') ?: null,
 				'title' => $request->safe()->input('seo.title') ?? $post->title,
 			]);
+
+			// Ubah Kepemilikan Temp Media
+			foreach ($request->safe()->array('temp_media_ids') as $mediaId) {
+				$media = Media::find($mediaId);
+
+				$media->move($post, 'uploads');
+			}
 
 			DB::commit();
 
