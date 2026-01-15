@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\Investor\DocumentInvsController;
 use App\Http\Controllers\V1\Investor\FinancialReportController;
 use App\Http\Controllers\V1\JobApplicationController;
 use App\Http\Controllers\V1\JobPostingController;
+use App\Http\Controllers\V1\Keberlanjutan\TinjauanController;
 use App\Http\Controllers\V1\MediaController;
 use App\Http\Controllers\V1\NotificationController;
 use App\Http\Controllers\V1\PostController;
@@ -69,6 +70,11 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::controller(JobPostingController::class)->group(function () {
 		Route::delete('job-postings/bulk-destroy', 'bulkDestroy');
 		Route::apiResource('job-postings', JobPostingController::class);
+	});
+
+	Route::controller(TinjauanController::class)->group(function () {
+		Route::post('keberlanjutan/tinjauan', 'store');
+		Route::get('keberlanjutan/tinjauan', 'show');
 	});
 
 	Route::prefix('master')->group(__DIR__ . '/api/v1/master.php');

@@ -23,6 +23,7 @@ export default function usePosts() {
       en: '',
       id: '',
     },
+    is_published: false,
     title: {
       en: '',
       id: '',
@@ -227,6 +228,63 @@ export default function usePosts() {
     }
   }
 
+  const getPostKeberlanjutanTinjauan = async () => {
+    loading.value = true
+
+    try {
+      let res = await sanctumFetch<ApiResponse<IPost>>(
+        `/v1/keberlanjutan/tinjauan`,
+      )
+
+      if (res.data) {
+        post.value = res.data
+      }
+    } catch (e: any) {
+      ElNotification({
+        title: 'Error',
+        message: e.response._data.message ?? e.message,
+        type: 'error',
+      })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const storePostKeberlanjutanTinjauan = async (data: object) => {
+    errors.value = ''
+    loading.value = true
+
+    try {
+      let res = await sanctumFetch<ApiResponse<IPost>>(
+        '/v1/keberlanjutan/tinjauan',
+        {
+          method: 'POST',
+          body: data,
+        },
+      )
+
+      ElNotification({
+        title: 'Success',
+        message: res.message,
+        type: 'success',
+      })
+    } catch (e: any) {
+      if (e.response) {
+        errors.value = e.response._data
+      } else {
+        errors.value = e
+      }
+
+      ElNotification({
+        title: 'Error',
+        message: errors.value['message'],
+        type: 'error',
+      })
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     errors,
     loading,
@@ -239,6 +297,8 @@ export default function usePosts() {
     updatePost,
     destroyPost,
     bulkDestroyPost,
+    getPostKeberlanjutanTinjauan,
+    storePostKeberlanjutanTinjauan,
     state,
   }
 }
