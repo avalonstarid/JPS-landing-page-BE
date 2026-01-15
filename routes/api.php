@@ -31,6 +31,9 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('karir-list', 'karirList');
 	Route::get('karir/{slug}', 'karirDetail');
 	Route::get('lini-bisnis/{slug}', 'liniBisnis');
+	Route::get('pengumuman', 'pengumuman');
+	Route::get('pengumuman-list', 'pengumumanList');
+	Route::get('pengumuman/detail/{slug}', 'pengumumanDetail');
 	Route::get('produk', 'produk');
 	Route::get('relasi-investor/{slug}', 'relasiInvestor');
 	Route::get('relasi-investor/laporan-keuangan/list', 'relasiInvestorLapKeu');
