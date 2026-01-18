@@ -30,6 +30,8 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('karir', 'karir');
 	Route::get('karir-list', 'karirList');
 	Route::get('karir/{slug}', 'karirDetail');
+	Route::get('keberlanjutan-laporan-list', 'keberlanjutanLaporanList');
+	Route::get('keberlanjutan/{slug}', 'keberlanjutan');
 	Route::get('lini-bisnis/{slug}', 'liniBisnis');
 	Route::get('pengumuman', 'pengumuman');
 	Route::get('pengumuman-list', 'pengumumanList');

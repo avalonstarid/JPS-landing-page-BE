@@ -41,6 +41,7 @@ return [
 		'berita-list',
 		'broadcasting/auth',
 		'karir-list',
+		'keberlanjutan-laporan-list',
 		'livewire/*',
 		'relasi-investor/*/list',
 		'telescope',
