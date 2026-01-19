@@ -1,0 +1,11 @@
+{
+    "agents": [
+        "gemini",
+        "phpstorm"
+    ],
+    "editors": [
+        "gemini",
+        "phpstorm"
+    ],
+    "guidelines": []
+}

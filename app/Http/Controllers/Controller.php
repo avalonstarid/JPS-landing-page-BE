@@ -17,8 +17,8 @@ abstract class Controller extends BaseController
 	 * Custom Response
 	 *
 	 * @param            $message
-	 * @param null       $data
-	 * @param null       $errors
+	 * @param            $data
+	 * @param            $errors
 	 * @param int|string $status_code
 	 *
 	 * @return JsonResponse
@@ -37,6 +37,16 @@ abstract class Controller extends BaseController
 		], $status_code);
 	}
 
+	/**
+	 * Custom Response New
+	 *
+	 * @param            $message
+	 * @param            $data
+	 * @param            $errors
+	 * @param int|string $status_code
+	 *
+	 * @return JsonResponse
+	 */
 	public function responseNew($message, $data = null, $errors = null, int|string $status_code = 200): JsonResponse
 	{
 		if (!is_int($status_code) || $status_code < 200 || $status_code > 500) {
