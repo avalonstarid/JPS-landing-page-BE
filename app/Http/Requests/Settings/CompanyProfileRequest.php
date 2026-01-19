@@ -29,10 +29,11 @@ class CompanyProfileRequest extends BaseApiRequest
 			'company_name' => ['required', 'string', 'max:100'],
 			'company_phone' => ['nullable', 'string', 'max:20'],
 			'company_social' => ['nullable', 'array'],
-			'company_social.email' => ['required', 'string', 'email', 'max:100'],
-			'company_social.instagram' => ['required', 'string', 'max:100'],
-			'company_social.linkedin' => ['required', 'string', 'max:100'],
-			'company_social.whatsapp' => ['required', 'string', 'max:20'],
+			'company_social.*.icon' => ['required', 'string', 'max:100'],
+			'company_social.*.icon_custom' => ['required', 'boolean'],
+			'company_social.*.key' => ['required', 'string', 'max:100'],
+			'company_social.*.link' => ['required', 'string'],
+			'company_social.*.value' => ['required', 'string', 'max:100'],
 		];
 	}
 }

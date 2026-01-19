@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\ContactUsController;
+use App\Http\Controllers\V1\Landing\BerandaController;
 use App\Http\Controllers\V1\LandingController;
 use App\Models\AppVersion;
 use Illuminate\Http\Request;
@@ -18,8 +19,8 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+// Landing Page
 Route::controller(LandingController::class)->group(function () {
-	Route::get('', 'index');
 	Route::get('berita', 'berita');
 	Route::get('berita-list', 'beritaList');
 	Route::get('berita/detail/{slug}', 'beritaDetail');
@@ -42,6 +43,9 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('relasi-investor/{slug}/list', 'relasiInvestorList');
 	Route::get('tentang-perusahaan', 'tentangPerusahaan');
 });
+
+Route::get('', [BerandaController::class, 'index']);
+// End Landing Page
 
 Route::get('app-version', function () {
 	$data = AppVersion::first();

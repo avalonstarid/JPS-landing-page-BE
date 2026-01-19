@@ -10,6 +10,8 @@ Route::apiResource('app-versions', AppVersionController::class)->only(['index', 
 
 Route::controller(GeneralSettingController::class)->prefix('general-settings')->group(function () {
 	Route::post('company-profile', 'companyProfile');
+	Route::post('landing-beranda', 'landingBeranda');
+	Route::get('{group}', 'show');
 });
 
 Route::controller(MenuController::class)->group(function () {

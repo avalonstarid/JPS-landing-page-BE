@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Setting extends Model implements HasMedia
 {
@@ -63,5 +64,18 @@ class Setting extends Model implements HasMedia
 		} else {
 			$this->attributes['value'] = $value;
 		}
+	}
+
+	/**
+	 * @param Media|null $media
+	 *
+	 * @return void
+	 */
+	public function registerMediaConversions(?Media $media = null): void
+	{
+		$this->addMediaConversion('thumb')
+			->format('webp')
+			->width(1000)
+			->quality(80);
 	}
 }
