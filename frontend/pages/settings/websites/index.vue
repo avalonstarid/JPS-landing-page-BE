@@ -6,6 +6,9 @@
     <ElTabPane label="Landing Page Beranda">
       <FormSettingsGeneralLandingBeranda />
     </ElTabPane>
+    <ElTabPane label="Landing Tentang Perusahaan">
+      <FormSettingsGeneralLandingTentangPerusahaan />
+    </ElTabPane>
   </ElTabs>
 </template>
 

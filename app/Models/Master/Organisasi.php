@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
@@ -37,6 +38,14 @@ class Organisasi extends Model
 		'desc',
 		'name',
 	];
+
+	/**
+	 * @return HasMany
+	 */
+	public function dewans(): HasMany
+	{
+		return $this->hasMany(Dewan::class, 'organisasi_id');
+	}
 
 	/**
 	 * @return BelongsTo

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\CompanyProfileRequest;
 use App\Http\Requests\Settings\Landing\LandingBerandaRequest;
+use App\Http\Requests\Settings\Landing\LandingTentangPerusahaanRequest;
 use App\Models\Setting;
 use App\Traits\ManagesSettings;
 use Exception;
@@ -86,6 +87,37 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_beranda');
 
 			Cache::forget('settings:landing_beranda');
+
+			return $this->response(
+				message: 'Berhasil menyimpan data.',
+				data: $updatedData,
+			);
+		} catch (Exception $e) {
+			return $this->response(
+				message: $e->getMessage(),
+				status_code: $e->getCode(),
+			);
+		}
+	}
+
+	/**
+	 * Update Landing Page Tentang Perusahaan
+	 *
+	 * @param LandingTentangPerusahaanRequest $request
+	 *
+	 * @return JsonResponse
+	 * @throws Throwable
+	 */
+	public function landingTentangPerusahaan(LandingTentangPerusahaanRequest $request)
+	{
+		try {
+			$this->authorize('update_landing', Setting::class);
+
+			$validated = $request->validated();
+
+			$updatedData = $this->updateSettings($validated, 'landing_tentang_perusahaan');
+
+			Cache::forget('settings:landing_tentang_perusahaan');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',

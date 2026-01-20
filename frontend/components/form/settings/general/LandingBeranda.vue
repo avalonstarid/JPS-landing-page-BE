@@ -3,7 +3,6 @@
     ref="formRef"
     class="card"
     :model="generalSetting"
-    :rules="rules"
     label-position="top"
     require-asterisk-position="right"
     scroll-to-error
@@ -189,7 +188,7 @@
               class="btn btn-sm btn-light-primary"
               type="button"
               title="Copy from Indonesia"
-              @click="copyFromId('hero')"
+              @click="copyFromId('product')"
             >
               <i class="ki-filled ki-copy"></i> Copy From ID
             </button>
@@ -263,7 +262,7 @@
               class="btn btn-sm btn-light-primary"
               type="button"
               title="Copy from Indonesia"
-              @click="copyFromId('hero')"
+              @click="copyFromId('standard')"
             >
               <i class="ki-filled ki-copy"></i> Copy From ID
             </button>
@@ -321,7 +320,7 @@
               class="btn btn-sm btn-light-primary"
               type="button"
               title="Copy from Indonesia"
-              @click="copyFromId('hero')"
+              @click="copyFromId('testimonial')"
             >
               <i class="ki-filled ki-copy"></i> Copy From ID
             </button>
@@ -396,7 +395,7 @@
               class="btn btn-sm btn-light-primary"
               type="button"
               title="Copy from Indonesia"
-              @click="copyFromId('hero')"
+              @click="copyFromId('faq')"
             >
               <i class="ki-filled ki-copy"></i> Copy From ID
             </button>
@@ -440,7 +439,7 @@
 <script setup lang="ts">
 import useGeneralSettings from '@/composables/settings/general-settings'
 import { objectToFormData } from '@/helpers/formData'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 
 const formRef = ref<FormInstance>()
 const {
@@ -450,17 +449,6 @@ const {
   getGeneralSetting,
   storeLandingBeranda,
 } = useGeneralSettings()
-
-// Create Rules Form
-const rules = reactive<FormRules>({
-  name: [
-    {
-      required: true,
-      message: 'Nama Permission wajib diisi.',
-      trigger: 'blur',
-    },
-  ],
-})
 
 // Form Submit Function
 const onSubmit = async (formEl: FormInstance | undefined) => {
@@ -500,8 +488,35 @@ onMounted(() => {
 })
 
 const copyFromId = (type: string) => {
-  if (type === 'hero') {
-    generalSetting.value.answer!.en = generalSetting.value.answer!.id
+  if (type === 'faq') {
+    generalSetting.value.faq_title!.en = generalSetting.value.faq_title!.id
+    generalSetting.value.faq_cta_lead!.en =
+      generalSetting.value.faq_cta_lead!.id
+    generalSetting.value.faq_cta_text!.en =
+      generalSetting.value.faq_cta_text!.id
+  } else if (type === 'hero') {
+    generalSetting.value.hero_cta_text!.en =
+      generalSetting.value.hero_cta_text!.id
+    generalSetting.value.hero_rotation_words!.en =
+      generalSetting.value.hero_rotation_words!.id
+    generalSetting.value.hero_subtitle!.en =
+      generalSetting.value.hero_subtitle!.id
+    generalSetting.value.hero_title!.en = generalSetting.value.hero_title!.id
+  } else if (type === 'product') {
+    generalSetting.value.product_cta_text!.en =
+      generalSetting.value.product_cta_text!.id
+    generalSetting.value.product_subtitle!.en =
+      generalSetting.value.product_subtitle!.id
+    generalSetting.value.product_title!.en =
+      generalSetting.value.product_title!.id
+  } else if (type === 'standard') {
+    generalSetting.value.standard_subtitle!.en =
+      generalSetting.value.standard_subtitle!.id
+    generalSetting.value.standard_title!.en =
+      generalSetting.value.standard_title!.id
+  } else if (type === 'testimonial') {
+    generalSetting.value.testimonial_title!.en =
+      generalSetting.value.testimonial_title!.id
   }
 }
 </script>

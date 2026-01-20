@@ -11,6 +11,7 @@ Route::apiResource('app-versions', AppVersionController::class)->only(['index', 
 Route::controller(GeneralSettingController::class)->prefix('general-settings')->group(function () {
 	Route::post('company-profile', 'companyProfile');
 	Route::post('landing-beranda', 'landingBeranda');
+	Route::post('landing-tentang-perusahaan', 'landingTentangPerusahaan');
 	Route::get('{group}', 'show');
 });
 
