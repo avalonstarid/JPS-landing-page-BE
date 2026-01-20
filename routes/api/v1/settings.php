@@ -12,6 +12,7 @@ Route::controller(GeneralSettingController::class)->prefix('general-settings')->
 	Route::post('company-profile', 'companyProfile');
 	Route::post('landing-beranda', 'landingBeranda');
 	Route::post('landing-berita', 'landingBerita');
+	Route::post('landing-blog', 'landingBlog');
 	Route::post('landing-hubungi-kami', 'landingHubungiKami');
 	Route::post('landing-lini-bisnis', 'landingLiniBisnis');
 	Route::post('landing-tentang-perusahaan', 'landingTentangPerusahaan');

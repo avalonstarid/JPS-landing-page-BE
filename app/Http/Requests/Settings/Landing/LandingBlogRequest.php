@@ -4,7 +4,7 @@ namespace App\Http\Requests\Settings\Landing;
 
 use App\Http\Requests\BaseApiRequest;
 
-class LandingBeritaRequest extends BaseApiRequest
+class LandingBlogRequest extends BaseApiRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
