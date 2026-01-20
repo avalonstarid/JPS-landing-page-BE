@@ -18,6 +18,9 @@
     <ElTabPane label="Landing Lini Bisnis">
       <FormSettingsGeneralLandingLiniBisnis />
     </ElTabPane>
+    <ElTabPane label="Landing Pengumuman">
+      <FormSettingsGeneralLandingPengumuman />
+    </ElTabPane>
     <ElTabPane label="Landing Tentang Perusahaan">
       <FormSettingsGeneralLandingTentangPerusahaan />
     </ElTabPane>
