@@ -5,14 +5,12 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Landing\Berita\PostDetailResource;
 use App\Http\Resources\Landing\Berita\PostResource;
-use App\Http\Resources\Landing\BusinessLineDetailResource;
 use App\Http\Resources\Landing\Investor\DocumentInvsResource;
 use App\Http\Resources\Landing\Investor\FinancialReportResource;
 use App\Http\Resources\Landing\Karir\CategoryResource;
 use App\Http\Resources\Landing\Karir\KarirResource;
 use App\Http\Resources\Landing\Keberlanjutan\TinjauanResource;
 use App\Http\Resources\Landing\ProductDetailResource;
-use App\Models\BusinessLine;
 use App\Models\Investor\FinancialReport;
 use App\Models\JobPosting;
 use App\Models\Master\Category;
@@ -609,74 +607,6 @@ class LandingController extends Controller
 		return $this->responseNew(
 			message: 'Berhasil mengambil data.',
 			data: DocumentInvsResource::collection($data),
-		);
-	}
-
-	/**
-	 * Get Lini Bisnis Landing Page
-	 *
-	 * @return JsonResponse
-	 */
-	public function liniBisnis(string $slug)
-	{
-		$data = Cache::remember("landing:liniBisnis:$slug", 3600, function () use ($slug) {
-			$businessLine = BusinessLine::with(['images'])->where('slug', $slug)->firstOrFail();
-
-			$seo = new SEOData(
-				title: $businessLine->title . ' - ' . config('app.name'),
-				description: 'Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
-				url: config('app.landing_url') . '/' . request()->path(),
-				type: 'website',
-				site_name: config('app.name'),
-				locale: 'id_ID',
-				robots: 'index, follow',
-				canonical_url: config('app.landing_url') . '/' . request()->path(),
-			);
-
-			return [
-				// Business Line
-				'business_line' => [
-					'data' => new BusinessLineDetailResource($businessLine),
-					'title' => [
-						'en' => 'Business Lines',
-						'id' => 'Lini Bisnis',
-					],
-				],
-
-				// CTA
-				'cta' => [
-					'text' => [
-						'en' => 'Farm Information',
-						'id' => 'Informasi Peternakan',
-					],
-				],
-
-				// Hero
-				'hero' => [
-					'background' => '/images/hero.jpg',
-					'title' => [
-						'en' => 'Our Business',
-						'id' => 'Bisnis Kami',
-					],
-				],
-
-				// SEO
-				'seo' => [
-					'title' => $seo->title,
-					'description' => $seo->description,
-					'url' => $seo->url,
-					'type' => $seo->type,
-					'site_name' => $seo->site_name,
-					'locale' => $seo->locale,
-					'robots' => $seo->robots,
-					'canonical_url' => $seo->canonical_url,
-				],
-			];
-		});
-
-		return $this->response(
-			message: 'Berhasil mengambil data.',
-			data: $data,
 		);
 	}
 

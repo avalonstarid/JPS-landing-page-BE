@@ -9,6 +9,9 @@
     <ElTabPane label="Landing Hubungi Kami">
       <FormSettingsGeneralLandingHubungiKami />
     </ElTabPane>
+    <ElTabPane label="Landing Lini Bisnis">
+      <FormSettingsGeneralLandingLiniBisnis />
+    </ElTabPane>
     <ElTabPane label="Landing Tentang Perusahaan">
       <FormSettingsGeneralLandingTentangPerusahaan />
     </ElTabPane>
