@@ -486,7 +486,7 @@ const {
   loading,
   generalSetting,
   getGeneralSetting,
-  storeLandingTentangPerusahaan,
+  storeLandingSetting,
 } = useGeneralSettings()
 
 // Form Submit Function
@@ -513,7 +513,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 
       const formData = objectToFormData(payload)
 
-      await storeLandingTentangPerusahaan(formData)
+      await storeLandingSetting('landing-tentang-perusahaan', formData)
     }
   })
 }

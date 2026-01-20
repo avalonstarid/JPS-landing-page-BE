@@ -3,8 +3,11 @@
     <ElTabPane label="Profile Perusahaan">
       <FormSettingsGeneralCompanyProfile />
     </ElTabPane>
-    <ElTabPane label="Landing Page Beranda">
+    <ElTabPane label="Landing Beranda">
       <FormSettingsGeneralLandingBeranda />
+    </ElTabPane>
+    <ElTabPane label="Landing Hubungi Kami">
+      <FormSettingsGeneralLandingHubungiKami />
     </ElTabPane>
     <ElTabPane label="Landing Tentang Perusahaan">
       <FormSettingsGeneralLandingTentangPerusahaan />

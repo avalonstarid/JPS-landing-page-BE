@@ -25,7 +25,7 @@ class TentangPerusahaanController extends Controller
 	 */
 	public function index()
 	{
-		$data = Cache::remember('landing:tentangPerusahaan', 1, function () {
+		$data = Cache::remember('landing:tentangPerusahaan', 3600, function () {
 			$historyTimelines = HistoricalTimeline::orderBy('year')->get();
 
 			$locations = BusinessLine::with(['locations'])->orderBy('sort_order')->get();

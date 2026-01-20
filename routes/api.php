@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\V1\ContactUsController;
 use App\Http\Controllers\V1\Landing\BerandaController;
+use App\Http\Controllers\V1\Landing\HubungiKamiController;
 use App\Http\Controllers\V1\Landing\TentangPerusahaanController;
 use App\Http\Controllers\V1\LandingController;
 use App\Models\AppVersion;
@@ -28,7 +29,6 @@ Route::controller(LandingController::class)->group(function () {
 	Route::get('blog', 'blog');
 	Route::get('blog-list', 'blogList');
 	Route::get('blog/detail/{slug}', 'blogDetail');
-	Route::get('hubungi-kami', 'hubungiKami');
 	Route::get('karir', 'karir');
 	Route::get('karir-list', 'karirList');
 	Route::get('karir/{slug}', 'karirDetail');
@@ -45,6 +45,7 @@ Route::controller(LandingController::class)->group(function () {
 });
 
 Route::get('', [BerandaController::class, 'index']);
+Route::get('hubungi-kami', [HubungiKamiController::class, 'index']);
 Route::get('tentang-perusahaan', [TentangPerusahaanController::class, 'index']);
 // End Landing Page
 

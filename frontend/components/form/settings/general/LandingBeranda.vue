@@ -447,7 +447,7 @@ const {
   loading,
   generalSetting,
   getGeneralSetting,
-  storeLandingBeranda,
+  storeLandingSetting,
 } = useGeneralSettings()
 
 // Form Submit Function
@@ -478,7 +478,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 
       const formData = objectToFormData(payload)
 
-      await storeLandingBeranda(formData)
+      await storeLandingSetting('landing-beranda', formData)
     }
   })
 }

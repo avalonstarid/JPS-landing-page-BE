@@ -62,48 +62,13 @@ export default function useGeneralSettings() {
     }
   }
 
-  const storeLandingBeranda = async (data: object) => {
+  const storeLandingSetting = async (type: string, data: object) => {
     errors.value = ''
     loading.value = true
 
     try {
       let res = await sanctumFetch<ApiResponse<any>>(
-        '/v1/settings/general-settings/landing-beranda',
-        {
-          method: 'POST',
-          body: data,
-        },
-      )
-
-      ElNotification({
-        title: 'Success',
-        message: res.message,
-        type: 'success',
-      })
-    } catch (e: any) {
-      if (e.response) {
-        errors.value = e.response._data
-      } else {
-        errors.value = e
-      }
-
-      ElNotification({
-        title: 'Error',
-        message: errors.value['message'],
-        type: 'error',
-      })
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const storeLandingTentangPerusahaan = async (data: object) => {
-    errors.value = ''
-    loading.value = true
-
-    try {
-      let res = await sanctumFetch<ApiResponse<any>>(
-        '/v1/settings/general-settings/landing-tentang-perusahaan',
+        `/v1/settings/general-settings/${type}`,
         {
           method: 'POST',
           body: data,
@@ -138,7 +103,6 @@ export default function useGeneralSettings() {
     generalSetting,
     getGeneralSetting,
     storeCompanyProfile,
-    storeLandingBeranda,
-    storeLandingTentangPerusahaan,
+    storeLandingSetting,
   }
 }
