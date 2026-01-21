@@ -15,6 +15,9 @@
     <ElTabPane label="Landing Blog">
       <FormSettingsGeneralLandingBlog />
     </ElTabPane>
+    <ElTabPane label="Landing Karir">
+      <FormSettingsGeneralLandingKarir />
+    </ElTabPane>
     <ElTabPane label="Landing Lini Bisnis">
       <FormSettingsGeneralLandingLiniBisnis />
     </ElTabPane>

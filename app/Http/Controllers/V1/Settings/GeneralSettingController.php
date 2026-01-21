@@ -8,6 +8,7 @@ use App\Http\Requests\Settings\Landing\LandingBerandaRequest;
 use App\Http\Requests\Settings\Landing\LandingBeritaRequest;
 use App\Http\Requests\Settings\Landing\LandingBlogRequest;
 use App\Http\Requests\Settings\Landing\LandingHubungiKamiRequest;
+use App\Http\Requests\Settings\Landing\LandingKarirRequest;
 use App\Http\Requests\Settings\Landing\LandingLiniBisnisRequest;
 use App\Http\Requests\Settings\Landing\LandingPengumumanRequest;
 use App\Http\Requests\Settings\Landing\LandingProdukRequest;
@@ -186,6 +187,37 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_hubungi_kami');
 
 			Cache::forget('settings:landing_hubungi_kami');
+
+			return $this->response(
+				message: 'Berhasil menyimpan data.',
+				data: $updatedData,
+			);
+		} catch (Exception $e) {
+			return $this->response(
+				message: $e->getMessage(),
+				status_code: $e->getCode(),
+			);
+		}
+	}
+
+	/**
+	 * Update Landing Page Karir
+	 *
+	 * @param LandingKarirRequest $request
+	 *
+	 * @return JsonResponse
+	 * @throws Throwable
+	 */
+	public function landingKarir(LandingKarirRequest $request)
+	{
+		try {
+			$this->authorize('update_landing', Setting::class);
+
+			$validated = $request->validated();
+
+			$updatedData = $this->updateSettings($validated, 'landing_karir');
+
+			Cache::forget('settings:landing_karir');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
