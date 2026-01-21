@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\Landing\KarirController;
 use App\Http\Controllers\V1\Landing\LiniBisnisController;
 use App\Http\Controllers\V1\Landing\PengumumanController;
 use App\Http\Controllers\V1\Landing\ProdukController;
+use App\Http\Controllers\V1\Landing\RelasiInvestorController;
 use App\Http\Controllers\V1\Landing\TentangPerusahaanController;
 use App\Http\Controllers\V1\LandingController;
 use App\Models\AppVersion;
@@ -31,9 +32,6 @@ use Illuminate\Support\Facades\Storage;
 Route::controller(LandingController::class)->group(function () {
 	Route::get('keberlanjutan-laporan-list', 'keberlanjutanLaporanList');
 	Route::get('keberlanjutan/{slug}', 'keberlanjutan');
-	Route::get('relasi-investor/{slug}', 'relasiInvestor');
-	Route::get('relasi-investor/laporan-keuangan/list', 'relasiInvestorLapKeu');
-	Route::get('relasi-investor/{slug}/list', 'relasiInvestorList');
 });
 
 Route::get('', [BerandaController::class, 'index']);
@@ -52,6 +50,9 @@ Route::get('pengumuman', [PengumumanController::class, 'index']);
 Route::get('pengumuman-list', [PengumumanController::class, 'list']);
 Route::get('pengumuman/detail/{slug}', [PengumumanController::class, 'detail']);
 Route::get('produk', [ProdukController::class, 'index']);
+Route::get('relasi-investor/laporan-keuangan/list', [RelasiInvestorController::class, 'laporanKeuangan']);
+Route::get('relasi-investor/{slug}/list', [RelasiInvestorController::class, 'list']);
+Route::get('relasi-investor/{slug}', [RelasiInvestorController::class, 'index']);
 Route::get('tentang-perusahaan', [TentangPerusahaanController::class, 'index']);
 // End Landing Page
 

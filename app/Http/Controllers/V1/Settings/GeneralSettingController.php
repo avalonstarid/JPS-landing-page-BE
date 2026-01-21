@@ -8,6 +8,7 @@ use App\Http\Requests\Settings\Landing\LandingBerandaRequest;
 use App\Http\Requests\Settings\Landing\LandingBeritaRequest;
 use App\Http\Requests\Settings\Landing\LandingBlogRequest;
 use App\Http\Requests\Settings\Landing\LandingHubungiKamiRequest;
+use App\Http\Requests\Settings\Landing\LandingInvestorRequest;
 use App\Http\Requests\Settings\Landing\LandingKarirRequest;
 use App\Http\Requests\Settings\Landing\LandingLiniBisnisRequest;
 use App\Http\Requests\Settings\Landing\LandingPengumumanRequest;
@@ -311,6 +312,37 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_produk');
 
 			Cache::forget('settings:landing_produk');
+
+			return $this->response(
+				message: 'Berhasil menyimpan data.',
+				data: $updatedData,
+			);
+		} catch (Exception $e) {
+			return $this->response(
+				message: $e->getMessage(),
+				status_code: $e->getCode(),
+			);
+		}
+	}
+
+	/**
+	 * Update Landing Page Relasi Investor
+	 *
+	 * @param LandingInvestorRequest $request
+	 *
+	 * @return JsonResponse
+	 * @throws Throwable
+	 */
+	public function landingRelasiInvestor(LandingInvestorRequest $request)
+	{
+		try {
+			$this->authorize('update_landing', Setting::class);
+
+			$validated = $request->validated();
+
+			$updatedData = $this->updateSettings($validated, 'landing_investor');
+
+			Cache::forget('settings:landing_investor');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
