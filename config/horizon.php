@@ -221,6 +221,7 @@ return [
 				'maxProcesses' => 10,
 				'balanceMaxShift' => 1,
 				'balanceCooldown' => 3,
+				'memory' => 1024,
 				'tries' => 3,
 			],
 		],
@@ -234,6 +235,9 @@ return [
 		'staging' => [
 			'supervisor-1' => [
 				'maxProcesses' => 3,
+				'memory' => 1024,
+				'timeout' => 300,
+				'tries' => 3,
 			],
 		],
 	],
