@@ -21,6 +21,7 @@ return [
 
 	'allowed_origins' => [
 		env('FRONTEND_URL', 'http://localhost:3000'),
+		env('LANDING_URL', 'http://localhost:3000'),
 		'http://localhost:3000',
 	],
 
