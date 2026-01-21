@@ -57,9 +57,9 @@
         />
         <el-table-column type="selection" width="30" />
         <el-table-column prop="parent.name.id" label="Parent" />
-        <el-table-column prop="name.id" label="Nama Kategori (ID)" />
-        <el-table-column prop="name.en" label="Nama Kategori (EN)" />
+        <el-table-column prop="name.id" label="Nama Kategori" />
         <el-table-column prop="slug" label="Slug" />
+        <el-table-column prop="desc.id" label="Deskripsi" />
         <el-table-column fixed="right" width="110">
           <template #default="{ row }">
             <el-dropdown

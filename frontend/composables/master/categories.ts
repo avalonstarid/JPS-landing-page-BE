@@ -3,6 +3,7 @@ import type { ApiResponse, IMultiLang, IState } from '@/helpers/interfaces'
 export interface ICategory {
   id: string
   created_at: string
+  desc: IMultiLang
   name: IMultiLang
   parent: ICategory | null
   parent_id: string | null
@@ -12,9 +13,13 @@ export interface ICategory {
 
 export default function useCategories() {
   const category = ref<Partial<ICategory>>({
-    name: {
-      id: '',
+    desc: {
       en: '',
+      id: '',
+    },
+    name: {
+      en: '',
+      id: '',
     },
   })
   const categories = ref<ApiResponse<ICategory[]>>()

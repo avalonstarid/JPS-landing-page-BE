@@ -25,8 +25,10 @@ class CategoryRequest extends BaseApiRequest
 	public function attributes(): array
 	{
 		return [
-			'name.en' => 'Nama (Bahasa Inggris)',
-			'name.id' => 'Nama (Bahasa Indonesia)',
+			'desc.en' => 'Deskripsi (Bahasa Inggris)',
+			'desc.id' => 'Deskripsi (Bahasa Indonesia)',
+			'name.en' => 'Nama Kategori (Bahasa Inggris)',
+			'name.id' => 'Nama Kategori (Bahasa Indonesia)',
 		];
 	}
 
@@ -38,9 +40,12 @@ class CategoryRequest extends BaseApiRequest
 	public function rules(): array
 	{
 		return [
+			'desc' => ['nullable', 'array'],
+			'desc.en' => ['nullable', 'string'],
+			'desc.id' => ['nullable', 'string'],
 			'name' => ['required', 'array'],
-			'name.en' => ['required', 'string'],
-			'name.id' => ['required', 'string'],
+			'name.en' => ['required', 'string', 'max:100'],
+			'name.id' => ['required', 'string', 'max:100'],
 			'parent_id' => ['nullable', Rule::exists('categories', 'id')],
 		];
 	}

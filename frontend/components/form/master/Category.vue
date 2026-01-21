@@ -27,37 +27,64 @@
       </InputSelect>
     </div>
 
-    <div v-if="category.name" class="card-group gap-4 grid grid-cols-2">
-      <div class="p-4 border border-gray-200 rounded-lg">
-        <div class="mb-4 font-bold text-gray-700">Bahasa Indonesia</div>
+    <div class="card-group gap-4 grid grid-cols-2">
+      <div class="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">
+        <div class="font-bold text-gray-700">Bahasa Indonesia</div>
+
         <InputBase
+          v-if="category.name"
           v-model="category.name.id"
           :errors="errors"
-          label="Nama Kategori"
+          label="Nama Kategori (ID)"
           name="name.id"
+        />
+
+        <InputBase
+          v-if="category.desc"
+          v-model="category.desc.id"
+          :autosize="{ minRows: 2 }"
+          :errors="errors"
+          label="Deskripsi (ID)"
+          name="desc.id"
+          type="textarea"
         />
       </div>
 
-      <div class="relative p-4 border border-gray-200 rounded-lg">
-        <div class="flex justify-between items-center mb-4">
+      <div
+        class="relative flex flex-col gap-4 p-4 border border-gray-200 rounded-lg"
+      >
+        <div class="flex justify-between items-center">
           <div class="font-bold text-gray-700">English</div>
           <button
             class="btn btn-sm btn-light-primary"
             type="button"
             title="Copy from Indonesia"
-            @click="copyFromId"
+            @click="copyFromId()"
           >
             <i class="ki-filled ki-copy"></i> Copy From ID
           </button>
         </div>
+
         <InputBase
+          v-if="category.name"
           v-model="category.name.en"
           :errors="errors"
-          label="Category Name"
+          label="Nama Kategori (EN)"
           name="name.en"
+        />
+
+        <InputBase
+          v-if="category.desc"
+          v-model="category.desc.en"
+          :autosize="{ minRows: 2 }"
+          :errors="errors"
+          label="Deskripsi (EN)"
+          name="desc.en"
+          type="textarea"
         />
       </div>
     </div>
+
     <div class="justify-start gap-3 card-footer">
       <button
         class="btn btn-sm btn-secondary"

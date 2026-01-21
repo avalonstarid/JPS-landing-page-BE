@@ -33,6 +33,7 @@ class Category extends Model
 	protected $guarded = ['id'];
 
 	public array $translatable = [
+		'desc',
 		'name',
 	];
 
