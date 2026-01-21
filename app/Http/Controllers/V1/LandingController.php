@@ -9,11 +9,9 @@ use App\Http\Resources\Landing\Investor\FinancialReportResource;
 use App\Http\Resources\Landing\Karir\CategoryResource;
 use App\Http\Resources\Landing\Karir\KarirResource;
 use App\Http\Resources\Landing\Keberlanjutan\TinjauanResource;
-use App\Http\Resources\Landing\ProductDetailResource;
 use App\Models\Investor\FinancialReport;
 use App\Models\JobPosting;
 use App\Models\Master\Category;
-use App\Models\Master\Product;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -266,121 +264,6 @@ class LandingController extends Controller
 		return $this->responseNew(
 			message: 'Berhasil mengambil data.',
 			data: DocumentInvsResource::collection($data),
-		);
-	}
-
-	/**
-	 * Get Produk Landing Page
-	 *
-	 * @return JsonResponse
-	 */
-	public function produk()
-	{
-		$data = Cache::remember('landing:produk', 3600, function () {
-			$seo = new SEOData(
-				title: 'Produk - ' . config('app.name'),
-				description: 'Rangkaian produk unggas kami memenuhi standar kualitas, keamanan, dan konsistensi.',
-				url: config('app.landing_url') . '/' . request()->path(),
-				type: 'website',
-				site_name: config('app.name'),
-				locale: 'id_ID',
-				robots: 'index, follow',
-				canonical_url: config('app.landing_url') . '/' . request()->path(),
-			);
-
-			return [
-				// Commercial
-				'commercial' => [
-					'stock' => [
-						'last_update' => [
-							'en' => 'Last updated 29 November 2025',
-							'id' => 'Terakhir diupdate 29 November 2025',
-						],
-						'products' => [
-							'day-old-chick-doc-parent-stock' => [
-								'stat' => 1000,
-								'title' => [
-									'en' => 'DOC Parent Stock',
-									'id' => 'DOC Parent Stock',
-								],
-							],
-							'day-old-chick-doc-final-stock' => [
-								'stat' => 1500,
-								'title' => [
-									'en' => 'DOC Final Stock',
-									'id' => 'DOC Final Stock',
-								],
-							],
-							'ayam-hidup-broiler-komersial' => [
-								'stat' => 900,
-								'title' => [
-									'en' => 'Ayam Hidup Broiler Komersial',
-									'id' => 'Ayam Hidup Broiler Komersial',
-								],
-							],
-							'telur-komersial' => [
-								'stat' => 2300,
-								'title' => [
-									'en' => 'Commercial Eggs',
-									'id' => 'Telur Komersial',
-								],
-							],
-							'produk-rpa' => [
-								'stat' => 1800,
-								'title' => [
-									'en' => 'RPA Products',
-									'id' => 'Produk RPA',
-								],
-							],
-						],
-						'title' => [
-							'en' => 'Stock Update',
-							'id' => 'Stock Update',
-						],
-					],
-					'title' => [
-						'en' => 'Our Commercial Products',
-						'id' => 'Produk Komersial Kami',
-					],
-				],
-
-				// Hero
-				'hero' => [
-					'background' => '/images/hero.jpg',
-					'subtitle' => [
-						'en' => 'We provide a range of poultry products that meet quality, safety, and consistency standards',
-						'id' => 'Kami menyediakan rangkaian produk unggas yang memenuhi standar kualitas, keamanan, dan konsisten',
-					],
-					'title' => [
-						'en' => 'Integrated Poultry Solutions',
-						'id' => 'Solusi Perunggasan Terintegrasi',
-					],
-				],
-
-				// Produk
-				'product' => [
-					'data' => ProductDetailResource::collection(
-						Product::with(['images'])->active()->orderBy('sort_order')->get(),
-					),
-				],
-
-				// SEO
-				'seo' => [
-					'title' => $seo->title,
-					'description' => $seo->description,
-					'url' => $seo->url,
-					'type' => $seo->type,
-					'site_name' => $seo->site_name,
-					'locale' => $seo->locale,
-					'robots' => $seo->robots,
-					'canonical_url' => $seo->canonical_url,
-				],
-			];
-		});
-
-		return $this->response(
-			message: 'Berhasil mengambil data.',
-			data: $data,
 		);
 	}
 

@@ -21,6 +21,9 @@
     <ElTabPane label="Landing Pengumuman">
       <FormSettingsGeneralLandingPengumuman />
     </ElTabPane>
+    <ElTabPane label="Landing Produk">
+      <FormSettingsGeneralLandingProduk />
+    </ElTabPane>
     <ElTabPane label="Landing Tentang Perusahaan">
       <FormSettingsGeneralLandingTentangPerusahaan />
     </ElTabPane>

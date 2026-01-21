@@ -16,6 +16,7 @@ Route::controller(GeneralSettingController::class)->prefix('general-settings')->
 	Route::post('landing-hubungi-kami', 'landingHubungiKami');
 	Route::post('landing-lini-bisnis', 'landingLiniBisnis');
 	Route::post('landing-pengumuman', 'landingPengumuman');
+	Route::post('landing-produk', 'landingProduk');
 	Route::post('landing-tentang-perusahaan', 'landingTentangPerusahaan');
 	Route::get('{group}', 'show');
 });

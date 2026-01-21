@@ -10,6 +10,7 @@ use App\Http\Requests\Settings\Landing\LandingBlogRequest;
 use App\Http\Requests\Settings\Landing\LandingHubungiKamiRequest;
 use App\Http\Requests\Settings\Landing\LandingLiniBisnisRequest;
 use App\Http\Requests\Settings\Landing\LandingPengumumanRequest;
+use App\Http\Requests\Settings\Landing\LandingProdukRequest;
 use App\Http\Requests\Settings\Landing\LandingTentangPerusahaanRequest;
 use App\Models\Setting;
 use App\Traits\ManagesSettings;
@@ -247,6 +248,37 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_pengumuman');
 
 			Cache::forget('settings:landing_pengumuman');
+
+			return $this->response(
+				message: 'Berhasil menyimpan data.',
+				data: $updatedData,
+			);
+		} catch (Exception $e) {
+			return $this->response(
+				message: $e->getMessage(),
+				status_code: $e->getCode(),
+			);
+		}
+	}
+
+	/**
+	 * Update Landing Page Produk
+	 *
+	 * @param LandingProdukRequest $request
+	 *
+	 * @return JsonResponse
+	 * @throws Throwable
+	 */
+	public function landingProduk(LandingProdukRequest $request)
+	{
+		try {
+			$this->authorize('update_landing', Setting::class);
+
+			$validated = $request->validated();
+
+			$updatedData = $this->updateSettings($validated, 'landing_produk');
+
+			Cache::forget('settings:landing_produk');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
