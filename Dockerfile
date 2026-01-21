@@ -1,70 +1,73 @@
-# 1. Base image with FrankenPHP + Composer
-FROM dunglas/frankenphp:php8.3 AS base
+FROM dunglas/frankenphp:php8.4
 
-# Set working directory
-WORKDIR /app
-
-# Update and install dependencies
-RUN apt update && apt install -y \
+# Install Dependencies, Extensions, & SUPERVISOR
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gifsicle \
-    git \
-    htop \
     jpegoptim \
-    nano \
+    libavif-bin \
     optipng \
     pngquant \
-    procps \
-    webp \
-    zip
+    supervisor \
+    unzip \
+    zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install PHP Extensions
 RUN install-php-extensions \
+    bcmath \
     exif \
     gd \
     igbinary \
     imagick \
+    intl \
+    opcache \
     pcntl \
     pdo_mysql \
     redis \
-    zip \
-    @composer
+    sodium \
+    zip
 
-# 2. Install system & PHP extensions + Composer
-FROM base AS dependencies
+# Environment Variables
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV OCTANE_SERVER=frankenphp
+ENV SERVER_NAME=":80"
 
-RUN mkdir -p /temp/dev/app
+# Config PHP
+COPY ./docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY ./docker/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
-# 3. Composer install tanpa scripts
-WORKDIR /temp/dev
+# Config Supervisor
+COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
-COPY composer.json composer.lock ./
-COPY app/helpers.php /temp/dev/app/
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install composer dependencies
-RUN cd /temp/dev && composer install --optimize-autoloader --no-dev --no-scripts
-
-# 4. Final image: copy vendor + seluruh kode, lalu run manual scripts
-FROM base AS release
-
-# Set working directory
+# Setup Workdir
 WORKDIR /app
 
-COPY --from=dependencies /temp/dev/vendor vendor
+# Install Vendor (Caching Layer)
+COPY composer.json composer.lock ./
+COPY app/helpers.php app/helpers.php
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
+# Copy Code
 COPY . .
 
-# Optimize autoloader and discover packages
-RUN composer dump-autoload --optimize \
-    && php artisan package:discover --ansi
+# Finalize
+RUN composer dump-autoload --optimize
 
-# Storage Link
-RUN php artisan storage:link
+# Setup Permission & Structure
+RUN mkdir -p storage/framework/{sessions,views,cache/data} storage/logs bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Generate Docs (Error mesti manual)
-#RUN php artisan scribe:generate
+# Entrypoint Script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint
+RUN chmod +x /usr/local/bin/entrypoint
 
-EXPOSE 80
+ENTRYPOINT ["entrypoint"]
 
-# --watch Error Laravel 12
-#CMD ["php", "artisan", "octane:frankenphp", "--workers=4", "--port=80", "--admin-port=2019"]
-CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=80", "--admin-port=2019"]
+# Default Command (Octane Start)
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=80", "--admin-port=2019", "--workers=auto", "--max-requests=1000"]

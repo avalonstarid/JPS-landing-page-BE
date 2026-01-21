@@ -3,19 +3,22 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: ${DOCKER_CONTAINER_NAME_BE:-skeleton}
+    container_name: ${DOCKER_CONTAINER_NAME_BE:-skeleton_be}
+    env_file: .env
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test: [ "CMD", "curl", "-f", "http://localhost:80/up" ]
+      timeout: 5s
+    hostname: ${DOCKER_CONTAINER_NAME_BE:-skeleton_be}
+    image: ${DOCKER_CONTAINER_NAME:-skeleton}:latest
     networks:
       - mysql
       - nginx
       - redis
-    #ports:
-    #  - '${DOCKER_PORT_BE:-80}:80'
     restart: unless-stopped
-    tty: true
     volumes:
-      - .env:/app/.env:ro
       - ./storage:/app/storage
-      - ./docker/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
 
   frontend:
     build:
@@ -28,6 +31,7 @@ services:
       timeout: 5s
       start_period: 10s
       retries: 3
+    hostname: ${DOCKER_CONTAINER_NAME_FE:-skeleton_fe}
     logging:
       driver: "json-file"
       options:
@@ -38,55 +42,45 @@ services:
     #ports:
     #  - '${DOCKER_PORT_FE:-80}:80'
     restart: unless-stopped
-    tty: true
 
   scheduler:
-    build:
-      context: .
-      dockerfile: ./Dockerfile-scheduler
+    command: php artisan schedule:work
     container_name: ${DOCKER_CONTAINER_NAME_SCHEDULER:-skeleton_scheduler}
-    healthcheck:
-      test: [ "CMD-SHELL", "test $(find /app/storage/framework/scheduler-heartbeat -mmin -1 | wc -l) -eq 1 || exit 1" ]
-      interval: 1m        # Cek setiap 1 menit
-      timeout: 10s        # Jika cek lemot > 10 detik, anggap gagal
-      retries: 3          # Jika gagal 3x berturut-turut, restart container
-      start_period: 30s   # Beri waktu 30 detik saat start awal sebelum mulai nge-cek
+    depends_on:
+      backend:
+        condition: service_healthy
+    env_file: .env
+    hostname: ${DOCKER_CONTAINER_NAME_SCHEDULER:-skeleton_scheduler}
+    image: ${DOCKER_CONTAINER_NAME:-skeleton}:latest
     networks:
       - mysql
       - redis
     restart: unless-stopped
-    tty: true
     volumes:
-      - .env:/app/.env:ro
-      - ./docker/supervisord.conf:/etc/supervisor/supervisord.conf:ro
-      - ./docker/laravel-scheduler.conf:/etc/supervisor/conf.d/laravel-scheduler.conf:ro
       - ./storage:/app/storage
-      - ./docker/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
 
   worker:
-    build:
-      context: .
-      dockerfile: ./Dockerfile-worker
+    command: php artisan horizon
     container_name: ${DOCKER_CONTAINER_NAME_WORKER:-skeleton_worker}
+    depends_on:
+      backend:
+        condition: service_healthy
+    env_file: .env
     healthcheck:
-      test: [ "CMD-SHELL", "php /app/artisan queue:monitor default --max=100 || exit 1" ]
-      interval: 1m
-      timeout: 10s
+      interval: 30s
       retries: 3
-      start_period: 30s
-    hostname: ${DOCKER_CONTAINER_NAME:-skeleton_worker}
+      test: [ "CMD-SHELL", "php artisan horizon:status || exit 1" ]
+      timeout: 5s
+    hostname: ${DOCKER_CONTAINER_NAME_WORKER:-skeleton_worker}
+    image: ${DOCKER_CONTAINER_NAME:-skeleton}:latest
     networks:
       - mysql
       - redis
     restart: unless-stopped
     stop_grace_period: 60s
-    tty: true
+    stop_signal: SIGTERM
     volumes:
-      - .env:/app/.env:ro
-      - ./docker/supervisord.conf:/etc/supervisor/supervisord.conf:ro
-      - ./docker/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf:ro
       - ./storage:/app/storage
-      - ./docker/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
 
 networks:
   mysql:
