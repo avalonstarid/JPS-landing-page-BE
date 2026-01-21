@@ -32,6 +32,10 @@ class GenerateSitemap extends Command
 	{
 		$this->info('Starting sitemap generation...');
 
+		if (!is_dir(public_path('sitemaps'))) {
+			mkdir(public_path('sitemaps'), 0755, true);
+		}
+
 		$this->info('Generating static pages...');
 		Sitemap::create()
 			->add($this->frontendUrl('/')->setPriority(1.0))
@@ -42,7 +46,7 @@ class GenerateSitemap extends Command
 			->add($this->frontendUrl('/blog')->setPriority(0.7)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
 			->add($this->frontendUrl('/pengumuman')->setPriority(0.7)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
 			->add($this->frontendUrl('/karir')->setPriority(0.7)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
-			->writeToFile(public_path('sitemap_page.xml'));
+			->writeToFile(public_path('sitemaps/sitemap_page.xml'));
 
 		$this->info('Generating berita...');
 		$beritaSitemap = Sitemap::create();
@@ -54,7 +58,7 @@ class GenerateSitemap extends Command
 						->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
 				);
 			});
-		$beritaSitemap->writeToFile(public_path('sitemap_berita.xml'));
+		$beritaSitemap->writeToFile(public_path('sitemaps/sitemap_berita.xml'));
 
 		$this->info('Generating blog...');
 		$blogSitemap = Sitemap::create();
@@ -66,7 +70,7 @@ class GenerateSitemap extends Command
 						->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
 				);
 			});
-		$blogSitemap->writeToFile(public_path('sitemap_blog.xml'));
+		$blogSitemap->writeToFile(public_path('sitemaps/sitemap_blog.xml'));
 
 		$this->info('Generating job posting...');
 		$jobSitemap = Sitemap::create();
@@ -77,7 +81,7 @@ class GenerateSitemap extends Command
 					->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
 			);
 		});
-		$jobSitemap->writeToFile(public_path('sitemap_job.xml'));
+		$jobSitemap->writeToFile(public_path('sitemaps/sitemap_job.xml'));
 
 		$this->info('Generating pengumuman...');
 		$pengumumanSitemap = Sitemap::create();
@@ -89,16 +93,16 @@ class GenerateSitemap extends Command
 						->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY),
 				);
 			});
-		$pengumumanSitemap->writeToFile(public_path('sitemap_pengumuman.xml'));
+		$pengumumanSitemap->writeToFile(public_path('sitemaps/sitemap_pengumuman.xml'));
 
 		$this->info('Generating index...');
 		SitemapIndex::create()
-			->add('/sitemap_page.xml')
-			->add('/sitemap_job.xml')
-			->add('/sitemap_berita.xml')
-			->add('/sitemap_blog.xml')
-			->add('/pengumuman.xml')
-			->writeToFile(public_path('sitemap_index.xml'));
+			->add('/sitemaps/sitemap_page.xml')
+			->add('/sitemaps/sitemap_job.xml')
+			->add('/sitemaps/sitemap_berita.xml')
+			->add('/sitemaps/sitemap_blog.xml')
+			->add('/sitemaps/sitemap_pengumuman.xml')
+			->writeToFile(public_path('sitemaps/sitemap.xml'));
 
 		$this->info('All sitemaps generated successfully!');
 	}

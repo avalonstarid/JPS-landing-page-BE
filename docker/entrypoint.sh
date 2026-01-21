@@ -20,5 +20,8 @@ php artisan route:cache
 echo "Caching views..."
 php artisan view:cache
 
+echo "Storage link..."
+php artisan storage:link
+
 # Execute the main command
 exec "$@"

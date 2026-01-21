@@ -19,6 +19,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage:/app/storage
+      - ./public/sitemaps:/app/public/sitemaps
 
   frontend:
     build:
@@ -58,6 +59,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./storage:/app/storage
+      - ./public/sitemaps:/app/public/sitemaps
 
   worker:
     command: php artisan horizon
@@ -81,6 +83,7 @@ services:
     stop_signal: SIGTERM
     volumes:
       - ./storage:/app/storage
+      - ./public/sitemaps:/app/public/sitemaps
 
 networks:
   mysql:

@@ -25,10 +25,3 @@ Schedule::call(function () {
 // Daily At
 Schedule::command('backup:clean')->daily()->at('01:00');
 Schedule::command('backup:run')->daily()->at('01:15');
-
-// Every Minute
-Schedule::call(function () {
-	// Pastikan folder framework ada (biasanya sudah ada)
-	$path = storage_path('framework/scheduler-heartbeat');
-	touch($path);
-})->everyMinute()->name('scheduler-heartbeat');
