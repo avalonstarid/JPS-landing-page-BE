@@ -72,17 +72,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="title.id" label="Judul">
-          <template #default="{ row }">
-            <NuxtLink
-              class="font-semibold text-2sm text-primary hover:text-primary-active"
-              :to="`${landingUrl}/blog/detail/${row.slug}`"
-              target="_blank"
-            >
-              {{ row.title.id }}
-            </NuxtLink>
-          </template>
-        </el-table-column>
+        <el-table-column prop="title.id" label="Judul" />
         <el-table-column
           prop="published_at"
           label="Tanggal Publikasi"

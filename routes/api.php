@@ -6,12 +6,12 @@ use App\Http\Controllers\V1\Landing\BeritaController;
 use App\Http\Controllers\V1\Landing\BlogController;
 use App\Http\Controllers\V1\Landing\HubungiKamiController;
 use App\Http\Controllers\V1\Landing\KarirController;
+use App\Http\Controllers\V1\Landing\KeberlanjutanController;
 use App\Http\Controllers\V1\Landing\LiniBisnisController;
 use App\Http\Controllers\V1\Landing\PengumumanController;
 use App\Http\Controllers\V1\Landing\ProdukController;
 use App\Http\Controllers\V1\Landing\RelasiInvestorController;
 use App\Http\Controllers\V1\Landing\TentangPerusahaanController;
-use App\Http\Controllers\V1\LandingController;
 use App\Models\AppVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,11 +29,6 @@ use Illuminate\Support\Facades\Storage;
 */
 
 // Landing Page
-Route::controller(LandingController::class)->group(function () {
-	Route::get('keberlanjutan-laporan-list', 'keberlanjutanLaporanList');
-	Route::get('keberlanjutan/{slug}', 'keberlanjutan');
-});
-
 Route::get('', [BerandaController::class, 'index']);
 Route::get('berita', [BeritaController::class, 'index']);
 Route::get('berita-list', [BeritaController::class, 'list']);
@@ -45,6 +40,8 @@ Route::get('hubungi-kami', [HubungiKamiController::class, 'index']);
 Route::get('karir', [KarirController::class, 'index']);
 Route::get('karir-list', [KarirController::class, 'list']);
 Route::get('karir/detail/{slug}', [KarirController::class, 'detail']);
+Route::get('keberlanjutan-laporan-list', [KeberlanjutanController::class, 'laporanList']);
+Route::get('keberlanjutan/{slug}', [KeberlanjutanController::class, 'index']);
 Route::get('lini-bisnis/{slug}', [LiniBisnisController::class, 'index']);
 Route::get('pengumuman', [PengumumanController::class, 'index']);
 Route::get('pengumuman-list', [PengumumanController::class, 'list']);

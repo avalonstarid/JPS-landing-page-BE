@@ -18,6 +18,9 @@
     <ElTabPane label="Landing Karir">
       <FormSettingsGeneralLandingKarir />
     </ElTabPane>
+    <ElTabPane label="Landing Keberlanjutan">
+      <FormSettingsGeneralLandingKeberlanjutan />
+    </ElTabPane>
     <ElTabPane label="Landing Lini Bisnis">
       <FormSettingsGeneralLandingLiniBisnis />
     </ElTabPane>

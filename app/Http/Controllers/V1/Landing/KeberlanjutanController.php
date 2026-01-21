@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\V1\Landing;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Landing\Berita\PostResource;
@@ -8,6 +8,7 @@ use App\Http\Resources\Landing\Investor\DocumentInvsResource;
 use App\Http\Resources\Landing\Keberlanjutan\TinjauanResource;
 use App\Models\Master\Category;
 use App\Models\Post;
+use App\Models\Setting;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,23 +17,34 @@ use RalphJSmit\Laravel\SEO\Support\SEOData;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class LandingController extends Controller
+class KeberlanjutanController extends Controller
 {
 	/**
 	 * Get Karir Landing Page
 	 *
 	 * @return JsonResponse
 	 */
-	public function keberlanjutan(string $slug)
+	public function index(string $slug)
 	{
-		$data = Cache::remember("landing:keberlanjutan:$slug", 1, function () use ($slug) {
+		$data = Cache::remember("landing:keberlanjutan:$slug", 3600, function () use ($slug) {
 			$category = Category::whereHas('parent', function ($query) {
 				$query->where('slug', 'keberlanjutan');
 			})->where('slug', $slug)->firstOrFail();
 
+			$settings = Cache::rememberForever('settings:landing_keberlanjutan', function () {
+				return Setting::where('group', 'landing_keberlanjutan')->get();
+			})->mapWithKeys(function ($item) {
+				if ($item->type === 'image') {
+					return [$item->key => $item->getFirstMediaUrl($item->key, 'thumb')];
+				}
+
+				return [$item->key => $item->value];
+			});
+
 			$seo = new SEOData(
 				title: $category->name . ' - ' . config('app.name'),
-				description: $category->name . ' PT Janu Putra Sejahtera.',
+				description: $category->desc ??
+				'PT Janu Putra Sejahtera - Perusahaan peternakan ayam terintegrasi terkemuka di Indonesia yang menyediakan produk berkualitas dan terjangkau.',
 				url: config('app.landing_url') . '/' . request()->path(),
 				type: 'website',
 				site_name: config('app.name'),
@@ -59,11 +71,15 @@ class LandingController extends Controller
 
 				// Hero
 				'hero' => [
-					'background' => '/images/hero.jpg',
-					'title' => [
-						'en' => 'Sustainability',
-						'id' => 'Keberlanjutan',
-					],
+					'background' => $settings['hero_background'] ?? null,
+					'subtitle' => $settings['hero_subtitle'] ?? [
+							'en' => 'Sustainability',
+							'id' => 'Keberlanjutan',
+						],
+					'title' => $settings['hero_title'] ?? [
+							'en' => 'Sustainability',
+							'id' => 'Keberlanjutan',
+						],
 				],
 
 				// Pendekatan dan Kinerja
@@ -103,7 +119,7 @@ class LandingController extends Controller
 	 *
 	 * @return JsonResponse
 	 */
-	public function keberlanjutanLaporanList(Request $request)
+	public function laporanList(Request $request)
 	{
 		$query = QueryBuilder::for(
 			subject: Category::whereHas('parent', function ($query) {
