@@ -3,6 +3,7 @@ FROM dunglas/frankenphp:php8.4
 # Install Dependencies, Extensions, & SUPERVISOR
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    default-mysql-client \
     gifsicle \
     jpegoptim \
     libavif-bin \
