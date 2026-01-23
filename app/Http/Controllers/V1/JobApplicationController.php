@@ -84,7 +84,7 @@ class JobApplicationController extends Controller
 	public function store(JobApplicationRequest $request): JsonResponse
 	{
 		try {
-			$this->authorize('create', JobApplication::class);
+//			$this->authorize('create', JobApplication::class);
 
 			DB::beginTransaction();
 

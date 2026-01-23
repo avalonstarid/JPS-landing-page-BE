@@ -17,6 +17,10 @@ use App\Http\Controllers\V1\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use MeShaon\RequestAnalytics\Http\Controllers\Api\AnalyticsApiController;
 
+Route::controller(JobApplicationController::class)->group(function () {
+	Route::post('job-applications', 'store');
+});
+
 Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 	Route::controller(AnalyticsApiController::class)->prefix('analytics')->group(function () {
 		Route::get('overview', 'overview');
@@ -64,7 +68,7 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 
 	Route::controller(JobApplicationController::class)->group(function () {
 		Route::delete('job-applications/bulk-destroy', 'bulkDestroy');
-		Route::apiResource('job-applications', JobApplicationController::class)->except(['update']);
+		Route::apiResource('job-applications', JobApplicationController::class)->except(['store', 'update']);
 	});
 
 	Route::controller(JobPostingController::class)->group(function () {
