@@ -23,6 +23,16 @@
             name="title.id"
           />
 
+          <InputBase
+            v-if="post.headline && type === 'TPST4'"
+            v-model="post.headline.id"
+            :errors="errors"
+            :autosize="{ minRows: 2 }"
+            label="Headline (ID)"
+            name="headline.id"
+            type="textarea"
+          />
+
           <InputTiptap
             v-if="post.content"
             v-model="post.content.id"
@@ -54,6 +64,16 @@
             :errors="errors"
             label="Judul (EN)"
             name="title.en"
+          />
+
+          <InputBase
+            v-if="post.headline && type === 'TPST4'"
+            v-model="post.headline.en"
+            :errors="errors"
+            :autosize="{ minRows: 2 }"
+            label="Headline (EN)"
+            name="headline.en"
+            type="textarea"
           />
 
           <InputTiptap
@@ -139,6 +159,7 @@ const { errors, loading, post, getPost, storePost, updatePost } = usePosts()
 
 const copyFromId = () => {
   post.value.content!.en = post.value.content!.id
+  post.value.headline!.en = post.value.headline!.id
   post.value.title!.en = post.value.title!.id
 }
 

@@ -18,6 +18,7 @@ class PostResource extends JsonResource
 		return [
 			'author' => $this->formatAuthor($this->author),
 			'content' => $this->whenHas('content', fn() => $this->getTranslations('content')),
+			'headline' => $this->whenHas('headline', fn() => $this->getTranslations('headline')),
 			'featured' => new MediaResource($this->whenLoaded('featured')),
 			'published_at' => $this->published_at,
 			'seo' => $this->formatSeo($this->seo),

@@ -28,6 +28,8 @@ class PostRequest extends BaseApiRequest
 		return [
 			'content.en' => 'Isi Konten (Bahasa Inggris)',
 			'content.id' => 'Isi Konten (Bahasa Indonesia)',
+			'headline.en' => 'Headline (Bahasa Inggris)',
+			'headline.id' => 'Headline (Bahasa Indonesia)',
 			'title.en' => 'Judul (Bahasa Inggris)',
 			'title.id' => 'Judul (Bahasa Indonesia)',
 		];
@@ -62,6 +64,9 @@ class PostRequest extends BaseApiRequest
 			'content' => ['nullable', 'array'],
 			'content.en' => ['required', 'string'],
 			'content.id' => ['required', 'string'],
+			'headline' => ['nullable', 'array'],
+			'headline.en' => ['nullable', 'string'],
+			'headline.id' => ['nullable', 'string'],
 			'featured' => ['nullable', 'file', 'image', 'max:5120'],
 			'featured_remove' => ['nullable', 'boolean'],
 			'is_published' => ['required', 'boolean'],

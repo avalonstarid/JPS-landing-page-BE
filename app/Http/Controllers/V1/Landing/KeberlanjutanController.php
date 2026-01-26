@@ -59,7 +59,7 @@ class KeberlanjutanController extends Controller
 				})->first();
 			} else if ($slug == 'pendekatan-dan-kinerja-manajemen') {
 				$pendekatanKinerja = Post::pendekatanKinerja()
-					->select(['id', 'content', 'created_by_id', 'published_at', 'slug', 'title'])
+					->select(['id', 'content', 'headline', 'created_by_id', 'published_at', 'slug', 'title'])
 					->with(['author', 'featured'])->orderBy('published_at')->get();
 			}
 

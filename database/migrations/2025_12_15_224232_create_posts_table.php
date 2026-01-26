@@ -15,6 +15,7 @@ return new class extends Migration {
 		Schema::create('posts', function (Blueprint $table) {
 			$table->uuid('id')->primary();
 			$table->json('content');
+			$table->json('headline')->nullable();
 			$table->boolean('is_published')->default(true);
 			$table->unsignedBigInteger('likes')->default(0);
 			$table->timestamp('published_at')->nullable();

@@ -51,6 +51,7 @@ class Post extends Model implements HasMedia
 
 	public array $translatable = [
 		'content',
+		'headline',
 		'title',
 	];
 

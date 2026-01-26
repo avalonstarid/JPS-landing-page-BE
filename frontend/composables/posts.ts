@@ -3,6 +3,7 @@ import type { ApiResponse, IMultiLang, IState } from '@/helpers/interfaces'
 export interface IPost {
   id: string
   content: IMultiLang
+  headline: IMultiLang
   created_at: string
   featured: File | string
   featured_remove: number
@@ -20,6 +21,10 @@ export interface IPost {
 export default function usePosts() {
   const post = ref<Partial<IPost>>({
     content: {
+      en: '',
+      id: '',
+    },
+    headline: {
       en: '',
       id: '',
     },

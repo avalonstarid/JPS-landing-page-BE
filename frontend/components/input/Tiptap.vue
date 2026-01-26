@@ -1,220 +1,224 @@
 <template>
-  <div class="tiptap-editor-wrapper">
-    <div v-if="editor" class="editor-toolbar">
-      <!-- History -->
-      <div class="toolbar-group">
-        <button
-          class="toolbar-btn"
-          :disabled="!editor.can().chain().focus().undo().run()"
-          type="button"
-          title="Undo"
-          @click="editor.chain().focus().undo().run()"
-        >
-          <el-icon><ElIconBack /></el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :disabled="!editor.can().chain().focus().redo().run()"
-          type="button"
-          title="Redo"
-          @click="editor.chain().focus().redo().run()"
-        >
-          <el-icon><ElIconRight /></el-icon>
-        </button>
+  <div>
+    <label class="el-form-item__label">{{ label }}</label>
+
+    <div class="tiptap-editor-wrapper">
+      <div v-if="editor" class="editor-toolbar">
+        <!-- History -->
+        <div class="toolbar-group">
+          <button
+            class="toolbar-btn"
+            :disabled="!editor.can().chain().focus().undo().run()"
+            type="button"
+            title="Undo"
+            @click="editor.chain().focus().undo().run()"
+          >
+            <el-icon><ElIconBack /></el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :disabled="!editor.can().chain().focus().redo().run()"
+            type="button"
+            title="Redo"
+            @click="editor.chain().focus().redo().run()"
+          >
+            <el-icon><ElIconRight /></el-icon>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Text Formatting -->
+        <div class="toolbar-group">
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('bold') }"
+            type="button"
+            title="Bold"
+            @click="editor.chain().focus().toggleBold().run()"
+          >
+            <el-icon>B</el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('italic') }"
+            type="button"
+            title="Italic"
+            @click="editor.chain().focus().toggleItalic().run()"
+          >
+            <el-icon>I</el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('strike') }"
+            type="button"
+            title="Strike"
+            @click="editor.chain().focus().toggleStrike().run()"
+          >
+            <el-icon><ElIconDiscount /></el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('code') }"
+            type="button"
+            title="Code"
+            @click="editor.chain().focus().toggleCode().run()"
+          >
+            <el-icon><ElIconPostcard /></el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
+            type="button"
+            title="Align Left"
+            @click="editor.chain().focus().setTextAlign('left').run()"
+          >
+            <i class="ki-textalign-left ki-outline"></i>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
+            type="button"
+            title="Align Center"
+            @click="editor.chain().focus().setTextAlign('center').run()"
+          >
+            <i class="ki-outline ki-textalign-center"></i>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
+            type="button"
+            title="Align Right"
+            @click="editor.chain().focus().setTextAlign('right').run()"
+          >
+            <i class="ki-textalign-right ki-outline"></i>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
+            type="button"
+            title="Align Justify"
+            @click="editor.chain().focus().setTextAlign('justify').run()"
+          >
+            <i class="ki-outline ki-textalign-justifycenter"></i>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Headings -->
+        <div class="toolbar-group hidden sm:flex">
+          <button
+            class="w-8 font-bold text-xs toolbar-btn"
+            :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+            type="button"
+            title="Heading 1"
+            @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          >
+            H1
+          </button>
+          <button
+            class="w-8 font-bold text-xs toolbar-btn"
+            :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+            type="button"
+            title="Heading 2"
+            @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+          >
+            H2
+          </button>
+          <button
+            class="w-8 font-bold text-xs toolbar-btn"
+            :class="{ 'is-active': editor.isActive('paragraph') }"
+            type="button"
+            title="Paragraph"
+            @click="editor.chain().focus().setParagraph().run()"
+          >
+            P
+          </button>
+        </div>
+
+        <div class="hidden sm:block toolbar-divider"></div>
+
+        <!-- Lists -->
+        <div class="toolbar-group">
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('bulletList') }"
+            type="button"
+            title="Bullet List"
+            @click="editor.chain().focus().toggleBulletList().run()"
+          >
+            <el-icon><ElIconList /></el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('orderedList') }"
+            type="button"
+            title="Ordered List"
+            @click="editor.chain().focus().toggleOrderedList().run()"
+          >
+            <span class="font-bold text-xs">1.</span>
+          </button>
+          <button
+            class="toolbar-btn"
+            :class="{ 'is-active': editor.isActive('blockquote') }"
+            type="button"
+            title="Blockquote"
+            @click="editor.chain().focus().toggleBlockquote().run()"
+          >
+            <el-icon><ElIconChatLineRound /></el-icon>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Insert -->
+        <div class="toolbar-group">
+          <button
+            class="toolbar-btn"
+            type="button"
+            title="Insert Image"
+            @click="triggerImageUpload"
+          >
+            <el-icon><ElIconPicture /></el-icon>
+          </button>
+          <button
+            class="toolbar-btn"
+            type="button"
+            title="Horizontal Rule"
+            @click="editor.chain().focus().setHorizontalRule().run()"
+          >
+            <el-icon><ElIconMinus /></el-icon>
+          </button>
+        </div>
       </div>
 
-      <div class="toolbar-divider"></div>
-
-      <!-- Text Formatting -->
-      <div class="toolbar-group">
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('bold') }"
-          type="button"
-          title="Bold"
-          @click="editor.chain().focus().toggleBold().run()"
-        >
-          <el-icon>B</el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('italic') }"
-          type="button"
-          title="Italic"
-          @click="editor.chain().focus().toggleItalic().run()"
-        >
-          <el-icon>I</el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('strike') }"
-          type="button"
-          title="Strike"
-          @click="editor.chain().focus().toggleStrike().run()"
-        >
-          <el-icon><ElIconDiscount /></el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('code') }"
-          type="button"
-          title="Code"
-          @click="editor.chain().focus().toggleCode().run()"
-        >
-          <el-icon><ElIconPostcard /></el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
-          type="button"
-          title="Align Left"
-          @click="editor.chain().focus().setTextAlign('left').run()"
-        >
-          <i class="ki-textalign-left ki-outline"></i>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
-          type="button"
-          title="Align Center"
-          @click="editor.chain().focus().setTextAlign('center').run()"
-        >
-          <i class="ki-outline ki-textalign-center"></i>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
-          type="button"
-          title="Align Right"
-          @click="editor.chain().focus().setTextAlign('right').run()"
-        >
-          <i class="ki-textalign-right ki-outline"></i>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
-          type="button"
-          title="Align Justify"
-          @click="editor.chain().focus().setTextAlign('justify').run()"
-        >
-          <i class="ki-outline ki-textalign-justifycenter"></i>
-        </button>
+      <!-- Upload Progress -->
+      <div v-if="useMedia.loading" class="w-full h-1">
+        <el-progress
+          :percentage="100"
+          :show-text="false"
+          :stroke-width="4"
+          indeterminate
+          status="warning"
+        />
       </div>
 
-      <div class="toolbar-divider"></div>
+      <!-- Main Content -->
+      <TiptapEditorContent class="editor-content" :editor="editor" />
 
-      <!-- Headings -->
-      <div class="toolbar-group hidden sm:flex">
-        <button
-          class="w-8 font-bold text-xs toolbar-btn"
-          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-          type="button"
-          title="Heading 1"
-          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        >
-          H1
-        </button>
-        <button
-          class="w-8 font-bold text-xs toolbar-btn"
-          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-          type="button"
-          title="Heading 2"
-          @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        >
-          H2
-        </button>
-        <button
-          class="w-8 font-bold text-xs toolbar-btn"
-          :class="{ 'is-active': editor.isActive('paragraph') }"
-          type="button"
-          title="Paragraph"
-          @click="editor.chain().focus().setParagraph().run()"
-        >
-          P
-        </button>
-      </div>
-
-      <div class="hidden sm:block toolbar-divider"></div>
-
-      <!-- Lists -->
-      <div class="toolbar-group">
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('bulletList') }"
-          type="button"
-          title="Bullet List"
-          @click="editor.chain().focus().toggleBulletList().run()"
-        >
-          <el-icon><ElIconList /></el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('orderedList') }"
-          type="button"
-          title="Ordered List"
-          @click="editor.chain().focus().toggleOrderedList().run()"
-        >
-          <span class="font-bold text-xs">1.</span>
-        </button>
-        <button
-          class="toolbar-btn"
-          :class="{ 'is-active': editor.isActive('blockquote') }"
-          type="button"
-          title="Blockquote"
-          @click="editor.chain().focus().toggleBlockquote().run()"
-        >
-          <el-icon><ElIconChatLineRound /></el-icon>
-        </button>
-      </div>
-
-      <div class="toolbar-divider"></div>
-
-      <!-- Insert -->
-      <div class="toolbar-group">
-        <button
-          class="toolbar-btn"
-          type="button"
-          title="Insert Image"
-          @click="triggerImageUpload"
-        >
-          <el-icon><ElIconPicture /></el-icon>
-        </button>
-        <button
-          class="toolbar-btn"
-          type="button"
-          title="Horizontal Rule"
-          @click="editor.chain().focus().setHorizontalRule().run()"
-        >
-          <el-icon><ElIconMinus /></el-icon>
-        </button>
-      </div>
-    </div>
-
-    <!-- Upload Progress -->
-    <div v-if="useMedia.loading" class="w-full h-1">
-      <el-progress
-        :percentage="100"
-        :show-text="false"
-        :stroke-width="4"
-        indeterminate
-        status="warning"
+      <!-- File Input -->
+      <input
+        ref="fileInputRef"
+        class="hidden"
+        type="file"
+        accept="image/*"
+        @change="handleFileChange"
       />
-    </div>
 
-    <!-- Main Content -->
-    <TiptapEditorContent class="editor-content" :editor="editor" />
-
-    <!-- File Input -->
-    <input
-      ref="fileInputRef"
-      class="hidden"
-      type="file"
-      accept="image/*"
-      @change="handleFileChange"
-    />
-
-    <div v-if="error" class="mt-1 px-4 pb-2 text-red-500 text-xs">
-      {{ error }}
+      <div v-if="error" class="mt-1 px-4 pb-2 text-red-500 text-xs">
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
