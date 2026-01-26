@@ -9,7 +9,9 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
@@ -136,6 +138,8 @@ class PostController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil menambah data.',
 				data: $data,
@@ -215,6 +219,8 @@ class PostController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil mengubah data.',
 				data: $post,
@@ -247,6 +253,8 @@ class PostController extends Controller
 			$post->delete();
 
 			DB::commit();
+
+			$this->clearCache();
 
 			return $this->response(
 				message: 'Berhasil menghapus data.',
@@ -285,6 +293,8 @@ class PostController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Data berhasil dihapus.',
 			);
@@ -296,5 +306,17 @@ class PostController extends Controller
 				status_code: 500,
 			);
 		}
+	}
+
+	/**
+	 * Clear Cache
+	 *
+	 * @return void
+	 */
+	private function clearCache()
+	{
+		Cache::forget('landing:berita');
+		Cache::forget('landing:blog');
+		Redis::del(Redis::keys('landing:keberlanjutan:*'));
 	}
 }

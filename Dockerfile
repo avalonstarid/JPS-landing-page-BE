@@ -24,7 +24,6 @@ RUN install-php-extensions \
     igbinary \
     imagick \
     intl \
-    opcache \
     pcntl \
     pdo_mysql \
     redis \

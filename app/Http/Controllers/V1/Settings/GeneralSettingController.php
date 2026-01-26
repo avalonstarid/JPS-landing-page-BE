@@ -20,6 +20,7 @@ use App\Traits\ManagesSettings;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\Subgroup;
 use Throwable;
@@ -65,6 +66,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'company');
 
 			Cache::forget('settings:company');
+			Cache::forget('landing:hubungiKami');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -96,6 +98,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_beranda');
 
 			Cache::forget('settings:landing_beranda');
+			Cache::forget('landing:index');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -127,6 +130,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_berita');
 
 			Cache::forget('settings:landing_berita');
+			Cache::forget('landing:berita');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -158,6 +162,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_blog');
 
 			Cache::forget('settings:landing_blog');
+			Cache::forget('landing:blog');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -189,6 +194,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_hubungi_kami');
 
 			Cache::forget('settings:landing_hubungi_kami');
+			Cache::forget('landing:hubungiKami');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -220,6 +226,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_karir');
 
 			Cache::forget('settings:landing_karir');
+			Cache::forget('landing:karir');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -251,6 +258,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_keberlanjutan');
 
 			Cache::forget('settings:landing_keberlanjutan');
+			Redis::del(Redis::keys('landing:keberlanjutan:*'));
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -282,6 +290,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_lini_bisnis');
 
 			Cache::forget('settings:landing_lini_bisnis');
+			Redis::del(Redis::keys('landing:liniBisnis:*'));
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -313,6 +322,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_pengumuman');
 
 			Cache::forget('settings:landing_pengumuman');
+			Cache::forget('landing:pengumuman');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -344,6 +354,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_produk');
 
 			Cache::forget('settings:landing_produk');
+			Cache::forget('landing:produk');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -375,6 +386,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_investor');
 
 			Cache::forget('settings:landing_investor');
+			Redis::del(Redis::keys('landing:relasiInvestor:*'));
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -406,6 +418,7 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_tentang_perusahaan');
 
 			Cache::forget('settings:landing_tentang_perusahaan');
+			Cache::forget('landing:tentangPerusahaan');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',

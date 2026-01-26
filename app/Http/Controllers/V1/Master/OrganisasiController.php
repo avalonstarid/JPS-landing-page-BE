@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
@@ -108,6 +109,8 @@ class OrganisasiController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil menambah data.',
 				data: $data,
@@ -160,6 +163,8 @@ class OrganisasiController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil mengubah data.',
 				data: $organisasi,
@@ -192,6 +197,8 @@ class OrganisasiController extends Controller
 			$organisasi->delete();
 
 			DB::commit();
+
+			$this->clearCache();
 
 			return $this->response(
 				message: 'Berhasil menghapus data.',
@@ -230,6 +237,8 @@ class OrganisasiController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Data berhasil dihapus.',
 			);
@@ -241,5 +250,15 @@ class OrganisasiController extends Controller
 				status_code: 500,
 			);
 		}
+	}
+
+	/**
+	 * Clear Cache
+	 *
+	 * @return void
+	 */
+	private function clearCache()
+	{
+		Cache::forget('landing:tentangPerusahaan');
 	}
 }

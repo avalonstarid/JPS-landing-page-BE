@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
@@ -92,6 +93,8 @@ class VisionMissionController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil menambah data.',
 				data: $data,
@@ -144,6 +147,8 @@ class VisionMissionController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil mengubah data.',
 				data: $visionMission,
@@ -171,6 +176,8 @@ class VisionMissionController extends Controller
 
 		$visionMission->delete();
 
+		$this->clearCache();
+
 		return $this->response(
 			message: 'Berhasil menghapus data.',
 		);
@@ -194,8 +201,20 @@ class VisionMissionController extends Controller
 			$data->delete();
 		}
 
+		$this->clearCache();
+
 		return $this->response(
 			message: 'Berhasil menghapus data.',
 		);
+	}
+
+	/**
+	 * Clear Cache
+	 *
+	 * @return void
+	 */
+	private function clearCache()
+	{
+		Cache::forget('landing:tentangPerusahaan');
 	}
 }
