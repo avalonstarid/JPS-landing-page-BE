@@ -64,7 +64,7 @@ return [
 
 	'pruning' => [
 		'enabled' => env('REQUEST_ANALYTICS_PRUNING_ENABLED', true),
-		'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 180),
+		'days' => env('REQUEST_ANALYTICS_PRUNING_DAYS', 365),
 	],
 
 	'geolocation' => [
