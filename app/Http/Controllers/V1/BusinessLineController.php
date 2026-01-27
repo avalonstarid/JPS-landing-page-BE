@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -282,6 +283,7 @@ class BusinessLineController extends Controller
 	 */
 	private function clearCache()
 	{
+		Redis::del(Redis::keys('landing:liniBisnis:*'));
 		Cache::forget('landing:tentangPerusahaan');
 	}
 }
