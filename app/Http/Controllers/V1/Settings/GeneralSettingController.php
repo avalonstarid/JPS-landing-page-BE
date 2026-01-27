@@ -67,6 +67,7 @@ class GeneralSettingController extends Controller
 
 			Cache::forget('settings:company');
 			Cache::forget('landing:hubungiKami');
+			Cache::forget('landing:footer');
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',

@@ -40,6 +40,7 @@ return [
 		env('REQUEST_ANALYTICS_PATHNAME', 'analytics'),
 		'berita-list',
 		'broadcasting/auth',
+		'footer',
 		'horizon/*',
 		'karir-list',
 		'keberlanjutan-laporan-list',
