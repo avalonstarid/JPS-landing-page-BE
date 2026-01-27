@@ -9,11 +9,11 @@
     >
       <NuxtLink to="/">
         <img
-          class="dark:hidden min-h-[30px]"
+          class="dark:hidden h-[40px]"
           src="/icon/web-app-manifest-192x192.png"
         />
         <img
-          class="hidden dark:block min-h-[30px]"
+          class="hidden dark:block h-[40px]"
           src="/icon/web-app-manifest-192x192.png"
         />
       </NuxtLink>

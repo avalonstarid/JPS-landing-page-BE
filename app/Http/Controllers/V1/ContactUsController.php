@@ -40,7 +40,7 @@ class ContactUsController extends Controller
 
 		$query = QueryBuilder::for(
 			subject: ContactUs::select([
-				'id', 'email', 'location', 'name', 'phone', 'created_at', 'updated_at', 'created_by_id',
+				'id', 'email', 'location', 'message', 'name', 'phone', 'created_at', 'updated_at', 'created_by_id',
 				'updated_by_id',
 			]),
 		)->allowedSorts(
@@ -53,7 +53,7 @@ class ContactUsController extends Controller
 					$q->whereAny(['email', 'location', 'message', 'name'], 'LIKE', '%' . $value . '%');
 				}),
 			],
-		);
+		)->defaultSort('-created_at');
 
 		if ($request->input('all', '') == 1) {
 			return $this->response(

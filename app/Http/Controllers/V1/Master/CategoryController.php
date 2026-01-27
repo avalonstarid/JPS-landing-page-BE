@@ -9,7 +9,9 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -107,6 +109,8 @@ class CategoryController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil menambah data.',
 				data: $data,
@@ -159,6 +163,8 @@ class CategoryController extends Controller
 
 			DB::commit();
 
+			$this->clearCache();
+
 			return $this->response(
 				message: 'Berhasil mengubah data.',
 				data: $category,
@@ -186,6 +192,8 @@ class CategoryController extends Controller
 
 		$category->delete();
 
+		$this->clearCache();
+
 		return $this->response(
 			message: 'Berhasil menghapus data.',
 		);
@@ -209,8 +217,22 @@ class CategoryController extends Controller
 			$data->delete();
 		}
 
+		$this->clearCache();
+
 		return $this->response(
 			message: 'Berhasil menghapus data.',
 		);
+	}
+
+	/**
+	 * Clear Cache
+	 *
+	 * @return void
+	 */
+	private function clearCache()
+	{
+		Cache::forget('landing:karir');
+		Redis::del(Redis::keys('landing:keberlanjutan:*'));
+		Redis::del(Redis::keys('landing:relasiInvestor:*'));
 	}
 }
