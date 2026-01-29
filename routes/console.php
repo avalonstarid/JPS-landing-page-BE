@@ -12,7 +12,7 @@ Schedule::command('model:prune', [
 ])->daily();
 Schedule::command('sanctum:prune-expired --hours=24')->daily();
 Schedule::command('sitemap:generate')->daily();
-Schedule::command('telescope:prune --hours=72')->daily();
+Schedule::command('telescope:prune --hours=48')->daily();
 Schedule::call(function () {
 	$staleUploads = TemporaryUpload::where('created_at', '<', now()->subDay())->get();
 
