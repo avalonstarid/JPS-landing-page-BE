@@ -69,7 +69,17 @@
               :preview-src-list="[row.featured_thumb]"
               fit="cover"
               preview-teleported
-            />
+            >
+              <template #error>
+                <el-image
+                  class="w-[50px] h-[50px]"
+                  :src="row.featured.original_url"
+                  :preview-src-list="[row.featured.original_url]"
+                  fit="cover"
+                  preview-teleported
+                />
+              </template>
+            </el-image>
           </template>
         </el-table-column>
         <el-table-column prop="title.id" label="Judul">
@@ -194,6 +204,7 @@ onMounted(() => {
   syncStateFilter(route, state)
 
   state['filter[type]'] = 'TPST3'
+  state.include = 'featured'
   getPosts()
 })
 

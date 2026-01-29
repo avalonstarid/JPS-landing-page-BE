@@ -15,12 +15,13 @@ use App\Http\Requests\Settings\Landing\LandingLiniBisnisRequest;
 use App\Http\Requests\Settings\Landing\LandingPengumumanRequest;
 use App\Http\Requests\Settings\Landing\LandingProdukRequest;
 use App\Http\Requests\Settings\Landing\LandingTentangPerusahaanRequest;
+use App\Models\BusinessLine;
+use App\Models\Master\Category;
 use App\Models\Setting;
 use App\Traits\ManagesSettings;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\Subgroup;
 use Throwable;
@@ -259,7 +260,12 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_keberlanjutan');
 
 			Cache::forget('settings:landing_keberlanjutan');
-			Redis::del(Redis::keys('landing:keberlanjutan:*'));
+			$cetKeberlanjutan = Category::whereHas('parent', function ($query) {
+				$query->where('slug', 'keberlanjutan');
+			})->get();
+			foreach ($cetKeberlanjutan as $item) {
+				Cache::forget("landing:keberlanjutan:$item->slug");
+			}
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -291,7 +297,10 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_lini_bisnis');
 
 			Cache::forget('settings:landing_lini_bisnis');
-			Redis::del(Redis::keys('landing:liniBisnis:*'));
+			$businessLines = BusinessLine::all();
+			foreach ($businessLines as $item) {
+				Cache::forget("landing:liniBisnis:$item->slug");
+			}
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',
@@ -387,7 +396,12 @@ class GeneralSettingController extends Controller
 			$updatedData = $this->updateSettings($validated, 'landing_investor');
 
 			Cache::forget('settings:landing_investor');
-			Redis::del(Redis::keys('landing:relasiInvestor:*'));
+			$cetKeberlanjutan = Category::whereHas('parent', function ($query) {
+				$query->where('slug', 'relasi-investor');
+			})->get();
+			foreach ($cetKeberlanjutan as $item) {
+				Cache::forget("landing:relasiInvestor:$item->slug");
+			}
 
 			return $this->response(
 				message: 'Berhasil menyimpan data.',

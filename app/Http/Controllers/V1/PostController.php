@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Models\Master\Category;
 use App\Models\Post;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
@@ -317,6 +317,12 @@ class PostController extends Controller
 	{
 		Cache::forget('landing:berita');
 		Cache::forget('landing:blog');
-		Redis::del(Redis::keys('landing:keberlanjutan:*'));
+
+		$keberlanjutan = Category::whereHas('parent', function ($query) {
+			$query->where('slug', 'keberlanjutan');
+		})->get();
+		foreach ($keberlanjutan as $item) {
+			Cache::forget("landing:keberlanjutan:$item->slug");
+		}
 	}
 }

@@ -116,12 +116,16 @@
         />
 
         <div class="w-full">
-          <InputSwitch
-            v-model="post.is_published"
-            :errors="errors"
-            active-text="Publikasi?"
-            name="is_published"
-          />
+          <el-tooltip
+            content="Centang ini untuk menampilkan perubahan di website"
+          >
+            <InputSwitch
+              v-model="post.is_published"
+              :errors="errors"
+              active-text="Publikasi?"
+              name="is_published"
+            />
+          </el-tooltip>
         </div>
 
         <div class="flex justify-start gap-3 mt-3 w-full">

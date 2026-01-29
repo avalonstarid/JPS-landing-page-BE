@@ -11,7 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -54,6 +53,7 @@ class BusinessLineController extends Controller
 			],
 		)->allowedIncludes(
 			includes: [
+				'featured',
 				'media',
 			],
 		);
@@ -109,7 +109,7 @@ class BusinessLineController extends Controller
 
 			DB::commit();
 
-			$this->clearCache();
+			$this->clearCache($data);
 
 			return $this->response(
 				message: 'Berhasil menambah data.',
@@ -187,7 +187,7 @@ class BusinessLineController extends Controller
 
 			DB::commit();
 
-			$this->clearCache();
+			$this->clearCache($businessLine);
 
 			return $this->response(
 				message: 'Berhasil mengubah data.',
@@ -222,7 +222,7 @@ class BusinessLineController extends Controller
 
 			DB::commit();
 
-			$this->clearCache();
+			$this->clearCache($businessLine);
 
 			return $this->response(
 				message: 'Berhasil menghapus data.',
@@ -257,11 +257,10 @@ class BusinessLineController extends Controller
 			foreach ($ids as $id) {
 				$data = BusinessLine::where('id', $id)->firstOrFail();
 				$data->delete();
+				$this->clearCache($data);
 			}
 
 			DB::commit();
-
-			$this->clearCache();
 
 			return $this->response(
 				message: 'Data berhasil dihapus.',
@@ -281,9 +280,9 @@ class BusinessLineController extends Controller
 	 *
 	 * @return void
 	 */
-	private function clearCache()
+	private function clearCache(BusinessLine $businessLine)
 	{
-		Redis::del(Redis::keys('landing:liniBisnis:*'));
+		Cache::forget("landing:liniBisnis:$businessLine->slug");
 		Cache::forget('landing:tentangPerusahaan');
 	}
 }

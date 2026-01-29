@@ -11,7 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 use Knuckles\Scribe\Attributes\BodyParam;
 use Knuckles\Scribe\Attributes\Group;
 use Knuckles\Scribe\Attributes\QueryParam;
@@ -232,7 +231,19 @@ class CategoryController extends Controller
 	private function clearCache()
 	{
 		Cache::forget('landing:karir');
-		Redis::del(Redis::keys('landing:keberlanjutan:*'));
-		Redis::del(Redis::keys('landing:relasiInvestor:*'));
+
+		$cetKeberlanjutan = Category::whereHas('parent', function ($query) {
+			$query->where('slug', 'keberlanjutan');
+		})->get();
+		foreach ($cetKeberlanjutan as $item) {
+			Cache::forget("landing:keberlanjutan:$item->slug");
+		}
+
+		$cetKeberlanjutan = Category::whereHas('parent', function ($query) {
+			$query->where('slug', 'relasi-investor');
+		})->get();
+		foreach ($cetKeberlanjutan as $item) {
+			Cache::forget("landing:relasiInvestor:$item->slug");
+		}
 	}
 }
