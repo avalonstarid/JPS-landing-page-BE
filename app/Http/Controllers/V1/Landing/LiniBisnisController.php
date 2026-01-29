@@ -4,9 +4,11 @@ namespace App\Http\Controllers\V1\Landing;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Landing\BusinessLineDetailResource;
+use App\Http\Resources\Landing\BusinessLineResource;
 use App\Models\BusinessLine;
 use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use RalphJSmit\Laravel\SEO\Support\SEOData;
 
@@ -86,6 +88,20 @@ class LiniBisnisController extends Controller
 					'canonical_url' => $seo->canonical_url,
 				],
 			];
+		});
+
+		return $this->response(
+			message: 'Berhasil mengambil data.',
+			data: $data,
+		);
+	}
+
+	public function list(Request $request)
+	{
+		$data = Cache::remember("liniBisnis:list", 3600, function () {
+			$liniBisnis = BusinessLine::orderBy('sort_order')->get();
+
+			return BusinessLineResource::collection($liniBisnis);
 		});
 
 		return $this->response(

@@ -45,6 +45,7 @@ Route::get('karir/detail/{slug}', [KarirController::class, 'detail']);
 Route::get('keberlanjutan-laporan-list', [KeberlanjutanController::class, 'laporanList']);
 Route::get('keberlanjutan/{slug}', [KeberlanjutanController::class, 'index']);
 Route::get('lini-bisnis/{slug}', [LiniBisnisController::class, 'index']);
+Route::get('lini-bisnis-list', [LiniBisnisController::class, 'list']);
 Route::get('pengumuman', [PengumumanController::class, 'index']);
 Route::get('pengumuman-list', [PengumumanController::class, 'list']);
 Route::get('pengumuman/detail/{slug}', [PengumumanController::class, 'detail']);

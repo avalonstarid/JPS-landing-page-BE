@@ -17,6 +17,7 @@ class BusinessLineResource extends JsonResource
 		return [
 			'featured_thumb' => $this->featured_thumb,
 			'locations' => LocationResource::collection($this->whenLoaded('locations')),
+			'slug' => $this->slug,
 			'title' => $this->getTranslations('title'),
 		];
 	}

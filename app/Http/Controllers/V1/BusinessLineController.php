@@ -284,5 +284,6 @@ class BusinessLineController extends Controller
 	{
 		Cache::forget("landing:liniBisnis:$businessLine->slug");
 		Cache::forget('landing:tentangPerusahaan');
+		Cache::forget('liniBisnis:list');
 	}
 }
