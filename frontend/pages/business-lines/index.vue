@@ -66,15 +66,15 @@
             <el-image
               class="w-[50px] h-[50px]"
               :src="row.featured_thumb"
-              :preview-src-list="[row.featured_thumb]"
+              :preview-src-list="[row.featured?.original_url]"
               fit="cover"
               preview-teleported
             >
               <template #error>
                 <el-image
                   class="w-[50px] h-[50px]"
-                  :src="row.featured.original_url"
-                  :preview-src-list="[row.featured.original_url]"
+                  :src="row.featured?.original_url"
+                  :preview-src-list="[row.featured?.original_url]"
                   fit="cover"
                   preview-teleported
                 />

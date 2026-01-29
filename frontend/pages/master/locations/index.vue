@@ -70,7 +70,17 @@
               :preview-src-list="row.media.map((item) => item.original_url)"
               fit="cover"
               preview-teleported
-            />
+            >
+              <template #error>
+                <el-image
+                  class="w-[50px] h-[50px]"
+                  :src="row.media[0].original_url"
+                  :preview-src-list="row.media.map((item) => item.original_url)"
+                  fit="cover"
+                  preview-teleported
+                />
+              </template>
+            </el-image>
           </template>
         </el-table-column>
         <el-table-column prop="business_line.title.id" label="Lini Bisnis" />
