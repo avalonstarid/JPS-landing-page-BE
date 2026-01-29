@@ -655,7 +655,7 @@ export default <Partial<Config>>{
     require('./metronic/core/plugins/components/rating'),
     require('./metronic/core/plugins/components/scrollable'),
     require('./metronic/core/plugins/components/progress'),
-    // require('./metronic/core/plugins/components/apexcharts'),
+    require('./metronic/core/plugins/components/apexcharts'),
     // require('./metronic/core/plugins/components/leaflet'),
   ],
 }

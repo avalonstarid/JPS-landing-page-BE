@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\BusinessLineController;
 use App\Http\Controllers\V1\ContactUsController;
+use App\Http\Controllers\V1\DashboardController;
 use App\Http\Controllers\V1\FaqController;
 use App\Http\Controllers\V1\HistoricalTimelineController;
 use App\Http\Controllers\V1\Investor\DocumentInvsController;
@@ -38,6 +39,15 @@ Route::middleware(['auth:web,sanctum', 'optimizeImages'])->group(function () {
 		Route::apiResource('contact-us', ContactUsController::class)->except(['store'])->parameters([
 			'contact-us' => 'contact_us',
 		]);
+	});
+
+	Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
+		Route::get('most-visited', 'mostVisited');
+		Route::get('top-browsers', 'topBrowsers');
+		Route::get('top-countries', 'topCountries');
+		Route::get('top-operating-systems', 'topOperatingSystems');
+		Route::get('top-referrers', 'topReferrers');
+		Route::get('total-visitors', 'totalVisitor');
 	});
 
 	Route::controller(FaqController::class)->group(function () {

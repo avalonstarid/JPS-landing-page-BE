@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Analytics\Facades\Analytics;
 use Spatie\Analytics\Period;
 
 class FooterController extends Controller
@@ -23,16 +24,22 @@ class FooterController extends Controller
 				return [$item->key => $item->value];
 			});
 
+			// Analytics
+			$now = Carbon::now();
+			$periodToday = Period::create($now->copy()->startOfDay(), $now->copy()->endOfDay());
+			$periodMonth = Period::create($now->copy()->startOfMonth(), $now->copy()->endOfMonth());
+			$periodYear = Period::create($now->copy()->startOfYear(), $now->copy()->endOfYear());
+
 			return [
 				// Company
 				'company' => $company,
 
 				// Visitor
 				'visitor' => [
-					'total' => 0,
-					'today' => 0,
-					'month' => 0,
-					'year' => 0,
+					'total' => Analytics::fetchTotalVisitorsAndPageViews(Period::years(3))->sum('screenPageViews'),
+					'today' => Analytics::fetchTotalVisitorsAndPageViews($periodToday)->sum('screenPageViews'),
+					'month' => Analytics::fetchTotalVisitorsAndPageViews($periodMonth)->sum('screenPageViews'),
+					'year' => Analytics::fetchTotalVisitorsAndPageViews($periodYear)->sum('screenPageViews'),
 				],
 			];
 		});
